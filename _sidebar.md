@@ -16,4 +16,3 @@
   * [算法分类](Algorithm/算法分类)
   * [C++刷题指南](Algorithm/C++刷题指南)
   * [Python刷题指南](Algorithm/Python刷题指南)
-* [如何制作博客](how_to_deploy_a_blog)
