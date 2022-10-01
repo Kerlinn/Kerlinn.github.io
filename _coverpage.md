@@ -1,7 +1,7 @@
 <img src="Media/logo.png" alt="logo" style="zoom: 25%;" />
 
 
-- ***Exporations in SEI of ECNU***
+- ***Explorations in SEI of ECNU***
 
 ## 2022年9月20日
 
