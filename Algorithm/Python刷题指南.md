@@ -244,8 +244,6 @@ m = -heappop(heap) # 注意取负回来
 > 需要注意是的，queue模块中提供的是同步的类，因此其入列/出列运算速度是比较慢的，远不及list.insert()和list.pop()。
 >
 
-类：
-
 - `Queue(maxsize=0)` ：FIFO 队列。如果maxsize小于等于零，队列尺寸为无限大，下同。
 - `LifoQueue(maxsize=0)`： LIFO 队列。
 - `PriorityQueue(maxsize=0)`： 优先级队列。
@@ -254,188 +252,22 @@ m = -heappop(heap) # 注意取负回来
 
 通用API：
 
-qsize()：返回队列大小
-full()：队列是否满了
-put(item, block, timeout)：以同步的方式入列
-get(item, block, timeout)：以同步的方式出列
-put_nowait(item)：以非同步的方式入列
-get_nowait(item)：以非同步的方式出列
-优先队列的item应该为以下数据格式：(priority number, data)
+- qsize()：返回队列大小
+- full()：队列是否满了
+- put(item, block, timeout)：以同步的方式入列
+- get(item, block, timeout)：以同步的方式出列
+- put_nowait(item)：以非同步的方式入列
+- get_nowait(item)：以非同步的方式出列
+- 优先队列的item应该为以下数据格式：(priority number, data)
 
-8. collections
-是Python内建的一个集合模块，提供了许多有用的集合类。该模块较为重要，为本文行文流畅考虑，此处仅做简介索引和用方举例。详细了解API可到：>扩展学习资料<
+## collections
 
-常用类：
+​		是Python内建的一个集合模块，提供了许多有用的集合类。该模块较为重要，为本文行文流畅考虑，此处仅做简介索引和用方举例。
 
-namedtuple：构建一个可命名的tuple，该类型可用isinstance检定
-deque：高效实现插入和删除操作双向列表，比list优异，可直接改造成FIFO队列或栈，API与list基本相同
-ChainMap：将多个dict串成一个逻辑上的dict(不修改内存)，往往用于优先级查找
-Counter： 计数器，大部分情况下速度会更快，但若只统计个别元素，推荐使用list.count()，接受一个字典或字符串
-OrderedDict： 有序字典(按key的值升序排序)，常用来做一个FIFO的有序字典
-defaultdict： 访问缺失值时会返回一个默认值的字典而不是抛出KeyError，相当好用，其它行为与dict一致，可以看成是一种更健壮的dict
-8.1 Counter
-该类由于重载了加、减、del等运算，因此可以直接进行减操作，在对字符串进行统计时想当有用。
+- namedtuple：构建一个可命名的tuple，该类型可用isinstance检定
+- deque：高效实现插入和删除操作双向列表，比list优异，可直接改造成FIFO队列或栈，API与list基本相同
+- ChainMap：将多个dict串成一个逻辑上的dict(不修改内存)，往往用于优先级查找
+- Counter： 计数器，大部分情况下速度会更快，但若只统计个别元素，推荐使用list.count()，接受一个字典或字符串
+- OrderedDict： 有序字典(按key的值升序排序)，常用来做一个FIFO的有序字典
+- defaultdict： 访问缺失值时会返回一个默认值的字典而不是抛出KeyError，相当好用，其它行为与dict一致，可以看成是一种更健壮的dict
 
-构造：
-
-Counter()：空构建
-Counter(st)：传入一个字符串
-Counter(dict)：传入一个字典
-Counter(key=v, ...)：传入一些键值对
-常用方法：
-
-update(Counter)：
-most_common(n)：返回 最多的n个元素的列表
-8.2 deque
-当只对首位数据进行操作时，双向队列类比list有着更高的效率。其与list相比，用有几乎完全相同的API，只不过pop()不允许按index弹出数据，只能弹出队尾数据，并且多了以下API：
-
-popleft()：与pop()相对，从尾部弹出数据(没有发现存在比pop(0, data)明显的性能优势)
-appendleft()：与append()相对，向首部添加数据(没有发现存在比insert(0, data)明显的性能优势)
-注意事项：collections.deque比queue.deque更加强大；后者是对前者的封装，作为模块内建对象存在，而前者这是一个类。后者拥有dequeue、enqueue等标准队列操作，但个人更推荐使用前者而不是后者。
-
-函数式编程/编程风格优化
-9. functools
-高阶函数模块，对于数学题或函数式编程风格优化起到重要作用。
-
-主要方法：
-
-@lru_cache(maxsize=None, typed=False)：LRU缓存，在递归和DP中取maxsize=None用作记忆法进行剪枝。
-reduce(function, iterable, [initializer])：累积函数，常用于列表连续求积
-其它方法跟装饰器有关，不一一罗列。
-
-10. itertools
-本模块实现了一系列 iterator，比起手动for循环，会快很多。
-
-无穷迭代器：
-
-count(start, [step])：步进迭代器，生成序列start, start+step, start+2*step...
-cycle(iterable)：循环迭代器，输入迭代器p，生成序列p0, p1, ... plast, p0, p1, ...
-repeat(obj [,n])： 重复迭代器，重复无限次或n次，生成序列obj, obj, obj, ...
-有限迭代器：
-
-accumulate(iterable, [func])：创建一个迭代器，根据func返回累加和或其他二元函数的累加结果。eg：accumulate([1,2,3,4,5]) --> 1 3 6 10 15
-chain：创建一个迭代器，它首先返回第一个可迭代对象中所有元素，接着返回下一个可迭代对象中所有元素，直到耗尽所有可迭代对象中的元素，eg：chain('ABC', 'DEF') --> A B C D E F
-compress(data, selectors)：返回 data 中经 selectors 真值测试为 True 的元素，eg：compress('ABCDEF', [1,0,1,0,1,1]) --> A C E F
-dropwhile：从首次真值测试失败开始，eg：dropwhile(lambda x: x<5, [1,4,6,4,1]) --> 6 4 1
-takewhile：直到首次真值测试失败结束，eg：takewhile(lambda x: x<5, [1,4,6,4,1]) --> 1 4
-filterfalse(predicate, iterable)：返回iterable中predicate为False的元素，eg：`filterfalse(lambda x: x%2, range(10)) --> 0 2 4 6 8
-groupby(iterable, [key])：迭代器中相邻的重复元素挑出来放在一起，eg：for i, v in itertools.groupby('AABBC'): print(i, list(v)) --> A ['A', 'A'] B ['B', 'B'] C ['C']
-islice(iterable, start, stop[, step])：返回从 iterable 里选中的元素，eg：islice('ABCDEFG', 2, None) --> C D E F G
-starmap(function, iterable)：星映射迭代器，eg：starmap(pow, [(2,5), (3,2), (10,3)]) --> 32 9 1000
-tee(iterable, n)：拆分一个迭代器为n nn个
-zip_longest：创建一个迭代器，从每个可迭代对象中收集元素。如果可迭代对象的长度未对齐，将根据fillvalue填充缺失值，eg：zip_longest('ABCD', 'xy', fillvalue='-') --> Ax By C- D-
-排列组合迭代器：
-
-product：笛卡尔积，eg：product('ABCD, 2') --> AA AB AC AD BA BB BC BD CA CB CC CD DA DB DC DD
-permutations：连续返回由 iterable 元素生成长度为 r 的排列，和combinations有点类似，即返回组合排列解，eg：permutations('ABCD, 2') --> AB AC AD BA BC BD CA CB CD DA DB DC
-combinations：返回由输入iterable中元素组成长度为r rr的子序列，eg：combinations('ABCD', 2) --> AB AC AD BC BD CD
-注意事项：
-
-accumulate可通过给定一个func来自定义累加过程，例如给定max作为累加器，则统计的是至今为止最大的数，在一些题目中相当好用。
-combinations本质上就是就是计算组合数，在一些数学题中相当好用，例如print(len(list(itertools.combinations('ABCD', 2))))可以直接得到C 4 2 = 6 C_4^2=6C 
-4
-2
-
- =6；permutations则是返回A 2 2 C 4 2 A_2^2C_4^2A 
-2
-2
-
- C 
-4
-2
-
- 。
-专业导向
-专业导向的模块除了re以外，一般不怎么用到，只对于某些专业题目，如二进制、文件、时间、加密等。
-
-11. datetime
-时间模块，可以直接对日期进行加减等操作，在某些日期问题中非常有用。如二月份的日期加减：
-
-print(datetime.date(2019, 2, 28) + datetime.timedelta(days=1))
-# 2019-03-01
-1
-2
-常用类：
-
-date(year, month, day)：日期模型
-time(hour, minute, second, microsecond, tzinfo)：时间模型
-datetime(...)：日期和时间的结合模型；常用timestamp()可将其转为时间戳
-timedelta(days, seconds, microseconds, milliseconds, minutes, hours, weeks)：时间增量，常用total_seconds()可以将其转化为秒。
-timezone：时区类
-12. calendar
-主要用于构建日历，在诸如打印出某年第某月日历的题目时非常有用，如打印2020年第二个月的日历(注意并不是2月1号到2月29号，而是印刷日历的编号，即为1月27日到3月1日【打开你右下角的windows日历自行查查对】)
-
-c = calendar.Calendar(firstweekday=0) # 0:日历印刷的第一天为星期一
-for i in c.itermonthdates(2020, 2):
-    print(i)
-1
-2
-3
-13. struct
-struct模块来解决bytes和其他二进制数据类型的转换。常用于处理二进制或字符串题。
-
->简易入门<
->format-characters
-
-14. re
-在这些专业导向的模块中，正则模块则是最重要的模块，能处理大量字符串相关的题目，需要额外学习正则表达式，此处不再赘述，属于必须掌握的模块。请参考>本文档<进行学习。
-
-15. copy
-主要用于处理浅层和深层拷贝，在某些需要自定义数据结构的题目中能方便你进行对象拷贝，属于必须掌握的模块。主要只有两个函数：
-
-copy：返回浅层拷贝。
-deepcopy：耗时大，返回深层拷贝对象。
-16. os.path
-在一些路径字符串分析题中非常有用，大部分情况下可以用re模块和str替代。
-
-17. string/str
-主要掌握str模块类的以下方法：
-
-strip([chars])：返回原字符串的副本，移除其中的前导和末尾字符；常用于IO
-split(sep=None, maxsplit=-1)：返回一个由字符串内单词组成的列表，常用于IO
-find(sub, [start], [end])：返回子字符串 sub 在s[start:end]切片内被找到的最小索引
-count(sub, [start], [end])：反回子字符串 sub 在 [start, end] 范围内非重叠出现的次数。
-center(width, [fillchar])：返回长度为 width 的字符串，原字符串在其正中， 使用指定的 fillchar 填充两边的空位(优先填右)
-capitalize()：返回将首字母大写、其余小写的原字符串副本
-index(sub, [start], [end])：类似find()，不推荐使用，因为找不到时会触发一个异常
-replace(old, new, [count])：替换子串，不过基本都由re.sub()替代该操作
-join(iterable)：返回一个由 iterable 中的字符串拼接而成的字符串；常用于IO
-lower()/upper()：返回一个副本，将所有字符转为小/大写
-lower()/isupper()：判断是否全由小写字母/大写字母组成
-isdigit()/isdecimal()/isnumeric()：判断是否全由数字字母组成【区别见下文】
-isalnum()/isalpha()：判断是否全由字母和数字组成/判断是否全由字母组成
-translate(table)：映射字符串，需要搭配str.maketrans(dict)一起用；eg: print("abc".translate(str.maketrans({"a": "1"})))将会输出1bc
-title()：转化为标题形式，仅用于一些针对性的题目
-注意事项：
-
-字符串类似一个list，可以进行切片或使用s[::-1]的语法糖进行倒序，但不能s[i]="x"进行修改性赋值(请使用str.replace(...)或将其转为一个list)
-isdigit()/isdecimal()/isnumeric()的区别使用场景为：
-True	False	Error
-isdigit	Unicode数字，byte数字（单字节），全角数字（双字节），罗马数字	汉字数字	/
-isdecimal	Unicode数字，，全角数字（双字节）	罗马数字，汉字数字	/
-isnumeric	Unicode数字，全角数字（双字节），罗马数字，汉字数字	/	byte数字（单字节）
-18. base64
-此模块提供了将二进制数据编码为可打印的 ASCII 字符以及将这些编码解码回二进制数据的函数，在某些数据分析题中很有用，但比较冷门，偶尔会遇到，如果掌握了可以节省大量的时间。
-
-19. difflib
-此模块提供用于比较序列的类和函数，在算法题中属于冷门模块，在一些用于比较字符串差异的题目中可以进行使用，例如比较 两个字符串序列的前后差异：
-
-c = difflib.ndiff("abcd", "abde")
-for i in c:
-    print(i)
-1
-2
-3
-TLE敏感操作
-上文中提到了部分敏感操作，接下来继续总结一些：
-
-x in obj要比obj.find(x)效率高，如str或list查找时。
-对list进行扩增，以下三种方式的效率依次增高：for _ in range(j): li.append(x)<li[i:i+j] = [x]*j<li += [x]*j。
-del x要比list.pop(index_x)效率高。
-list.reverse()要比list[::-1]效率高。
-[[0 for i in range(1000)] for j in range(1000)]要比[[0] * 1000 for j in range(1000)]效率高，但不推荐直接开一个特别大的数组，该操作本身非常耗时间。
-li += [1, 2, 3]要比li.extend([1, 2, 3])效率高，但在扩增的数据量较少时，候没有绝对优势。
-s.remove(x)要比s.pop(s.index(x))或del s[s.index(1)]有性能优势，如果非必要，请直接移除。相对的，还有以下性能比较：if x in s: s.remove(x)>del s[s.index(x)]>s.pop(s.index(x))；总而言之，若对索引不感兴趣，尽量用in关键字做包含性查询、用del关键字移除对象。
-————————————————
-版权声明：本文为CSDN博主「身披白袍」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/Shenpibaipao/article/details/105873407
