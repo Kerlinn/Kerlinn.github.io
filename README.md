@@ -1,6 +1,6 @@
 ### Kelin_のKnowledge Base
 
-&emsp;&emsp;本博客用于记录学习知识图谱的相关知识与技能。
+&emsp;&emsp;本博客用于记录学习教育心理学与知识图谱的相关知识与技能。
 
 &emsp;&emsp;主要包括以下内容：
 
@@ -10,7 +10,7 @@
   * [Pytorch](Basic_skill/Pytorch)
   * [Neo4j](Basic_skill/Neo4j)
 - [基础知识](basic_knowledge)
-  * [概率论](Basic_knowledge/概率论)
+  * [教育心理学](Basic_knowledge/概率论)
   * [机器学习](Basic_knowledge/机器学习)
 - [知识图谱](Knowledge_Graph/知识图谱)
   * [知识图谱导论](Knowledge_Graph/知识图谱导论)
