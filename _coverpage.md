@@ -1,7 +1,7 @@
 <img src="Media/logo.png" alt="logo" style="zoom: 25%;" />
 
 
-- ***希望本站能够成为我在华东师范大学读研三年的探索笔记***
+- ***Exporations in SEI of ECNU***
 
 ## 2022年9月20日
 
