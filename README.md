@@ -10,7 +10,7 @@
   * [Pytorch](Basic_skill/Pytorch)
   * [Neo4j](Basic_skill/Neo4j)
 - [基础知识](basic_knowledge)
-  * [教育心理学](Basic_knowledge/概率论)
+  * [教育心理学](Basic_knowledge/教育心理学)
   * [机器学习](Basic_knowledge/机器学习)
 - [知识图谱](Knowledge_Graph/知识图谱)
   * [知识图谱导论](Knowledge_Graph/知识图谱导论)
