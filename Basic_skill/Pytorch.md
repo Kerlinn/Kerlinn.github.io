@@ -307,13 +307,11 @@ array([[5, 8, 7],
 
 ​	**数组的轴即数组的维度**，它是从 0 开始的。对于我们这个二维数组来说，有两个轴，分别是代表行的 1 轴与代表列的 0 轴。如下图所示。
 
-<img src="Pytorch.assets/image-20220927210513783.png" alt="image-20220927210513783" style="zoom:50%;" />
+![image-20220927210513783](Pytorch.assets/image-20220927210513783.png)
 
 #### 0轴（按列）
 
-​	第一个需求是，计算每一款游戏的评分总和。也就是沿着 0 轴的方向进行求和。所以，我们只需要在求和函数中指定沿着 0 轴的方向求和即可
-
-<img src="Pytorch.assets/image-20220927210456741.png" alt="image-20220927210456741" style="zoom: 48%;" />
+​	第一个需求是，计算每一款游戏的评分总和。也就是沿着 0 轴的方向进行求和。所以，我们只需要在求和函数中指定沿着 0 轴的方向求和即可![image-20220927210456741](Pytorch.assets/image-20220927210456741.png)
 
 ```python
 >>> np.sum(interest_score, axis=0)
@@ -324,7 +322,7 @@ array([22, 15, 28])
 
 ​	第二个问题是要计算每个游戏的平均得分，也就是要沿着 1 轴方向对二维数组进行操作。所以，我们需要使用average函数，并将 axis 参数设定为 1 
 
-<img src="Pytorch.assets/image-20220927210704248.png" alt="image-20220927210704248" style="zoom:50%;" />
+![image-20220927210704248](Pytorch.assets/image-20220927210704248.png)
 
 ```python
 >>>np.around(np.average(interest_score, axis=1),decimals=2) #保留两位小数
@@ -356,7 +354,7 @@ array([[[ 0,  1,  2],
 
 如下图所示，绿框代表沿着 0 轴方向的单位，蓝框代表着沿着 1 轴方向的单位，红框代表着 2 轴方向的单位。
 
-<img src="Pytorch.assets/image-20220927211820594.png" alt="image-20220927211820594" style="zoom:75%;" />
+![image-20220927211820594](Pytorch.assets/image-20220927211820594.png)
 
 当 axis=0 时，就意味着将三个绿框的数据聚合在一起，结果是一个（2，3）的数组，数组内容为：
 $$
