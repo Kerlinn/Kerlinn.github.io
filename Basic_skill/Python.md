@@ -2009,7 +2009,7 @@ for name, response in responses.items():
 
 - 关键字参数 *end* 可以取消输出后面的换行, 或用另一个字符串结尾：
 
-```
+```python
 >>> a, b = 0, 1
 >>> while a < 1000:
 ...     print(a, end=',')
@@ -2026,7 +2026,7 @@ for name, response in responses.items():
 
 使用列表方法实现堆栈非常容易，最后插入的最先取出（“后进先出”）。把元素添加到堆栈的顶端，使用 `append()` 。从堆栈顶部取出元素，使用 `pop()` ，不用指定索引。例如：
 
-```
+```python
 >>> stack = [3, 4, 5]
 >>> stack.append(6)
 >>> stack.append(7)
@@ -2050,7 +2050,7 @@ for name, response in responses.items():
 
 实现队列最好用 [`collections.deque`](https://docs.python.org/zh-cn/3.10/library/collections.html#collections.deque)，可以快速从两端添加或删除元素。例如：
 
-```
+```python
 >>> from collections import deque
 >>> queue = deque(["Eric", "John", "Michael"])
 >>> queue.append("Terry")           # Terry arrives
@@ -2069,7 +2069,7 @@ deque(['Michael', 'Terry', 'Graham'])
 
 例如，创建平方值的列表：
 
-```
+```python
 >>> squares = []
 >>> for x in range(10):
 ...     squares.append(x**2)
@@ -2080,13 +2080,13 @@ deque(['Michael', 'Terry', 'Graham'])
 
 注意，这段代码创建（或覆盖）变量 `x`，该变量在循环结束后仍然存在。下述方法可以无副作用地计算平方列表：
 
-```
+```python
 squares = list(map(lambda x: x**2, range(10)))
 ```
 
 或等价于：
 
-```
+```python
 squares = [x**2 for x in range(10)]
 ```
 
@@ -2094,14 +2094,14 @@ squares = [x**2 for x in range(10)]
 
 列表推导式的方括号内包含以下内容：一个表达式，后面为一个 `for` 子句，然后，是零个或多个 `for` 或 `if` 子句。结果是由表达式依据 `for` 和 `if` 子句求值计算而得出一个新列表。 举例来说，以下列表推导式将两个列表中不相等的元素组合起来：
 
-```
+```python
 >>> [(x, y) for x in [1,2,3] for y in [3,1,4] if x != y]
 [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
 ```
 
 等价于：
 
-```
+```python
 >>> combs = []
 >>> for x in [1,2,3]:
 ...     for y in [3,1,4]:
@@ -2116,7 +2116,7 @@ squares = [x**2 for x in range(10)]
 
 表达式是元组（例如上例的 `(x, y)`）时，必须加上括号：
 
-```
+```python
 >>> vec = [-4, -2, 0, 2, 4]
 >>> # create a new list with the values doubled
 >>> [x*2 for x in vec]
@@ -2148,7 +2148,7 @@ SyntaxError: did you forget parentheses around the comprehension target?
 
 列表推导式可以使用复杂的表达式和嵌套函数：
 
-```
+```python
 >>> from math import pi
 >>> [str(round(pi, i)) for i in range(1, 6)]
 ['3.1', '3.14', '3.142', '3.1416', '3.14159']
@@ -2160,7 +2160,7 @@ SyntaxError: did you forget parentheses around the comprehension target?
 
 下面这个 3x4 矩阵，由 3 个长度为 4 的列表组成：
 
-```
+```python
 >>> matrix = [
 ...     [1, 2, 3, 4],
 ...     [5, 6, 7, 8],
@@ -2170,14 +2170,14 @@ SyntaxError: did you forget parentheses around the comprehension target?
 
 下面的列表推导式可以转置行列：
 
-```
+```python
 >>> [[row[i] for row in matrix] for i in range(4)]
 [[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
 ```
 
 如上节所示，嵌套的列表推导式基于其后的 [`for`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#for) 求值，所以这个例子等价于：
 
-```
+```python
 >>> transposed = []
 >>> for i in range(4):
 ...     transposed.append([row[i] for row in matrix])
@@ -2188,7 +2188,7 @@ SyntaxError: did you forget parentheses around the comprehension target?
 
 反过来说，也等价于：
 
-```
+```python
 >>> transposed = []
 >>> for i in range(4):
 ...     # the following 3 lines implement the nested listcomp
@@ -2203,7 +2203,7 @@ SyntaxError: did you forget parentheses around the comprehension target?
 
 **实际应用中，最好用内置函数替代复杂的流程语句**。此时，[`zip()`](https://docs.python.org/zh-cn/3.10/library/functions.html#zip) 函数更好用：
 
-```
+```python
 >>> list(zip(*matrix))
 [(1, 5, 9), (2, 6, 10), (3, 7, 11), (4, 8, 12)]
 ```
