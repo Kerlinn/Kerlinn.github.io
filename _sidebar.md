@@ -6,6 +6,7 @@
   * [Python](Basic_skill/Python)
   * [Pytorch](Basic_skill/Pytorch)
   * [Neo4j](Basic_skill/Neo4j)
+  * [Egg.js](Basic_skill/Egg.js)
 * [基础知识](basic_knowledge)
   * [教育心理学](Basic_knowledge/教育心理学)
   * [机器学习](Basic_knowledge/机器学习)

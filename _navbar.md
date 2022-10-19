@@ -6,6 +6,7 @@
   * [Python](Basic_skill/Python)
   * [Pytorch](Basic_skill/Pytorch)
   * [Neo4j](Basic_skill/Neo4j)
+  * [Egg.js](Basic_skill/Egg.js)
 * [基础知识](basic_knowledge)
   * [教育心理学](Basic_knowledge/教育心理学)
   * [机器学习](Basic_knowledge/机器学习)
@@ -16,3 +17,4 @@
   * [算法分类](Algorithm/算法分类)
   * [C++刷题指南](Algorithm/C++刷题指南)
   * [Python刷题指南](Algorithm/Python刷题指南)
+* [如何制作博客](how_to_deploy_a_blog)
