@@ -1,4 +1,4 @@
-### Kelin_のKnowledge Base
+### [Kelin_のKnowledge Base](www.bullorwolf.top)
 
 &emsp;&emsp;本博客用于记录学习教育心理学与知识图谱的相关知识与技能。
 
@@ -10,7 +10,7 @@
   * [Pytorch](Basic_skill/Pytorch)
   * [Neo4j](Basic_skill/Neo4j)
 - [基础知识](basic_knowledge)
-  * [教育心理学](Basic_knowledge/教育心理学)
+  * [教育心理学](Basic_knowledge/概率论)
   * [机器学习](Basic_knowledge/机器学习)
 - [知识图谱](Knowledge_Graph/知识图谱)
   * [知识图谱导论](Knowledge_Graph/知识图谱导论)
@@ -19,3 +19,4 @@
   * [算法分类](Algorithm/算法分类)
   * [C++刷题指南](Algorithm/C++刷题指南)
   * [Python刷题指南](Algorithm/Python刷题指南)
+- [如何制作博客](how_to_deploy_a_blog)
