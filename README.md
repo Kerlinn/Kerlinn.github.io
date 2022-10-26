@@ -1,4 +1,4 @@
-### [Kelin_のKnowledge Base](www.bullorwolf.top)
+## [Kelin_のKnowledge Base](https://www.bullorwolf.top)
 
 &emsp;&emsp;本博客用于记录学习教育心理学与知识图谱的相关知识与技能。
 
