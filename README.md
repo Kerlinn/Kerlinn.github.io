@@ -10,6 +10,9 @@
   * [MySQL数据库](Basic_skill/MySQL)
   * [Neo4j数据库](Basic_skill/Neo4j)
 - [理论知识](basic_knowledge.md)
+  * [机器学习](Machine_learning/机器学习)
+  * [深度学习](Machine_learning/深度学习)
+  * [图神经网络](Machine_learning/图神经网络)
   * [知识图谱导论](Basic_knowledge/知识图谱导论)
   * [经典论文与模型](Basic_knowledge/KGE)
 - [前端开发](Front.md)
@@ -22,4 +25,3 @@
   * [编程语言基础](Algorithm/编程语言基础.md)
   * [基础算法汇总](Algorithm/基础算法汇总.md)
   * [C++刷题指南](Algorithm/C++刷题指南.md)
-  
