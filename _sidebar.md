@@ -6,6 +6,7 @@
   * [Python](Basic_skill/Python)
   * [MySQL数据库](Basic_skill/MySQL)
   * [Neo4j数据库](Basic_skill/Neo4j)
+  * [Redis数据库](Basic_skill/Redis)
 * [理论知识](basic_knowledge.md)
   * [机器学习](Machine_learning/机器学习)
   * [深度学习](Machine_learning/深度学习)

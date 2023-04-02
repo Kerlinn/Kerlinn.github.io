@@ -1,6 +1,6 @@
 ## [Kelin_のKnowledge Base](https://www.bullorwolf.top)
 
-&emsp;&emsp;本博客用于记录学习知识图谱、前端（3D开发）相关知识与技能。
+&emsp;&emsp;本博客用于记录学习深度学习、知识图谱、前端（Three.js开发）相关知识与技能。
 
 &emsp;&emsp;主要包括以下内容：
 
@@ -9,6 +9,7 @@
   * [Python](Basic_skill/Python)
   * [MySQL数据库](Basic_skill/MySQL)
   * [Neo4j数据库](Basic_skill/Neo4j)
+  * [Redis数据库](Basic_skill/Redis)
 - [理论知识](basic_knowledge.md)
   * [机器学习](Machine_learning/机器学习)
   * [深度学习](Machine_learning/深度学习)
