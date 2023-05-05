@@ -5,9 +5,8 @@
 
 - [RLHF总览](#RLHF总览)
 - [论文](#papers)
-- [Codebases](#codebases)
-- [Blogs](#blogs)
-- [Contributing](#contributing)
+- [代码库](#代码库)
+- [博客](#博客)
 
 ## RLHF总览
 
@@ -220,96 +219,68 @@ RLHF是人工智能领域的一个活跃研究方向，应用于诸如机器人�
   - James MacGlashan, Mark K Ho, Robert Loftin, Bei Peng, Guan Wang, David Roberts, Matthew E. Taylor, Michael L. Littman
   - Keyword: Decision is influenced by current policy rather than human feedback, Learn from policy dependent feedback that converges to a local optimal
 
-## Codebases
+## 代码库
 
 ```
 format:
 - [title](codebase link) [links]
-  - author1, author2, and author3...
   - keyword
   - experiment environments, datasets or tasks
 ```
 
 - [PaLM + RLHF - Pytorch](https://github.com/lucidrains/PaLM-rlhf-pytorch)
-  - Phil Wang, Yachine Zahidi, Ikko Eltociear Ashimine, Eric Alcaide
   - Keyword: Transformers, PaLM architecture
   - Dataset: [enwik8](http://prize.hutter1.net/)
 - [lm-human-preferences](https://github.com/openai/lm-human-preferences)
-  - Daniel M. Ziegler, Nisan Stiennon, Jeffrey Wu, Tom B. Brown, Alec Radford, Dario Amodei, Paul Christiano, Geoffrey Irving
   - Keyword: Reward learning for language, Continuing text with positive sentiment, Summary task, Physical  descriptive
   - Dataset: [TL;DR](https://www.tensorflow.org/datasets/catalog/reddit), [CNN/DM](https://github.com/abisee/cnn-dailymail)
 - [following-instructions-human-feedback](https://github.com/openai/following-instructions-human-feedback)
-  - Long Ouyang, Jeff Wu, Xu Jiang, et al.
   - Keyword: Large Language Model, Align Language Model with Human Intent
   - Dataset: [TruthfulQA](https://github.com/sylinrl/TruthfulQA) [RealToxicityPrompts](https://allenai.org/data/real-toxicity-prompts)
 - [Transformer Reinforcement Learning (TRL)](https://github.com/lvwerra/trl)
-  - Leandro von Werra, Younes Belkada, Lewis Tunstall, et al.
   - Keyword: Train LLM with RL, PPO, Transformer
   - Task: [IMDB sentiment](https://www.imdb.com/interfaces/)
 - [Transformer Reinforcement Learning X (TRLX)](https://github.com/CarperAI/trlx)
-  - Jonathan Tow, Leandro von Werra, et al.
   - Keyword: Distributed training framework, T5-based language models, Train LLM with RL, PPO, ILQL
   - Task: Fine tuning LLM with RL using provided reward function or reward-labeled dataset
 - [RL4LMs (A modular RL library to fine-tune language models to human preferences)](https://github.com/allenai/RL4LMs)
-  - Rajkumar Ramamurthy, Prithviraj Ammanabrolu, Kianté,Brantley, Jack Hessel, Rafet Sifa, Christian Bauckhage, Hannaneh Hajishirzi, Yejin Choi
   - Keyword: Optimizing language generators with RL, Benchmark,  Performant RL algorithm
   - Dataset: [IMDB](https://www.imdb.com/interfaces/), [CommonGen](https://inklab.usc.edu/CommonGen/), [CNN Daily Mail](https://github.com/abisee/cnn-dailymail), [ToTTo](https://github.com/google-research-datasets/ToTTo), [WMT-16 (en-de)](https://www.statmt.org/wmt16/it-translation-task.html), [NarrativeQA](https://github.com/deepmind/narrativeqa), [DailyDialog](http://yanran.li/dailydialog)
 - [HH-RLHF](https://github.com/anthropics/hh-rlhf)
-  - Ben Mann, Deep Ganguli
   - Keyword: Human preference dataset, Red teaming data, machine-written
   - Task: Open-source dataset for human preference data about helpfulness and harmlessness
 - [LaMDA-rlhf-pytorch](https://github.com/conceptofmind/LaMDA-rlhf-pytorch)
-  - Phil Wang
   - Keyword: LaMDA, Attention-mechanism
   - Task: Open-source pre-training implementation of Google's LaMDA research paper in PyTorch
 - [TextRL](https://github.com/voidful/TextRL)
-  - Eric Lam
   - Keyword: huggingface's transformer
   - Task: Text generation
   - Env: PFRL, gym
 - [minRLHF](https://github.com/thomfoster/minRLHF)
-  - Thomfoster
   - Keyword: PPO, Minimal library
   - Task: educational purposes
 - [Stanford Human Preferences Dataset(SHP)](https://huggingface.co/datasets/stanfordnlp/SHP)
-  - Ethayarajh, Kawin and Zhang, Heidi and Wang, Yizhong and Jurafsky, Dan
   - Keyword: Naturally occurring and human-written dataset,18 different subject areas
   - Task: Intended to be used for training RLHF reward models 
 - [PromptSource](https://github.com/bigscience-workshop/promptsource)
-  - Stephen H. Bach, Victor Sanh, Zheng-Xin Yong et al.
   - Keyword: Prompted English datasets,  Mapping a data example into natural language
   - Task:  Toolkit for creating, Sharing and using natural language prompts
 - [Structured Knowledge Grounding(SKG) Resources Collections](https://unifiedskg.com/)
-  - Tianbao Xie, Chen Henry Wu, Peng Shi et al.
   - Keyword: Structured Knowledge Grounding
   - Task:  Collection of datasets are related to structured knowledge grounding
 - [The Flan Collection](https://github.com/google-research/FLAN/tree/main/flan/v2)
-  - Longpre Shayne, Hou Le, Vu Tu et al.
   - Task: Collection compiles datasets from Flan 2021, P3, Super-Natural Instructions
 
 
-## Blogs
+## 博客
 
 - [OpenAI] [ChatGPT: Optimizing Language Models for Dialogue](https://openai.com/blog/chatgpt)
 - [Hugging Face] [Illustrating Reinforcement Learning from Human Feedback (RLHF)](https://huggingface.co/blog/rlhf)
-- [ZhiHu] [通向AGI之路：大型语言模型 (LLM) 技术精要](https://zhuanlan.zhihu.com/p/597586623)
-- [ZhiHu] [大语言模型的涌现能力：现象与解释](https://zhuanlan.zhihu.com/p/621438653)
+- [知乎] [通向AGI之路：大型语言模型 (LLM) 技术精要](https://zhuanlan.zhihu.com/p/597586623)
+- [知乎] [大语言模型的涌现能力：现象与解释](https://zhuanlan.zhihu.com/p/621438653)
 - [W&B Fully Connected][ Understanding Reinforcement Learning from Human Feedback (RLHF)](https://wandb.ai/ayush-thakur/RLHF/reports/Understanding-Reinforcement-Learning-from-Human-Feedback-RLHF-Part-1--VmlldzoyODk5MTIx)
 - [Deepmind] [Learning through human feedback](https://www.deepmind.com/blog/learning-through-human-feedback)
 - [Notion] [深入理解语言模型的突现能力](https://yaofu.notion.site/514f4e63918749398a1a8a4c660e0d5b)
 - [Notion] [拆解追溯 GPT-3.5 各项能力的起源](https://yaofu.notion.site/GPT-3-5-360081d91ec245f29029d37b54573756#cf00f4e11d974187956122ce7d534386)
 - [gist] [Reinforcement Learning for Language Models](https://gist.github.com/yoavg/6bff0fecd65950898eba1bb321cfbd81)
 - [YouTube] [John Schulman - Reinforcement Learning from Human Feedback: Progress and Challenges](https://www.youtube.com/watch?v=hhiLw5Q_UFg)
-
-
-## Other Language Support
-
-[Turkish](README_TU.md)
-
-## Contributing
-
-Our purpose is to make this repo even better. If you are interested in contributing, please refer to [HERE](CONTRIBUTING.md) for instructions in contribution.
-
-## License
-
-Awesome RLHF is released under the Apache 2.0 license.
