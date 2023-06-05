@@ -3716,7 +3716,348 @@ print(insertionsort(arr))
 
 
 
+## 数据结构和算法
 
+- 算法：解决问题的方法和步骤
+
+- 评价算法的好坏：渐近时间复杂度和渐近空间复杂度。
+
+- 渐近时间复杂度的大O标记：
+
+  - <img src="http://latex.codecogs.com/gif.latex?O(c)" /> - 常量时间复杂度 - 布隆过滤器 / 哈希存储
+  - <img src="http://latex.codecogs.com/gif.latex?O(log_2n)" /> - 对数时间复杂度 - 折半查找（二分查找）
+  - <img src="http://latex.codecogs.com/gif.latex?O(n)" /> - 线性时间复杂度 - 顺序查找 / 计数排序
+  - <img src="http://latex.codecogs.com/gif.latex?O(n*log_2n)" /> - 对数线性时间复杂度 - 高级排序算法（归并排序、快速排序）
+  - <img src="http://latex.codecogs.com/gif.latex?O(n^2)" /> - 平方时间复杂度 - 简单排序算法（选择排序、插入排序、冒泡排序）
+  - <img src="http://latex.codecogs.com/gif.latex?O(n^3)" /> - 立方时间复杂度 - Floyd算法 / 矩阵乘法运算
+  - <img src="http://latex.codecogs.com/gif.latex?O(2^n)" /> - 几何级数时间复杂度 - 汉诺塔
+  - <img src="http://latex.codecogs.com/gif.latex?O(n!)" /> - 阶乘时间复杂度 - 旅行经销商问题 - NPC
+
+  ![](./Python.assets/algorithm_complexity_1.png)
+
+  ![](./Python.assets/algorithm_complexity_2.png)
+
+- 排序算法（选择、冒泡和归并）和查找算法（顺序和折半）
+
+  ```Python
+  def select_sort(items, comp=lambda x, y: x < y):
+      """简单选择排序"""
+      items = items[:]
+      for i in range(len(items) - 1):
+          min_index = i
+          for j in range(i + 1, len(items)):
+              if comp(items[j], items[min_index]):
+                  min_index = j
+          items[i], items[min_index] = items[min_index], items[i]
+      return items
+  ```
+
+  ```Python
+  def bubble_sort(items, comp=lambda x, y: x > y):
+      """冒泡排序"""
+      items = items[:]
+      for i in range(len(items) - 1):
+          swapped = False
+          for j in range(len(items) - 1 - i):
+              if comp(items[j], items[j + 1]):
+                  items[j], items[j + 1] = items[j + 1], items[j]
+                  swapped = True
+          if not swapped:
+              break
+      return items
+  ```
+
+  ```Python
+  def bubble_sort(items, comp=lambda x, y: x > y):
+      """搅拌排序(冒泡排序升级版)"""
+      items = items[:]
+      for i in range(len(items) - 1):
+          swapped = False
+          for j in range(len(items) - 1 - i):
+              if comp(items[j], items[j + 1]):
+                  items[j], items[j + 1] = items[j + 1], items[j]
+                  swapped = True
+          if swapped:
+              swapped = False
+              for j in range(len(items) - 2 - i, i, -1):
+                  if comp(items[j - 1], items[j]):
+                      items[j], items[j - 1] = items[j - 1], items[j]
+                      swapped = True
+          if not swapped:
+              break
+      return items
+  ```
+
+  ```Python
+  def merge(items1, items2, comp=lambda x, y: x < y):
+      """合并(将两个有序的列表合并成一个有序的列表)"""
+      items = []
+      index1, index2 = 0, 0
+      while index1 < len(items1) and index2 < len(items2):
+          if comp(items1[index1], items2[index2]):
+              items.append(items1[index1])
+              index1 += 1
+          else:
+              items.append(items2[index2])
+              index2 += 1
+      items += items1[index1:]
+      items += items2[index2:]
+      return items
+  
+  
+  def merge_sort(items, comp=lambda x, y: x < y):
+      return _merge_sort(list(items), comp)
+  
+  
+  def _merge_sort(items, comp):
+      """归并排序"""
+      if len(items) < 2:
+          return items
+      mid = len(items) // 2
+      left = _merge_sort(items[:mid], comp)
+      right = _merge_sort(items[mid:], comp)
+      return merge(left, right, comp)
+  ```
+
+  ```Python
+  def seq_search(items, key):
+      """顺序查找"""
+      for index, item in enumerate(items):
+          if item == key:
+              return index
+      return -1
+  ```
+
+  ```Python
+  def bin_search(items, key):
+      """折半查找"""
+      start, end = 0, len(items) - 1
+      while start <= end:
+          mid = (start + end) // 2
+          if key > items[mid]:
+              start = mid + 1
+          elif key < items[mid]:
+              end = mid - 1
+          else:
+              return mid
+      return -1
+  ```
+
+- 常用算法：
+
+  - 穷举法 - 又称为暴力破解法，对所有的可能性进行验证，直到找到正确答案。
+  - 贪婪法 - 在对问题求解时，总是做出在当前看来
+  - 最好的选择，不追求最优解，快速找到满意解。
+  - 分治法 - 把一个复杂的问题分成两个或更多的相同或相似的子问题，再把子问题分成更小的子问题，直到可以直接求解的程度，最后将子问题的解进行合并得到原问题的解。
+  - 回溯法 - 回溯法又称为试探法，按选优条件向前搜索，当搜索到某一步发现原先选择并不优或达不到目标时，就退回一步重新选择。
+  - 动态规划 - 基本思想也是将待求解问题分解成若干个子问题，先求解并保存这些子问题的解，避免产生大量的重复运算。
+
+  穷举法例子：百钱百鸡和五人分鱼。
+
+  ```Python
+  # 公鸡5元一只 母鸡3元一只 小鸡1元三只
+  # 用100元买100只鸡 问公鸡/母鸡/小鸡各多少只
+  for x in range(20):
+      for y in range(33):
+          z = 100 - x - y
+          if 5 * x + 3 * y + z // 3 == 100 and z % 3 == 0:
+              print(x, y, z)
+  
+  # A、B、C、D、E五人在某天夜里合伙捕鱼 最后疲惫不堪各自睡觉
+  # 第二天A第一个醒来 他将鱼分为5份 扔掉多余的1条 拿走自己的一份
+  # B第二个醒来 也将鱼分为5份 扔掉多余的1条 拿走自己的一份
+  # 然后C、D、E依次醒来也按同样的方式分鱼 问他们至少捕了多少条鱼
+  fish = 6
+  while True:
+      total = fish
+      enough = True
+      for _ in range(5):
+          if (total - 1) % 5 == 0:
+              total = (total - 1) // 5 * 4
+          else:
+              enough = False
+              break
+      if enough:
+          print(fish)
+          break
+      fish += 5
+  ```
+
+  贪婪法例子：假设小偷有一个背包，最多能装20公斤赃物，他闯入一户人家，发现如下表所示的物品。很显然，他不能把所有物品都装进背包，所以必须确定拿走哪些物品，留下哪些物品。
+
+  |  名称  | 价格（美元） | 重量（kg） |
+  | :----: | :----------: | :--------: |
+  |  电脑  |     200      |     20     |
+  | 收音机 |      20      |     4      |
+  |   钟   |     175      |     10     |
+  |  花瓶  |      50      |     2      |
+  |   书   |      10      |     1      |
+  |  油画  |      90      |     9      |
+
+  ```Python
+  """
+  贪婪法：在对问题求解时，总是做出在当前看来是最好的选择，不追求最优解，快速找到满意解。
+  输入：
+  20 6
+  电脑 200 20
+  收音机 20 4
+  钟 175 10
+  花瓶 50 2
+  书 10 1
+  油画 90 9
+  """
+  class Thing(object):
+      """物品"""
+  
+      def __init__(self, name, price, weight):
+          self.name = name
+          self.price = price
+          self.weight = weight
+  
+      @property
+      def value(self):
+          """价格重量比"""
+          return self.price / self.weight
+  
+  
+  def input_thing():
+      """输入物品信息"""
+      name_str, price_str, weight_str = input().split()
+      return name_str, int(price_str), int(weight_str)
+  
+  
+  def main():
+      """主函数"""
+      max_weight, num_of_things = map(int, input().split())
+      all_things = []
+      for _ in range(num_of_things):
+          all_things.append(Thing(*input_thing()))
+      all_things.sort(key=lambda x: x.value, reverse=True)
+      total_weight = 0
+      total_price = 0
+      for thing in all_things:
+          if total_weight + thing.weight <= max_weight:
+              print(f'小偷拿走了{thing.name}')
+              total_weight += thing.weight
+              total_price += thing.price
+      print(f'总价值: {total_price}美元')
+  
+  
+  if __name__ == '__main__':
+      main()
+  ```
+
+  分治法例子：[快速排序](https://zh.wikipedia.org/zh/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F)。
+
+  ```Python
+  """
+  快速排序 - 选择枢轴对元素进行划分，左边都比枢轴小右边都比枢轴大
+  """
+  def quick_sort(items, comp=lambda x, y: x <= y):
+      items = list(items)[:]
+      _quick_sort(items, 0, len(items) - 1, comp)
+      return items
+  
+  
+  def _quick_sort(items, start, end, comp):
+      if start < end:
+          pos = _partition(items, start, end, comp)
+          _quick_sort(items, start, pos - 1, comp)
+          _quick_sort(items, pos + 1, end, comp)
+  
+  
+  def _partition(items, start, end, comp):
+      pivot = items[end]
+      i = start - 1
+      for j in range(start, end):
+          if comp(items[j], pivot):
+              i += 1
+              items[i], items[j] = items[j], items[i]
+      items[i + 1], items[end] = items[end], items[i + 1]
+      return i + 1
+  ```
+
+  回溯法例子：[骑士巡逻](https://zh.wikipedia.org/zh/%E9%AA%91%E5%A3%AB%E5%B7%A1%E9%80%BB)。
+
+  ```Python
+  """
+  递归回溯法：叫称为试探法，按选优条件向前搜索，当搜索到某一步，发现原先选择并不优或达不到目标时，就退回一步重新选择，比较经典的问题包括骑士巡逻、八皇后和迷宫寻路等。
+  """
+  import sys
+  import time
+  
+  SIZE = 5
+  total = 0
+  
+  
+  def print_board(board):
+      for row in board:
+          for col in row:
+              print(str(col).center(4), end='')
+          print()
+  
+  
+  def patrol(board, row, col, step=1):
+      if row >= 0 and row < SIZE and \
+          col >= 0 and col < SIZE and \
+          board[row][col] == 0:
+          board[row][col] = step
+          if step == SIZE * SIZE:
+              global total
+              total += 1
+              print(f'第{total}种走法: ')
+              print_board(board)
+          patrol(board, row - 2, col - 1, step + 1)
+          patrol(board, row - 1, col - 2, step + 1)
+          patrol(board, row + 1, col - 2, step + 1)
+          patrol(board, row + 2, col - 1, step + 1)
+          patrol(board, row + 2, col + 1, step + 1)
+          patrol(board, row + 1, col + 2, step + 1)
+          patrol(board, row - 1, col + 2, step + 1)
+          patrol(board, row - 2, col + 1, step + 1)
+          board[row][col] = 0
+  
+  
+  def main():
+      board = [[0] * SIZE for _ in range(SIZE)]
+      patrol(board, SIZE - 1, SIZE - 1)
+  
+  
+  if __name__ == '__main__':
+      main()
+  ```
+
+  动态规划例子：子列表元素之和的最大值。
+
+  > 说明：子列表指的是列表中索引（下标）连续的元素构成的列表；列表中的元素是int类型，可能包含正整数、0、负整数；程序输入列表中的元素，输出子列表元素求和的最大值，例如：
+  >
+  > 输入：1 -2 3 5 -3 2
+  >
+  > 输出：8
+  >
+  > 输入：0 -2 3 5 -1 2
+  >
+  > 输出：9
+  >
+  > 输入：-9 -2 -3 -5 -3
+  >
+  > 输出：-2
+
+  ```Python
+  def main():
+      items = list(map(int, input().split()))
+      overall = partial = items[0]
+      for i in range(1, len(items)):
+          partial = max(items[i], partial + items[i])
+          overall = max(partial, overall)
+      print(overall)
+  
+  
+  if __name__ == '__main__':
+      main()
+  ```
+
+  > **说明**：这个题目最容易想到的解法是使用二重循环，但是代码的时间性能将会变得非常的糟糕。使用动态规划的思想，仅仅是多用了两个变量，就将原来$O(N^2)$复杂度的问题变成了$O(N)$。
 
 
 
