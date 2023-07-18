@@ -10,6 +10,10 @@
   * [人类反馈强化学习(RLHF)](Theory/LLM/人类反馈强化学习(RLHF))
   * [知识图谱导论](Theory/KG/知识图谱导论)
   * [知识图谱经典论文与模型](Theory/KG/KGE)
+* [计算生物学](Biotech/_biotech.md)
+
+  - [生物医药SOTA模型](Biotech/生物医药SOTA模型)
+
 * [开发技能](Develop/_develop.md)
 
   * [终端命令](Develop/终端命令)
