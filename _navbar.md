@@ -7,10 +7,13 @@
   * [机器学习](Theory/ML/机器学习)
   * [深度学习](Theory/ML/深度学习)
   * [图神经网络](Theory/ML/图神经网络)
-  * [自然语言处理](Theory/LLM/自然语言处理)
-  * [人类反馈强化学习(RLHF)](Theory/LLM/人类反馈强化学习(RLHF))
   * [知识图谱导论](Theory/KG/知识图谱导论)
   * [知识图谱经典论文与模型](Theory/KG/KGE)
+  
+* [预训练语言模型](PLM/_plm)
+
+  * [自然语言处理](PLM/自然语言处理)
+  * [人类反馈强化学习(RLHF)](PLM/人类反馈强化学习(RLHF))
 
 * [计算生物学](Biotech/_biotech.md)
 
