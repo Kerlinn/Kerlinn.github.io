@@ -1,4 +1,4 @@
-<img src="_deploy/logo.png" alt="logo" style="zoom: 25%;" />
+<img src="logo.png" alt="logo" style="zoom: 25%;" />
 
 
 - ***Explorations in SEI of ECNU***
