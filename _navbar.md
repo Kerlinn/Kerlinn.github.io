@@ -8,7 +8,7 @@
   - [机器学习](1.Basic\ML\机器学习)
   - [深度学习](1.Basic\DL\深度学习)
   - [图神经网络](1.Basic\Other\图神经网络)
-  
+
 * [自然语言处理](2.NLP\_nlp)
 
   - [自然语言处理导论](2.NLP\自然语言处理导论)
@@ -24,19 +24,12 @@
   - [人类反馈强化学习(RLHF)](4.LLM/Theory/人类反馈强化学习(RLHF))
   - [主要通用模型](4.LLM/Engineering/主要通用模型)
   - [垂直领域模型](4.LLM/Engineering/垂直领域模型)
-  
-* [开发技能](5.5.Develop/_develop.md)
 
-  - [终端命令](5.Develop/终端命令)
-  - [Python](5.Develop/Python)
-  - [MySQL数据库](5.Develop/MySQL)
-  - [Neo4j数据库](5.Develop/Neo4j)
-  - [Redis数据库](5.Develop/Redis)
-  - [HTML](5.Develop/HTML.md)
-  - [JavaScript](5.Develop/JavaScript.md)
-  - [TypeScript](5.Develop/TypeScript.md)
-  - [Egg.js](5.Develop/Egg.js.md)
-  - [Vue.js](5.Develop/Vue.js.md)
+* [实践项目](5.Coding/_coding.md)
+
+  - [终端命令](5.Coding/终端命令)
+  - [闻达](5.Coding/闻达)
+  - [DB-GPT](5.Coding/DB-GPT)
 
   
 
