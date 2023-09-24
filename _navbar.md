@@ -22,6 +22,7 @@
 * [大模型](4.LLM/_llm)
 
   - [人类反馈强化学习(RLHF)](4.LLM/Theory/人类反馈强化学习(RLHF))
+  - [检索增强LLM](4.LLM/Theory/检索增强LLM)
   - [主要通用模型](4.LLM/Engineering/主要通用模型)
   - [垂直领域模型](4.LLM/Engineering/垂直领域模型)
 
