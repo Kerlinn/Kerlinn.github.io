@@ -41,7 +41,8 @@
 - [实践项目](5.Coding/_coding.md)
 
   - [终端命令](5.Coding/终端命令)
+  - [Python](5.Coding/Python)
   - [闻达（大模型调用平台）](5.Coding/闻达)
   - [DB-GPT（基于大模型的本地问答）](5.Coding/DB-GPT)
-
+  
   

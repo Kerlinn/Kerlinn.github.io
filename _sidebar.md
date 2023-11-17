@@ -19,10 +19,12 @@
 * [大模型](4.LLM/_llm)
   - [人类反馈强化学习(RLHF)](4.LLM/Theory/人类反馈强化学习(RLHF))
   - [检索增强LLM](4.LLM/Theory/检索增强LLM)
+  - [向量数据库](4.LLM/Theory/向量数据库)
   - [主要通用模型](4.LLM/Engineering/主要通用模型)
   - [垂直领域模型](4.LLM/Engineering/垂直领域模型)
   
 * [实践项目](5.Coding/_coding.md)
   - [终端命令](5.Coding/终端命令)
+  - [Python](5.Coding/Python)
   - [闻达](5.Coding/闻达)
   - [DB-GPT](5.Coding/DB-GPT)

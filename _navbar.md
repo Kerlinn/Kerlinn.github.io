@@ -30,11 +30,10 @@
 * [实践项目](5.Coding/_coding.md)
 
   - [终端命令](5.Coding/终端命令)
+  - [Python](5.Coding/Python)
   - [闻达](5.Coding/闻达)
   - [DB-GPT](5.Coding/DB-GPT)
-
   
-
   
   
   
