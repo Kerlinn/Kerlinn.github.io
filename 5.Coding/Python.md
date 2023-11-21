@@ -1031,42 +1031,46 @@ Namespaces are one honking great idea -- let's do more of those!
 
 - 同理，就算多语阅读、维护代码的可能再小，也不要在标识符中使用非 ASCII 字符。
 
-#### 
-
 
 
 ## 3. 列表
 
 > 列表让你能够在一个地方存储成组的信息，其中可以只包含几个元素，也可以包含数百万个元素。列表是最强大的Python功能之一，它融合了众多重要的编程概念。
 
+### 定义
+
+- 列表中可以存放一系列对象
+- 存放的对象可以是**数字**、**字符串**也可以是**列表**
+- 列表用方括号“[]”表示，每个对象称作列表的**元素**，元素之间使用逗号**“，”**分隔
+- 列表中的元素**可以**在定义列表之后进行**修改**，也可以使用索引来访问一个或多个元素
+- 列表也支持了**丰富的内置函数**
+
+
+
 ### 赋值与拷贝
 
 #### 列表赋值
 
-​	在Python中，列表属于可变对象，而对可变对象的复制其实就是将列表的内存空间类似C中的指针再次指向新的变量名，而不是诸如字符串这种不可变对象在复制时会创建新的内存空间进行赋值。即此时b和a指向的是同一片内存空间。
+​	在Python中，列表属于可变对象，而对可变对象的**复制**其实就是将**列表的内存空间**（类似C中的指针）再次**指向新的变量名**，而不是诸如字符串这种不可变对象在复制时会创建新的内存空间进行赋值。即此时b和a指向的是同一片内存空间。
 
 ```python
-In [1]: x=[1,2]
-In [2]: y=[3,4]
-In [3]: a=[x,y]
-In [4]: b=a			#列表赋值：相当于起别名，b是a的指针
-In [5]: b[0]='abc'	
-In [6]: print(a)
-['abc', [3, 4]]
-In [7]: print(b)
-['abc', [3, 4]]
+x = [1,2]
+y = [3,4]
+a = [x,y]
+b = a     # 列表赋值：相当于起别名，b是a的指针
+b[0] = 'abc'
+print(a)  # ['abc', [3, 4]]
+print(b)  # ['abc', [3, 4]]
 ```
 
 ```python
-In [1]: x=[1,2]
-In [2]: y=[3,4]
-In [3]: a=[x,y]
-In [4]: b=a[:]      #浅拷贝：相当于复制，b是a的一个副本
-In [5]: b[0]='abc'  
-In [6]: print(a)
-[[1, 2], [3, 4]]
-In [7]: print(b)
-['abc', [3, 4]]
+x = [1,2]
+y = [3,4]
+a = [x,y]
+b = a[:]     # 浅拷贝：相当于复制，b是a的一个副本
+b[0] = 'abc'
+print(a)  # [[1, 2], [3, 4]]
+print(b)  # ['abc', [3, 4]]
 ```
 
 #### 浅拷贝
@@ -1074,7 +1078,6 @@ In [7]: print(b)
 当列表中的元素为不可变对象时，我们可以用以下方法对列表进行赋值：
 
 ```python
-import copy
 # 定义一个新列表
 L0 = [1, 2, 3, 4, 5]
 print(L0)
@@ -1160,6 +1163,8 @@ print(L0)
 
 ### 访问列表
 
+> 列表是有顺序的，所以可以通过索引访问其中的元素
+
 ```python
 bicycles = ['trek','cannondale','redline','specialized']
 print(bicycles) #全部列表
@@ -1185,22 +1190,56 @@ print(message)
 # My first ficycle was a Trek.
 ```
 
-### 修改元素
+### 添加元素
 
-- 与 [immutable](https://docs.python.org/zh-cn/3.10/glossary.html#term-immutable) 字符串不同, 列表是 [mutable](https://docs.python.org/zh-cn/3.10/glossary.html#term-mutable) 类型，其内容可以改变：
 
-  > mutable -- 可变对象
-  >
-  > 可变对象可以在其 [`id()`](https://docs.python.org/zh-cn/3.10/library/functions.html#id) 保持固定的情况下改变其取值。另请参见 immutable。
+- 指定位置k插入XXX：list.insert(k, "XXX")
 
 ```python
->>> cubes = [1, 8, 27, 65, 125]  # something's wrong here
->>> 4 ** 3  # the cube of 4 is 64, not 65!
-64
->>> cubes[3] = 64  # replace the wrong value
->>> cubes
-[1, 8, 27, 64, 125]
+motorcycles = ['honda','yamaha','suzuki']
+print(motorcycles) # ['honda', 'yamaha', 'suzuki']
+
+motorcycles.insert(2,"ducati")
+print(motorcycles) # ['honda', 'yamaha', 'ducati', 'suzuki']
 ```
+
+- 末尾添加：list.append("XXX")
+
+```python
+motorcycles = ['honda','yamaha','suzuki']
+print(motorcycles) # ['honda', 'yamaha', 'suzuki']
+
+motorcycles.append("ducati")
+print(motorcycles) # ['honda', 'yamaha', 'suzuki', 'ducati']
+```
+
+- 末尾添加：list += [XXX]
+- 扩展元素：list.extend(可迭代对象*)
+
+```python
+list_demo = ['a', 'b', 'c', 'd', 'e', ['f','g']]
+print(type(list_demo))
+print(list_demo)
+list_demo.insert(0,"first")
+print(list_demo)
+list_demo.insert(-1,"last") # 即使在最后一个插入，也是插入到倒数第二个，想要插入到末尾，需要用append函数
+print(list_demo)
+list_demo.append("last_one") # 插入到末尾
+print(list_demo)
+list_demo.extend("last_one") # 将其视为可迭代对象（列表），逐个字符插入
+print(list_demo)
+
+# <class 'list'>
+# ['a', 'b', 'c', 'd', 'e', ['f', 'g']]
+# ['first', 'a', 'b', 'c', 'd', 'e', ['f', 'g']]
+# ['first', 'a', 'b', 'c', 'd', 'e', 'last', ['f', 'g']]
+# ['first', 'a', 'b', 'c', 'd', 'e', 'last', ['f', 'g'], 'last_one']
+# ['first', 'a', 'b', 'c', 'd', 'e', 'last', ['f', 'g'], 'last_one', 'l', 'a', 's', 't', '_', 'o', 'n', 'e']
+```
+
+
+
+### 修改元素
 
 - 直接按列表位置修改即可
 
@@ -1210,6 +1249,48 @@ print(motorcycles)# ['honda', 'yamaha', 'suzuki']
  
 motorcycles[0] = 'ducati'
 print(motorcycles)# ['ducati', 'yamaha', 'suzuki']
+```
+
+- `list.remove(元素)`移除列表的元素
+- `list.reverse()`反转列表元素的顺序
+- `list.pop(索引)`移除索引对应的元素并返回该元素，不指定索引除最后一个元素
+- `list.copy()`复制列表
+- `list.ciear()`清空列表
+
+```python
+list_demo = ['a', 'b', 'c', 'd', 'e', ['f','g']]
+print(type(list_demo))
+print(list_demo)
+list_demo.insert(0,"first")
+print(list_demo)
+list_demo.insert(-1,"last") # 即使在最后一个插入，也是插入到倒数第二个，想要插入到末尾，需要用append函数
+print(list_demo)
+list_demo.append("last_one") # 插入到末尾
+print(list_demo)
+list_demo.remove("last_one") # 指定删除某元素(按值)
+print(list_demo)
+list_demo.reverse() # 翻转列表
+print(list_demo)
+list_demo.pop(2) #指定删除第3个元素（按序号）
+print(list_demo)
+list_demo.pop() #不指定，默认删除末尾元素
+print(list_demo)
+tmp = list_demo.copy()
+print(tmp) 
+list_demo.clear()
+print(list_demo)
+
+# <class 'list'>
+# ['a', 'b', 'c', 'd', 'e', ['f', 'g']]
+# ['first', 'a', 'b', 'c', 'd', 'e', ['f', 'g']]
+# ['first', 'a', 'b', 'c', 'd', 'e', 'last', ['f', 'g']]
+# ['first', 'a', 'b', 'c', 'd', 'e', 'last', ['f', 'g'], 'last_one']
+# ['first', 'a', 'b', 'c', 'd', 'e', 'last', ['f', 'g']]
+# [['f', 'g'], 'last', 'e', 'd', 'c', 'b', 'a', 'first']
+# [['f', 'g'], 'last', 'd', 'c', 'b', 'a', 'first']
+# [['f', 'g'], 'last', 'd', 'c', 'b', 'a']
+# [['f', 'g'], 'last', 'd', 'c', 'b', 'a']
+# []
 ```
 
 为切片赋值可以改变列表大小，甚至清空整个列表：
@@ -1232,31 +1313,7 @@ print(motorcycles)# ['ducati', 'yamaha', 'suzuki']
 []
 ```
 
-### 添加元素
 
-
-- 指定位置插入：list.insert(k, "XXX")
-
-```python
-motorcycles = ['honda','yamaha','suzuki']
-print(motorcycles) # ['honda', 'yamaha', 'suzuki']
-
-motorcycles.insert(2,"ducati")
-print(motorcycles) # ['honda', 'yamaha', 'ducati', 'suzuki']
-```
-
-- 末尾添加：list.append("XXX")
-
-```python
-motorcycles = ['honda','yamaha','suzuki']
-print(motorcycles) # ['honda', 'yamaha', 'suzuki']
-
-motorcycles.append("ducati")
-print(motorcycles) # ['honda', 'yamaha', 'suzuki', 'ducati']
-```
-
-- 末尾添加：list += [XXX]
-- 
 
 ### 删除元素
 
@@ -1340,7 +1397,7 @@ print("The last motorcycle I owned was a "+last_owned.title()+".")
 
 还有，不是所有数据都可以排序或比较。例如，`[None, 'hello', 10]` 就不可排序，因为整数不能与字符串对比，而 *None* 不能与其他类型对比。有些类型根本就没有定义顺序关系，例如，`3+4j < 5+7j` 这种对比操作就是无效的。
 
-### 组织列表
+### 组织列表（常用函数）
 
 #### 合并
 
@@ -1388,9 +1445,9 @@ cars.reverse()
 print(cars) # ['subaru', 'toyota', 'audi', 'bmw']
 ```
 
-#### 列表长度
+#### 列表长度 / 元素个数
 
-> Python计算列表元素数时从1开始，因此确定列表长度时，你应该不会遇到差一错误。
+> Python计算列表元素数时从1开始，因此确定列表长度时，你不会遇到差一错误。
 
 - len()
 
@@ -1428,18 +1485,21 @@ print(cars[4])
 
 
 
-#### 统计计算
+#### 计算 / 统计
 
 ```python
 digits = [1,2,3,4,5,6,7,8,9,0]
 print(min(digits)) # 0
 print(max(digits)) # 9
 print(sum(digits)) # 45
+
+digits = [1,2,2,3,3,3,4,4,4,4]
+digits.count(3) # 3
 ```
 
 - 求平均：numpy.mean(digits)
 - 计数：list.count(*x*)
-  - 返回列表中元素 *x* 出现的次数。
+  - 返回列表中元素 *x* 出现的次数，注意x不是下标
 
 
 
@@ -1634,11 +1694,403 @@ print(friend_foods)
 # ['pizze', 'falafel', 'carrot cake', 'cannoli']
 ```
 
+### 列表推导式
+
+列表推导式创建列表的方式更简洁。常见的用法为，对序列或可迭代对象中的每个元素应用某种操作，用生成的结果创建新的列表；或用满足特定条件的元素创建子序列。
+
+例如，创建平方值的列表：
+
+```python
+>>> squares = []
+>>> for x in range(10):
+...     squares.append(x**2)
+...
+>>> squares
+[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+```
+
+注意，这段代码创建（或覆盖）变量 `x`，该变量在循环结束后仍然存在。下述方法可以无副作用地计算平方列表：
+
+```python
+squares = list(map(lambda x: x**2, range(10)))
+```
+
+或等价于：
+
+```python
+squares = [x**2 for x in range(10)]
+```
+
+上面这种写法更简洁、易读。
+
+列表推导式的方括号内包含以下内容：一个表达式，后面为一个 `for` 子句，然后，是零个或多个 `for` 或 `if` 子句。结果是由表达式依据 `for` 和 `if` 子句求值计算而得出一个新列表。 举例来说，以下列表推导式将两个列表中不相等的元素组合起来：
+
+```python
+>>> [(x, y) for x in [1,2,3] for y in [3,1,4] if x != y]
+[(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+```
+
+等价于：
+
+```python
+>>> combs = []
+>>> for x in [1,2,3]:
+...     for y in [3,1,4]:
+...         if x != y:
+...             combs.append((x, y))
+...
+>>> combs
+[(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+```
+
+注意，上面两段代码中，[`for`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#for) 和 [`if`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#if) 的顺序相同。
+
+表达式是元组（例如上例的 `(x, y)`）时，必须加上括号：
+
+```python
+>>> vec = [-4, -2, 0, 2, 4]
+>>> # create a new list with the values doubled
+>>> [x*2 for x in vec]
+[-8, -4, 0, 4, 8]
+>>> # filter the list to exclude negative numbers
+>>> [x for x in vec if x >= 0]
+[0, 2, 4]
+>>> # apply a function to all the elements
+>>> [abs(x) for x in vec]
+[4, 2, 0, 2, 4]
+>>> # call a method on each element
+>>> freshfruit = ['  banana', '  loganberry ', 'passion fruit  ']
+>>> [weapon.strip() for weapon in freshfruit]
+['banana', 'loganberry', 'passion fruit']
+>>> # create a list of 2-tuples like (number, square)
+>>> [(x, x**2) for x in range(6)]
+[(0, 0), (1, 1), (2, 4), (3, 9), (4, 16), (5, 25)]
+>>> # the tuple must be parenthesized, otherwise an error is raised
+>>> [x, x**2 for x in range(6)]
+  File "<stdin>", line 1
+    [x, x**2 for x in range(6)]
+     ^^^^^^^
+SyntaxError: did you forget parentheses around the comprehension target?
+>>> # flatten a list using a listcomp with two 'for'
+>>> vec = [[1,2,3], [4,5,6], [7,8,9]]
+>>> [num for elem in vec for num in elem]
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+列表推导式可以使用复杂的表达式和嵌套函数：
+
+```python
+>>> from math import pi
+>>> [str(round(pi, i)) for i in range(1, 6)]
+['3.1', '3.14', '3.142', '3.1416', '3.14159']
+```
+
+### 嵌套的列表推导式
+
+列表推导式中的初始表达式可以是任何表达式，甚至可以是另一个列表推导式。
+
+下面这个 3x4 矩阵，由 3 个长度为 4 的列表组成：
+
+```python
+>>> matrix = [
+...     [1, 2, 3, 4],
+...     [5, 6, 7, 8],
+...     [9, 10, 11, 12],
+... ]
+```
+
+下面的列表推导式可以转置行列：
+
+```python
+>>> [[row[i] for row in matrix] for i in range(4)]
+[[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
+```
+
+如上节所示，嵌套的列表推导式基于其后的 [`for`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#for) 求值，所以这个例子等价于：
+
+```python
+>>> transposed = []
+>>> for i in range(4):
+...     transposed.append([row[i] for row in matrix])
+...
+>>> transposed
+[[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
+```
+
+反过来说，也等价于：
+
+```python
+>>> transposed = []
+>>> for i in range(4):
+...     # the following 3 lines implement the nested listcomp
+...     transposed_row = []
+...     for row in matrix:
+...         transposed_row.append(row[i])
+...     transposed.append(transposed_row)
+...
+>>> transposed
+[[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
+```
+
+**实际应用中，最好用内置函数替代复杂的流程语句**。此时，[`zip()`](https://docs.python.org/zh-cn/3.10/library/functions.html#zip) 函数更好用：
+
+```python
+>>> list(zip(*matrix))
+[(1, 5, 9), (2, 6, 10), (3, 7, 11), (4, 8, 12)]
+```
+
+## 4. 元组
+
+> **值不可被修改的列表。**相比于列表，元组是更简单的数据结构。如果需要存储的一组值在程序的整个生命周期内都不变，可使用元组。列表适合用于存储在**程序运行期间可能变化的数据集**。列表是可以修改的，这对处理网站的用户列表或游戏中的角色列表至关重要。然而，有时候你需要创建一系列不可修改的元素，元组可以满足这种需求。Python将不能修改的值称为不可变的，而**不可变的列表**被称为元组。
+>
+> 序列分为:可变序列和不可变序列
+>
+> - **列表**属于可变序列
+> - **元组**、**字符串**属于不可变序列
+> - 不可变序列中，append()、 pop()、 insert() 等修改序列元素的函数均无法使用
+> - 列表是`list0=[1,2,3]`，元组是`tuple0=(1,2,3)`
+> - 对不应变化的值提供了一定程度的保护
+
+### 序列的通用操作
+
+![image-20231117191553557](./Python.assets/image-20231117191553557.png)
+
+> 只要对原有内容有修改，那元组都用不了：
+>
+> 1. 元组和列表创建之后，元组不可修改，列表可修改
+> 2. **元组执行效率高**，
+>    列表执行效率低（定义好之后无须修改，所以不会占用很多内存）
+
+### 创建元组
+
+- 可以使用圆括号“()”定义元组
+- 可以使用tuple()函数创建元组
+- 将range()、列表、字符串转换为元组
+
+#### 定义元组
+
+```python
+str_1 = [x for x in range(1,6)]
+str_2 = [1,2,3,4,5]
+str_3 = '''lisi'''
+list_1 = tuple(str_1)
+list_2 = tuple(str_2)
+list_3 = tuple(str_3)
+print(type(list_1))
+print(list_1)
+print(type(list_2))
+print(list_2)
+print(type(list_3))
+print(list_3)
+
+tuple_demo1 = (1,2,4,8,16,32, 64, 128, 256, 512, 1024)
+tuple_demo2 = tuple([2**i for i in range(0,11) ])
+print(type(tuple_demo1))
+print(tuple_demo1)
+print(type(tuple_demo2))
+print(tuple_demo2)
+
+# <class 'tuple'>
+# (1, 2, 3, 4, 5)
+# <class 'tuple'>
+# (1, 2, 3, 4, 5)
+# <class 'tuple'>
+# ('l', 'i', 's', 'i')
+# <class 'tuple'>
+# (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024)
+# <class 'tuple'>
+# (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024)
+```
+
+```python
+dimesions = (200,50)
+print(dimesions[0]) # 200
+print(dimesions[1]) # 50
+
+# 元组是不可改变的，无法被赋值
+dimesions[0] = 250
+# Traceback (most recent call last):
+#   File "D:/Python_Projects/Chapter 4.py", line 63, in <module>
+#     dimesions[0] = 250
+# TypeError: 'tuple' object does not support item assignment
+```
+
+#### 遍历元组
+
+```python
+dimesions = (200,50,30,10)
+for dimesion in dimesions:
+    print(dimesion)
+# 200
+# 50
+# 30
+# 10
+```
+
+#### 修改元组
+
+- 虽然不能修改元组的元素，但可以给存储元组的变量赋值。因此，如果要修改前述矩形的尺寸，可重新定义(赋值)整个元组:
+
+```python
+dimesions = (200,50,30,10)
+print("Origianl dimesions:")
+for dimesion in dimesions:
+    print(dimesion)
+    
+dimesions = (400,100)
+print("\nModified dimesions:")
+for dimesion in dimesions:
+    print(dimesion)
+
+# Origianl dimesions:
+# 200
+# 50
+# 30
+# 10
+# 
+# Modified dimesions:
+# 400
+# 100
+```
 
 
-## 5. 字典
 
-> 在Python中，字典是一系列**键-值对**。每个键都与一个值相关联，你可以使用键来访问与之相关联的值。与键相关联的值可以是数字、字符串、列表乃至字典。事实上，可将任何Python对象用作字典中的值。
+### 删除元组
+
+- 使用del
+- 
+
+
+
+```python
+# 1、增加元素 报错
+tuple_demo = ('x', 'y', 'z')
+print(tuple_demo.append('a'))
+# AttributeError: 'tuple' object has no attribute 'append'
+
+# 2、删除元素 报错
+tuple_demo = ('x', 'y', 'z')
+print(tuple_demo.remove('z'))
+# AttributeError: 'tuple' object has no attribute 'remove'
+
+# 3、元素索引操作
+tuple_demo = ('x', 'y', 'z')
+print(tuple_demo.insert(3, 'a'))
+# AttributeError: 'tuple' object has no attribute 'insert'
+
+# 索引：
+tuple_demo = ('x', 'y', 'z')
+for i in range(len(tuple_demo)):
+    print(tuple_demo[i])
+# x
+# y
+# z
+```
+
+
+
+## 5. 集合
+
+集合是由不重复元素组成的无序容器。基本用法包括成员检测、消除重复元素。集合对象支持合集、交集、差集、对称差分等数学运算。
+
+创建集合用花括号或 [`set()`](https://docs.python.org/zh-cn/3.10/library/stdtypes.html#set) 函数。注意，创建空集合只能用 `set()`，不能用 `{}`，`{}` 创建的是空字典，下一小节介绍数据结构：字典。
+
+`set()`取集合后的元素是无序的
+
+```python
+color = ('r', 'g', 'b', 'g', 'b', 'b') # 初始tuple
+new_color = set(color) # 用set筛选不重复的元素
+print(new_color) # {'g', 'b', 'r'}
+
+
+new_color_2 = tuple(new_color) # 再将其转换成tuple
+print(new_color_2) # ('g', 'b', 'r')
+```
+
+以下是一些简单的示例
+
+```python
+basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
+print(basket)                  # 重复的部分会被去掉
+print('orange' in basket)      # 快速成员判定
+print('crabgrass' in basket)
+# 对两个单词中的唯一字母的集合运算
+a = set('abracadabra')
+b = set('alacazam')
+print(a)                        # 集合a中用到的字母
+print(a - b)                    # 集合a中用到且不再b中的字母
+print(a | b)                    # 在集合a或者集合b中的字母
+print(a & b)                    # 既在集合a中又在集合b中的字母
+print(a ^ b)                    # 在集合a或者b中，但不都在二者里的字母
+
+# {'pear', 'apple', 'orange', 'banana'}
+# True
+# False
+# {'r', 'b', 'a', 'd', 'c'}
+# {'d', 'r', 'b'}
+# {'r', 'z', 'b', 'a', 'l', 'd', 'm', 'c'}
+# {'a', 'c'}
+# {'r', 'd', 'z', 'l', 'b', 'm'}
+```
+
+与 [列表推导式](https://docs.python.org/zh-cn/3.10/tutorial/datastructures.html#tut-listcomps) 类似，集合也支持推导式：
+
+```python
+a = {x for x in 'abracadabra' if x not in 'abc'}
+print(a) # {'d', 'r'}
+```
+
+### 常用操作
+
+`len(s)`：返回集合s的元素数量
+`x in s`：检测x是否为s中的成员
+`set <= other`：检测集合set中的每个元素是否在other中
+`set < other`：检测集合set是否为other的真子集
+
+```python
+color = ('r', 'g', 'b', 'g', 'b', 'b') 
+new_color = set(color) # 用set筛选不重复的元素
+print(new_color)
+print(len(new_color)) # 3
+print('r' in new_color) # True
+print({'r','g','b'} <= new_color) # True
+print({'r','g','b'} < new_color)  # False
+```
+
+其他内置函数：add()、remove()、pop()、clear()都能实现对集合的原地修改
+
+```python
+color = ('r', 'g', 'b', 'g', 'b', 'b') 
+new_color = set(color) # 用set筛选不重复的元素
+
+new_color.add('t')
+print(new_color)
+new_color.remove('b')
+print(new_color)
+new_color.pop()
+print(new_color)
+new_color.clear()
+print(new_color)
+
+# {'t', 'g', 'b', 'r'}
+# {'t', 'g', 'r'}
+# {'g', 'r'}
+# set()
+```
+
+
+
+
+
+## 6. 字典
+
+> 映射与字典：
+>
+> - 映射是可变类型
+> - 映射**只有一种**数据类型：字典
+> - 整数1和浮点数1.0会被当做相同的键
+>
+> 在Python中，字典是一系列**键-值对**。每个键都与一个值相关联，你可以使用键来访问与之相关联的值。**键不能重复**，因此无法哈希的类型，如列表、字典等，不可作为键来使用；**与键相关联的值**可以是数字、字符串、列表乃至字典。事实上，可将任何Python对象用作字典中的值。
 >
 > 键值对是两个相关联的值。指定键时，Python将返回与之相关联的值。键和值之间用冒号分隔，而键值对之间用逗号分隔。在字典中，你想存储多少个键值对都可以。
 
@@ -1646,34 +2098,86 @@ print(friend_foods)
 alien_0 = {'color':'green','points':5}
 ```
 
+### 定义字典
+
+1. 使用花括号定义: `{ 'one': 1, 'two' : 2 }`
+2. 使用类型构造器: `dict(one=1, two=2)`
+3. 使用字典推导式: `{ x: x**2 for x in range(10) }`
+
+```python
+tel = {'jack': 4098, 'sape': 4139}
+tel['guido'] = 4127
+# 输出字典
+print(tel)               # {'jack': 4098, 'sape': 4139, 'guido': 4127}
+print(tel['jack'])       # 4098
+# 删除字典中的键
+del tel['sape'] 
+print(tel)               # {'jack': 4098, 'guido': 4127}
+# 修改字典中键的值  
+tel['guido'] = 4128
+print(tel)               # {'jack': 4098, 'guido': 4128}
+# 将字典转换成列表
+print(list(tel))         # ['jack', 'guido']
+print(sorted(tel))       # ['guido', 'jack']
+# 查询字典中的键存在与否
+print('guido' in tel)    # True
+print('jack' not in tel) # False
+```
+
+
+
 ### 使用字典
 
 #### 访问字典
 
-```python
-alien_0 = {'color': 'green', 'points': 5}
-new_points = alien_0['points']
-print("You just earned "+str(new_points)+" points!")
-# You just earned 5 points!
-```
+- 访问全部字典内容，直接`dict`
+- 访问字典的所有键：`dict.key()`
+- 访问字典的所有值：`dict.value()`
+- 访问某个键key1的值：
+  - `dict(key1)`
+  - `dict.get(key1)`
 
-- 如果你在有外星人被射杀时都运行这段代码，就会获取该外星人的点数。
+```python
+# 访问列表里的所有元素
+mail_list = {'tom': 'tom@gmail.com', 'jerry': 'jerry@foxmail.com', 'john': 'john@163.com'}
+
+# 全部
+mail_list.items() 
+# dict_items([('tom', 'tom@gmail.com'), ('jerry', 'jerry@foxmail.com'), ('john', 'john@163.com')])
+
+# 键
+mail_list.keys() 
+# dict_keys(['tom', 'jerry', 'john'])
+
+# 值
+mail_list.values() 
+# dict_values(['tom@gmail.com', 'jerry@foxmail.com', 'john@163.com'])
+
+#某键的值
+mail_list.get('tom') 
+# 'tom@gmail.com'
+```
 
 #### 添加键值对
 
-```python
-alien_0 = {'color': 'green', 'points': 5}
-alien_0['x_position'] = 0
-alien_0['y_position'] = 25
-print(alien_0)
-# {'color': 'green', 'points': 5, 'x_position': 0, 'y_position': 25}
-```
+- 直接指定`dict[key] = value`
+- `dict.update(key = value)`
 
 ```python
-alien_0 = {}
-alien_0['color'] = 'green'
-alien_0['points'] = 5
+mail_list = {'tom': 'tom@gmail.com', 'jerry': 'jerry@foxmail.com', 'john': 'john@163.com'}
+mail_list['zhangsan'] = 'zhangsan@163.com'
+mail_list.update(lisi ='lisi@163.com')
+for key, value in mail_list.items():
+    print(key,":",value)
+
+# tom : tom@gmail.com
+# jerry : jerry@foxmail.com
+# john : john@163.com
+# zhangsan : zhangsan@163.com
+# lisi : lisi@163.com
 ```
+
+
 
 #### 修改字典中的值
 
@@ -1710,6 +2214,31 @@ print("The alien's speed state is: "+ alien_0['speed'])
 # The alien's speed state is: very fast
 ```
 
+#### 删除字典
+
+- `del dict[key]`：删除字典中的key键和它的值
+
+```python
+test_dict = {"Runoob" : 1, "Google" : 2, "Taobao" : 3, "Zhihu" : 4} 
+  
+# 输出原始的字典
+print ("字典移除前 : " + str(test_dict)) 
+  
+# 使用 del 移除 Zhihu
+del test_dict['Zhihu'] 
+  
+# 输出移除后的字典
+print ("字典移除后 : " + str(test_dict)) 
+  
+# 移除没有的 key 会报错
+#del test_dict['Baidu']
+
+# 字典移除前 : {'Runoob': 1, 'Google': 2, 'Taobao': 3, 'Zhihu': 4}
+# 字典移除后 : {'Runoob': 1, 'Google': 2, 'Taobao': 3}
+```
+
+
+
 #### 由类似对象组成的字典
 
 ```python
@@ -1719,14 +2248,33 @@ favorite_languages = {
     'edward': 'ruby',
     'phil': 'c++'
 }
-print("Sarah's favorite language is "+
-      favorite_languages['sarah'].title()+".")
-# Sarah's favorite language is C.
+print("Edward's favorite language is "+
+      favorite_languages['edward'].title()+".")
+# Edward's favorite language is Ruby.
 ```
 
 ### 遍历字典
 
 #### 遍历所有键值对
+
+```python
+bin = { x: 2**x for x in range(11) }
+for key,value in bin.items():
+    print(key,":",value)
+# 0 : 1
+# 1 : 2
+# 2 : 4
+# 3 : 8
+# 4 : 16
+# 5 : 32
+# 6 : 64
+# 7 : 128
+# 8 : 256
+# 9 : 512
+# 10 : 1024
+```
+
+
 
 ```python
 user_0 = {
@@ -1748,7 +2296,7 @@ for key, value in user_0.items():
 # Value: fermi
 ```
 
-注意，即便遍历字典时，键值对的返回顺序也与存储顺序不同。Python不关心键 值对的存储顺序，而只跟踪键和值之间的关联关系。
+> 注意，即便遍历字典时，键值对的返回顺序也与存储顺序不同。Python**不关心键值对的存储顺序**，而只跟踪键和值之间的关联关系。
 
 #### 遍历字典中的所有键
 
@@ -1792,8 +2340,8 @@ if 'erin' not in favorite_languages.keys():
 # Erin, please take our poll !
 ```
 
-- ​	遍历字典时，会默认遍历所有的键，因此，如果将上述代码中的for name in favorite_languages.keys(): 替换为 for name in favorite languages:，输出将不变。
-  ​	如果显式地使用方法keys()可让代码更容易理解，你可以选择这样做，但如果你愿意，也可省略它。
+- 遍历字典时，会默认遍历所有的键，因此，如果将上述代码中的for name in favorite_languages.keys(): 替换为 for name in favorite languages:，输出将不变。
+- 如果显式地使用方法keys()可让代码更容易理解，你可以选择这样做，但如果你愿意，也可省略它。
 
 #### 【按顺序】遍历字典中的所有键
 
@@ -1851,9 +2399,44 @@ for language in set(favorite_languages.values()):
 # 	Ruby
 ```
 
-### 嵌套
+### 内置函数
 
-#### 字典列表
+- `len(dict)`：返回字典的项数
+- `key in dict`：判断键是否在字典中
+- `dict.pop()`：如果键存在且在字典中，移除该键，**返回该键对应的值**
+  - 也就是删除并使用，比get多了一个删除
+- `dict.popitem()`：移除字典的末尾键值对并**返回该键值对**
+
+```python
+mail_list = {'tom': 'tom@gmail.com', 'jerry': 'jerry@foxmail.com', 'john': 'john@163.com'}
+print(len(mail_list))           # 3
+print('tom' in mail_list)       # True
+print(mail_list.get('john'))    # john@163.com
+print(mail_list.pop('john'))    # john@163.com
+print(mail_list.popitem())      # ('jerry', 'jerry@foxmail.com')
+```
+
+### 高级用法
+
+#### 嵌套
+
+##### 列表&字典
+
+```python
+{
+    'red':[255,0,0],
+    'green':[0,255,0],
+    'blue':[0,0,255]
+}
+
+[
+    { 'color':'red', 'value':[255,0,0] },
+    { 'color':'green', 'value':[0,255,0] },
+    { 'color':'blue', 'value':[0,0,255] }
+]
+```
+
+
 
 ```python
 alien_0 = {'color':'green','point':5}
@@ -1907,7 +2490,7 @@ print("Total number of aliens: "+str(len(aliens)))
 # Total number of aliens: 30
 ```
 
-### 在字典中存储列表
+##### 在字典中存储列表
 
 - 每当需要在字典中将一个键关联到多个值时，都可以在字典汇中嵌套一个列表。
 
@@ -1955,7 +2538,24 @@ for name, languages in favorite_languages.items():
 # 	Haskell
 ```
 
-#### 在字典中存储字典
+###### 【理解这个案例】按格式输出
+
+```python
+keys= ['id', 'name', 'pwd']
+values = [[2, 3],['123', '456'],['djks1321','48hbdsk']]
+b = dict(zip(keys,values))
+# print(b)
+# print(len(b.get('id'))) # 获取[2,3]中元素个数
+print("id |  name |  pwd ")
+for i in range(len(b.get('id'))):
+    print(b['id'][i], " | ", b['name'][i], " | ", b['pwd'][i])
+
+# id |  name |  pwd 
+# 2  |  123  |  djks1321
+# 3  |  456  |  48hbdsk
+```
+
+##### 在字典中存储字典
 
 ```PYTHON
 users = {
@@ -1984,6 +2584,60 @@ for username, user_info in users.items():
 # 	Full name: Marie Curie
 # 	Location: Paris
 ```
+
+#### zip()
+
+- 利用zip()函数合并两个列表为字典
+  `字典= dict(zip(列表1,例表2))`
+
+```python
+keys = ['a', 'b', 'c']
+values = [1, 2, 3]
+dictionary = dict(zip(keys, values))
+print(dictionary) # {'a': 1, 'b': 2, 'c': 3}
+```
+
+```python
+keys= ['id', 'name', 'pwd']
+values = [[2, 3],['123', '456'],['djks1321','48hbdsk']]
+b = dict(zip(keys,values))
+# print(b)
+# print(len(b.get('id'))) # 获取[2,3]中元素个数
+print("id |  name |  pwd ")
+for i in range(len(b.get('id'))):
+    print(b['id'][i], " | ", b['name'][i], " | ", b['pwd'][i])
+
+# id |  name |  pwd 
+# 2  |  123  |  djks1321
+# 3  |  456  |  48hbdsk
+```
+
+
+
+#### dict.setdefault()
+
+- Python 字典 `setdefault() `函数和 `get()`方法类似，如果键不存在于字典中，将会添加键并将值设为默认值。
+
+- `dict.setdefault(key[, default])`
+
+  如果字典存在键key，返回它对应的值
+
+  如果不存在，插入default的键key，并返回default
+
+```python
+mail_list = {'tom': 'tom@gmail.com', 'jerry': 'jerry@foxmail.com', 'john': 'john@163.com'}
+tom_mail = mail_list.setdefault('tom','tom@163.com')
+print(tom_mail)  # tom@gmail.com
+print(mail_list) # {'tom': 'tom@gmail.com', 'jerry': 'jerry@foxmail.com', 'john': 'john@163.com'}
+#可以看到，虽然你想要设置tom的邮箱为tom@163.com，但是setdefault方法不让你设置，他会告诉你说，tom已经存在了，并且有值，将值返回给你。这样更加安全。
+
+keli_mail = mail_list.setdefault('keli','keli@163.com')
+print(keli_mail) # keli@163.com
+print(mail_list) # {'tom': 'tom@gmail.com', 'jerry': 'jerry@foxmail.com', 'john': 'john@163.com', 'keli': 'keli@163.com'}
+# 如果插入的是不存在的键，那就可以插入，并且把值返回给你
+```
+
+
 
 
 
@@ -2646,76 +3300,6 @@ range(0, 10)
 
 ## 8. 数据结构
 
-### 集合
-
-
-
-
-
-### 元组
-
-- 相比于列表，元组是更简单的数据结构。如果需要存储的一组值在程序的整个生命周期内都不变，可使用元组。
-- 值不可被修改的列表
-- 列表是`list0=[1,2,3]`，元组是`tuple0=(1,2,3)`
-- 对不应变化的值提供了一定程度的保护
-
-> 列表非常适合用于存储在**程序运行期间可能变化的数据集**。列表是可以修改的，这对处理网站的用户列表或游戏中的角色列表至关重要。然而，有时候你需要创建一系列不可修改的元素，元组可以满足这种需求。Python将不能修改的值称为不可变的，而**不可变的列表**被称为元组。
-
-#### 定义元组
-
-```python
-dimesions = (200,50)
-print(dimesions[0]) # 200
-print(dimesions[1]) # 50
-
-# 元组是不可改变的，无法被赋值
-dimesions[0] = 250
-# Traceback (most recent call last):
-#   File "D:/Python_Projects/Chapter 4.py", line 63, in <module>
-#     dimesions[0] = 250
-# TypeError: 'tuple' object does not support item assignment
-```
-
-#### 遍历元组
-
-```python
-dimesions = (200,50,30,10)
-for dimesion in dimesions:
-    print(dimesion)
-# 200
-# 50
-# 30
-# 10
-```
-
-#### 修改元组
-
-- 虽然不能修改元组的元素，但可以给存储元组的变量赋值。因此，如果要修改前述矩形的尺寸，可重新定义(赋值)整个元组:
-
-```python
-dimesions = (200,50,30,10)
-print("Origianl dimesions:")
-for dimesion in dimesions:
-    print(dimesion)
-    
-dimesions = (400,100)
-print("\nModified dimesions:")
-for dimesion in dimesions:
-    print(dimesion)
-
-# Origianl dimesions:
-# 200
-# 50
-# 30
-# 10
-# 
-# Modified dimesions:
-# 400
-# 100
-```
-
-
-
 
 
 ### 用列表实现堆栈
@@ -2758,153 +3342,6 @@ for dimesion in dimesions:
 >>> queue                           # Remaining queue in order of arrival
 deque(['Michael', 'Terry', 'Graham'])
 ```
-
-### 列表推导式
-
-列表推导式创建列表的方式更简洁。常见的用法为，对序列或可迭代对象中的每个元素应用某种操作，用生成的结果创建新的列表；或用满足特定条件的元素创建子序列。
-
-例如，创建平方值的列表：
-
-```python
->>> squares = []
->>> for x in range(10):
-...     squares.append(x**2)
-...
->>> squares
-[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
-```
-
-注意，这段代码创建（或覆盖）变量 `x`，该变量在循环结束后仍然存在。下述方法可以无副作用地计算平方列表：
-
-```python
-squares = list(map(lambda x: x**2, range(10)))
-```
-
-或等价于：
-
-```python
-squares = [x**2 for x in range(10)]
-```
-
-上面这种写法更简洁、易读。
-
-列表推导式的方括号内包含以下内容：一个表达式，后面为一个 `for` 子句，然后，是零个或多个 `for` 或 `if` 子句。结果是由表达式依据 `for` 和 `if` 子句求值计算而得出一个新列表。 举例来说，以下列表推导式将两个列表中不相等的元素组合起来：
-
-```python
->>> [(x, y) for x in [1,2,3] for y in [3,1,4] if x != y]
-[(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
-```
-
-等价于：
-
-```python
->>> combs = []
->>> for x in [1,2,3]:
-...     for y in [3,1,4]:
-...         if x != y:
-...             combs.append((x, y))
-...
->>> combs
-[(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
-```
-
-注意，上面两段代码中，[`for`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#for) 和 [`if`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#if) 的顺序相同。
-
-表达式是元组（例如上例的 `(x, y)`）时，必须加上括号：
-
-```python
->>> vec = [-4, -2, 0, 2, 4]
->>> # create a new list with the values doubled
->>> [x*2 for x in vec]
-[-8, -4, 0, 4, 8]
->>> # filter the list to exclude negative numbers
->>> [x for x in vec if x >= 0]
-[0, 2, 4]
->>> # apply a function to all the elements
->>> [abs(x) for x in vec]
-[4, 2, 0, 2, 4]
->>> # call a method on each element
->>> freshfruit = ['  banana', '  loganberry ', 'passion fruit  ']
->>> [weapon.strip() for weapon in freshfruit]
-['banana', 'loganberry', 'passion fruit']
->>> # create a list of 2-tuples like (number, square)
->>> [(x, x**2) for x in range(6)]
-[(0, 0), (1, 1), (2, 4), (3, 9), (4, 16), (5, 25)]
->>> # the tuple must be parenthesized, otherwise an error is raised
->>> [x, x**2 for x in range(6)]
-  File "<stdin>", line 1
-    [x, x**2 for x in range(6)]
-     ^^^^^^^
-SyntaxError: did you forget parentheses around the comprehension target?
->>> # flatten a list using a listcomp with two 'for'
->>> vec = [[1,2,3], [4,5,6], [7,8,9]]
->>> [num for elem in vec for num in elem]
-[1, 2, 3, 4, 5, 6, 7, 8, 9]
-```
-
-列表推导式可以使用复杂的表达式和嵌套函数：
-
-```python
->>> from math import pi
->>> [str(round(pi, i)) for i in range(1, 6)]
-['3.1', '3.14', '3.142', '3.1416', '3.14159']
-```
-
-### 嵌套的列表推导式
-
-列表推导式中的初始表达式可以是任何表达式，甚至可以是另一个列表推导式。
-
-下面这个 3x4 矩阵，由 3 个长度为 4 的列表组成：
-
-```python
->>> matrix = [
-...     [1, 2, 3, 4],
-...     [5, 6, 7, 8],
-...     [9, 10, 11, 12],
-... ]
-```
-
-下面的列表推导式可以转置行列：
-
-```python
->>> [[row[i] for row in matrix] for i in range(4)]
-[[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
-```
-
-如上节所示，嵌套的列表推导式基于其后的 [`for`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#for) 求值，所以这个例子等价于：
-
-```python
->>> transposed = []
->>> for i in range(4):
-...     transposed.append([row[i] for row in matrix])
-...
->>> transposed
-[[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
-```
-
-反过来说，也等价于：
-
-```python
->>> transposed = []
->>> for i in range(4):
-...     # the following 3 lines implement the nested listcomp
-...     transposed_row = []
-...     for row in matrix:
-...         transposed_row.append(row[i])
-...     transposed.append(transposed_row)
-...
->>> transposed
-[[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
-```
-
-**实际应用中，最好用内置函数替代复杂的流程语句**。此时，[`zip()`](https://docs.python.org/zh-cn/3.10/library/functions.html#zip) 函数更好用：
-
-```python
->>> list(zip(*matrix))
-[(1, 5, 9), (2, 6, 10), (3, 7, 11), (4, 8, 12)]
-```
-
-关于本行中星号的详细说明，参见 [解包实参列表](https://docs.python.org/zh-cn/3.10/tutorial/controlflow.html#tut-unpacking-arguments)。
 
 
 
