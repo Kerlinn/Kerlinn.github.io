@@ -69,6 +69,9 @@ https://docs.python.org/zh-cn/3.10/library/stdtypes.html
 
 #### 常见数据类型
 
+- 常量：None（字典中未被赋值的key的value
+- 逻辑值：True,False
+- 空集：''、()、[]、{}、set()、range(0)
 - 数字类型: int、float、complex
 - 文本类型: str 
 - 序列类型: list、 tuple、 range
@@ -2643,169 +2646,14 @@ print(mail_list) # {'tom': 'tom@gmail.com', 'jerry': 'jerry@foxmail.com', 'john'
 
 ## 7. 流程控制语句
 
-### while循环
-
-```python
->>> # Fibonacci series:
-... # the sum of two elements defines the next
-... a, b = 0, 1
->>> while a < 10:
-...     print(a)
-...     a, b = b, a+b
-...
-0
-1
-1
-2
-3
-5
-8
-```
-
-#### 让用户选择何时退出
-
-```python
-prompt = "\nTell me something, and I will repeat it back to you: "
-prompt += "\nEnter 'quit' to end the program."
-message = ""
-while message != 'quit':
-    message = input(prompt)
-    if message != 'quit':
-        print(message)
-______________________________或者______________________________
-prompt = "\nTell me something, and I will repeat it back to you: "
-prompt += "\nEnter 'quit' to end the program."
-active = True
-while active:
-    message = input(prompt) # 将要打印的字符放到变量中，这样可以使逻辑更清晰
-    if message == 'quit':
-        active = False
-    else:
-        print(message)
-# Tell me something, and I will repeat it back to you:
-# Enter 'quit' to end the program.hello
-# hello
-#
-# Tell me something, and I will repeat it back to you:
-# Enter 'quit' to end the program.???
-# ???
-#
-# Tell me something, and I will repeat it back to you:
-# Enter 'quit' to end the program.quit
-#
-# Process finished with exit code 0
-```
-
-#### 使用while循环来处理列表和字典
-
-##### 在列表之间移动元素
-
-```python
-# 首先，创建一个待验证用户列表
-# 和一个用于存储已验证用户的空列表
-unconfirmed_users = ['alice', 'brian', 'candace']
-confirmed_users = []
-# 验证每个用户，直到没有未验证用户为止
-# 将每个经过验证的列表都移到已验证用户列表中
-while unconfirmed_users:
-    current_user = unconfirmed_users.pop()
-    print("Verifying user: " + current_user.title())
-    confirmed_users.append(current_user)
-# 显示所有已验证用户
-print("\nThe following users have been confirmed: ")
-for confirmed_user in confirmed_users:
-    print(confirmed_user.title())
-# Verifying user: Candace
-# Verifying user: Brian
-# Verifying user: Alice
-# 
-# The following users have been confirmed: 
-# Candace
-# Brian
-# Alice
-```
-
-##### 删除包含特定值的所有列表元素
-
-- 在第3章中，我们使用函数remove()来删除列表中的特定值，这之所以可行，是因为要删除的值在列表中只出现了一次。如果要删除列表中所有包含特定值的元素，该怎么办呢?
-
-```python
-pets = ['dog','cat','dog','goldfish','cat','rabbit','cat']
-print(pets)
-while 'cat' in pets:
-    pets.remove('cat')
-print(pets)
-# ['dog', 'cat', 'dog', 'goldfish', 'cat', 'rabbit', 'cat']
-# ['dog', 'dog', 'goldfish', 'rabbit']
-```
-
-##### 使用用户输入来填充字典
-
-```python
-responses = {}
-# 设置一个标志，指出调查是否继续
-polling_active = True
-while polling_active:
-    # 提示输入被调查者的名字和回答
-    name = input("\nWhat is your name?")
-    response = input("which mountain would you like to climb someday? ")
-    # 将答卷存储在字典中
-    responses[name] = response
-    # 看看是否还有人要参与调查
-    repeat = input("Would you like to let another person respond? (yes/ no) ")
-    if repeat == 'no':
-        polling_active = False
-# 调查结束，显示结果.
-print("\n--- Poll Results ---")
-for name, response in responses.items():
-    print(name + " would like to climb " + response + ".")
-# What is your name?like
-# which mountain would you like to climb someday? ximalaya
-# Would you like to let another person respond? (yes/ no) yes
-# 
-# What is your name?wang
-# which mountain would you like to climb someday? qinling
-# Would you like to let another person respond? (yes/ no) no
-# 
-# --- Poll Results ---
-# like would like to climb ximalaya.
-# wang would like to climb qinling.
-```
-
-### for循环
-
-​	Python 的 `for` 语句与 C 或 Pascal 中的不同。Python 的 `for` 语句不迭代算术递增数值（如 Pascal），或是给予用户定义迭代步骤和暂停条件的能力（如 C），而是**迭代列表或字符串等任意序列**，元素的迭代顺序与在序列中出现的顺序一致。 
-
-```python
->>> # Measure some strings:
-... words = ['cat', 'window', 'defenestrate']
->>> for w in words:
-...     print(w, len(w))
-...
-cat 3
-window 6
-defenestrate 12
-```
-
-遍历集合时修改集合的内容，会很容易生成错误的结果。因此不能直接进行循环，而是**应遍历该集合的副本**或**创建新的集合**：
-
-```python
-# Create a sample collection
-users = {'Hans': 'active', 'Éléonore': 'inactive', '景太郎': 'active'}
-
-# Strategy:  Iterate over a copy
-for user, status in users.copy().items():
-    if status == 'inactive':
-        del users[user]
-
-# Strategy:  Create a new collection
-active_users = {}
-for user, status in users.items():
-    if status == 'active':
-        active_users[user] = status
-```
-
 ### if语句
+
+```python
+if 判断条件：
+    执行语句……
+else：
+    执行语句……
+```
 
 ```python
 cars = ['audi','bmw','subaru','toyota']
@@ -2820,6 +2668,10 @@ for car in cars:
 # Subaru
 # Toyota
 ```
+
+
+
+
 
 #### 条件测试
 
@@ -2943,31 +2795,311 @@ print("\nFinished making your pizza!")
 
 
 
-### else子句
+
+
+### while循环
+
+```python
+while 判断条件(condition)：
+    执行语句(statements)……
+
+```
+
+```python
+count = 0
+while (count < 3):
+   print ('The count is:', count)
+   count = count + 1
+ 
+print ("Good bye!")
+# The count is: 0
+# The count is: 1
+# The count is: 2
+# Good bye!
+```
+
+```python
+# continue 和 break 用法
+ 
+i = 1
+while i < 10:   
+    i += 1
+    if i%2 > 0:     # 非双数时跳过输出
+        continue
+    print (i)         # 输出双数2、4、6、8、10
+ 
+i = 1
+while 1:            # 循环条件为1必定成立
+    print (i)         # 输出1~5
+    i += 1
+    if i > 5:     # 当i大于10时跳出循环
+        break
+```
+
+
+
+```python
+>>> # Fibonacci series:
+... # the sum of two elements defines the next
+... a, b = 0, 1
+>>> while a < 10:
+...     print(a)
+...     a, b = b, a+b
+...
+0
+1
+1
+2
+3
+5
+8
+```
+
+#### 循环的退出方法
+
+- 循环结束，正常退出
+- 执行出错，异常退出
+- 使用标志退出
+- 使用break、 continue 语句退出
+- 条件不满足，不执行循环
+- 死循环，不退出
+
+##### 让用户选择何时退出
+
+```python
+prompt = "\nTell me something, and I will repeat it back to you: "
+prompt += "\nEnter 'quit' to end the program."
+message = ""
+while message != 'quit':
+    message = input(prompt)
+    if message != 'quit':
+        print(message)
+______________________________或者______________________________
+prompt = "\nTell me something, and I will repeat it back to you: "
+prompt += "\nEnter 'quit' to end the program."
+active = True
+while active:
+    message = input(prompt) # 将要打印的字符放到变量中，这样可以使逻辑更清晰
+    if message == 'quit':
+        active = False
+    else:
+        print(message)
+# Tell me something, and I will repeat it back to you:
+# Enter 'quit' to end the program.hello
+# hello
+#
+# Tell me something, and I will repeat it back to you:
+# Enter 'quit' to end the program.???
+# ???
+#
+# Tell me something, and I will repeat it back to you:
+# Enter 'quit' to end the program.quit
+#
+# Process finished with exit code 0
+```
+
+#### 使用while循环来处理列表和字典
+
+```python
+list1= [1,2,3,4,5]
+while list1:
+    print(list1.pop())
+# 5
+# 4
+# 3
+# 2
+# 1
+```
+
+
+
+##### 在列表之间移动元素
+
+```python
+# 首先，创建一个待验证用户列表
+# 和一个用于存储已验证用户的空列表
+unconfirmed_users = ['alice', 'brian', 'candace']
+confirmed_users = []
+# 验证每个用户，直到没有未验证用户为止
+# 将每个经过验证的列表都移到已验证用户列表中
+while unconfirmed_users:
+    current_user = unconfirmed_users.pop()
+    print("Verifying user: " + current_user.title())
+    confirmed_users.append(current_user)
+# 显示所有已验证用户
+print("\nThe following users have been confirmed: ")
+for confirmed_user in confirmed_users:
+    print(confirmed_user.title())
+# Verifying user: Candace
+# Verifying user: Brian
+# Verifying user: Alice
+# 
+# The following users have been confirmed: 
+# Candace
+# Brian
+# Alice
+```
+
+##### 删除包含特定值的所有列表元素
+
+- 在第3章中，我们使用函数remove()来删除列表中的特定值，这之所以可行，是因为要删除的值在列表中只出现了一次。如果要删除列表中所有包含特定值的元素，该怎么办呢?
+
+```python
+pets = ['dog','cat','dog','goldfish','cat','rabbit','cat']
+print(pets)
+while 'cat' in pets:
+    pets.remove('cat')
+print(pets)
+# ['dog', 'cat', 'dog', 'goldfish', 'cat', 'rabbit', 'cat']
+# ['dog', 'dog', 'goldfish', 'rabbit']
+```
+
+##### 使用用户输入来填充字典
+
+```python
+responses = {}
+# 设置一个标志，指出调查是否继续
+polling_active = True
+while polling_active:
+    # 提示输入被调查者的名字和回答
+    name = input("\nWhat is your name?")
+    response = input("which mountain would you like to climb someday? ")
+    # 将答卷存储在字典中
+    responses[name] = response
+    # 看看是否还有人要参与调查
+    repeat = input("Would you like to let another person respond? (yes/ no) ")
+    if repeat == 'no':
+        polling_active = False
+# 调查结束，显示结果.
+print("\n--- Poll Results ---")
+for name, response in responses.items():
+    print(name + " would like to climb " + response + ".")
+# What is your name?like
+# which mountain would you like to climb someday? ximalaya
+# Would you like to let another person respond? (yes/ no) yes
+# 
+# What is your name?wang
+# which mountain would you like to climb someday? qinling
+# Would you like to let another person respond? (yes/ no) no
+# 
+# --- Poll Results ---
+# like would like to climb ximalaya.
+# wang would like to climb qinling.
+```
+
+### for循环
+
+​	Python 的 `for` 语句与 C 或 Pascal 中的不同。Python 的 `for` 语句不迭代算术递增数值（如 Pascal），或是给予用户定义迭代步骤和暂停条件的能力（如 C），而是**迭代列表或字符串等任意序列**，元素的迭代顺序与在序列中出现的顺序一致。 
+
+```python
+# Measure some strings:
+words = ['cat', 'window', 'defenestrate']
+for w in words:
+    print(w, len(w))
+
+# cat 3
+# window 6
+# defenestrate 12
+```
+
+遍历集合时修改集合的内容，会很容易生成错误的结果。因此不能直接进行循环，而是**应遍历该集合的副本**或**创建新的集合**：
+
+```python
+# Create a sample collection
+users = {'Hans': 'active', 'Éléonore': 'inactive', '景太郎': 'active'}
+
+# Strategy:  Iterate over a copy
+for user, status in users.copy().items():
+    if status == 'inactive':
+        del users[user]
+
+# Strategy:  Create a new collection
+active_users = {}
+for user, status in users.items():
+    if status == 'active':
+        active_users[user] = status
+```
+
+#### else子句
 
 循环语句支持 `else` 子句；[`for`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#for) 循环中，可迭代对象中的元素全部循环完毕，或 [`while`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#while) 循环的条件为假时，执行该子句；[`break`](https://docs.python.org/zh-cn/3.10/reference/simple_stmts.html#break) 语句终止循环时，不执行该子句。 请看下面这个查找素数的循环示例：
 
-```
->>> for n in range(2, 10):
-...     for x in range(2, n):
-...         if n % x == 0:
-...             print(n, 'equals', x, '*', n//x)
-...             break
-...     else:
-...         # loop fell through without finding a factor
-...         print(n, 'is a prime number')
-...
-2 is a prime number
-3 is a prime number
-4 equals 2 * 2
-5 is a prime number
-6 equals 2 * 3
-7 is a prime number
-8 equals 2 * 4
-9 equals 3 * 3
+```python
+for n in range(2, 10):
+    for x in range(2, n):
+        if n % x == 0:
+            print(n, 'equals', x, '*', n//x)
+            break
+    else:
+        # loop fell through without finding a factor
+        print(n, 'is a prime number')
+# 2 is a prime number
+# 3 is a prime number
+# 4 equals 2 * 2
+# 5 is a prime number
+# 6 equals 2 * 3
+# 7 is a prime number
+# 8 equals 2 * 4
+# 9 equals 3 * 3
 ```
 
 （没错，这段代码就是这么写。仔细看：`else` 子句属于 [`for`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#for) 循环，**不属于** [`if`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#if) 语句。）
+
+```python
+movie1 = { "name":"Friends", "language":"En", "Sessions":10, "Other name":"Six of One" }
+for title in movie1.keys():
+    print(title.title())
+    # Name
+    # Language
+    # Sessions
+    # Other Name
+for value in movie1.values():
+    print(value)
+    # Friends
+    # En
+    # 10
+    # Six of One
+for i in enumerate(movie1.items()):
+    print(i)
+    # (0, ('name', 'Friends'))
+    # (1, ('language', 'En'))
+    # (2, ('Sessions', 10))
+    # (3, ('Other name', 'Six of One'))
+```
+
+
+
+#### 枚举enumerate()
+
+enumerate() 函数用于将一个可遍历的数据对象(如列表、元组或字符串)组合为一个索引序列，同时列出数据和数据下标，一般用在 for 循环当中
+
+```python
+seasons = ['Spring', 'Summer', 'Fall', 'Winter']
+list(enumerate(seasons))
+# [(0, 'Spring'), (1, 'Summer'), (2, 'Fall'), (3, 'Winter')]
+list(enumerate(seasons, start=1)) # 下标从 1 开始
+# [(1, 'Spring'), (2, 'Summer'), (3, 'Fall'), (4, 'Winter')]
+
+```
+
+```python
+i = 0
+seq = ['one', 'two', 'three']
+# 传统for循环的枚举
+# for element in seq:
+#     print (i, seq[i])
+#     i += 1
+
+# enumerate()函数的枚举
+for i, element in enumerate(seq):
+    print (i, element)
+
+# 0 one
+# 1 two
+# 2 three
+```
+
+
 
 ### break语句
 
@@ -3093,7 +3225,11 @@ while current_number < 10:
 
 ### match语句
 
-​		match语句接受一个表达式，并将其值与作为一个或多个case块给出的连续模式进行比较。这表面上类似于C、Java或JavaScript(以及许多其他语言)中的**switch语句**，但它更类似于Rust或Haskell等语言中的模式匹配。只有第一个匹配的模式被执行，它还可以从值中提取组件(序列元素或对象属性)到变量中。
+> match语句需要Python 3.10及以上版本支持
+>
+> match语句更擅长字面值比较，if语句更擅长数值比较
+
+match语句接受一个表达式，并将其值与作为一个或多个case块给出的连续模式进行比较。这表面上类似于C、Java或JavaScript(以及许多其他语言)中的**switch语句**，但它更类似于Rust或Haskell等语言中的模式匹配。只有第一个匹配的模式被执行，它还可以从值中提取组件(序列元素或对象属性)到变量中。
 
 最简单的形式是将一个目标值与一个或多个字面值进行比较：
 
@@ -3275,8 +3411,6 @@ match 语句的其他特性：
 3 little
 4 lamb
 ```
-
-不过，大多数情况下，`enumerate()` 函数更便捷，详见 [循环的技巧](# 7. 数据结构) 。
 
 如果只输出 range，会出现意想不到的结果：
 
@@ -5095,20 +5229,287 @@ test_dict = {'A':'a', 'B':'b', 'C':'c'}
 
 
 
-
 ## 语法糖
 
-### 列表推导式
+### 推导式
+
+**推导式（又称解析器）**，是 Python 独有的一种特性。
+
+使用推导式可以**快速生成列表、元组、字典以及集合类型的数据**，因此推导式又可细分为列表推导式、元组推导式、字典推导式以及集合推导式。
+
+#### 列表推导式
+
+列表推导式可以利用 range 区间、元组、列表、字典和集合等数据类型，快速生成一个满足指定需求的列表。
+
+列表推导式的语法格式如下：
 
 ```python
->>> a = [i for i in range(10)]
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+[表达式 for 迭代变量 in 可迭代对象 [if 条件表达式] ]
+```
+
+
+此格式中，[if 条件表达式] 不是必须的，可以使用，也可以省略。
+
+通过列表推导式的语法格式，明显会感觉到它和 for 循环存在某些关联。
+
+其实，除去 [if 条件表达式] 部分，其余各部分的含义以及执行顺序和 for 循环是完全一样的（表达式其实就是 for 循环中的循环体），即它的执行顺序如下所示：
+
+```python
+for 迭代变量 in 可迭代对象:
+    表达式
+```
+
+> **可以这样认为，它只是对 for 循环语句的格式做了一下简单的变形，并用 [] 括起来而已，只不过最大的不同之处在于，列表推导式最终会将循环过程中，计算表达式得到的一系列值组成一个列表。**
+
+```python
+a_range = range(10)
+# 对a_range执行for表达式
+a_list = [x * x for x in a_range]
+# a_list集合包含10个元素
+print(a_list)
+
+输出结果：
+[0 , 1 , 4 , 9 , 16 , 25 , 36 , 49 , 64, 81]
+
+```
+
+上面代码的第 3 行会对 a_range 执行迭代，由于 a_range 相当于包含 10 个元素，因此程序生成的 a_list 同样包含 10 个元素，且每个元素都是 a_range 中每个元素的平方（由表达式 x * x 控制）。
+
+不仅如此，我们还可以在列表推导式中添加 `if 条件语句`，这样列表推导式将只迭代那些符合条件的元素。例如：
+
+```python
+b_list = [x * x for x in a_range if x % 2 == 0]
+# a_list集合包含5个元素
+print(b_list)
+
+输出结果：
+[0 ,4 , 16, 36, 64]
+```
+
+这里给列表推导式增加了 if 条件语句，这会导致推导式只处理 range 区间的偶数，因此程序生成的 b_list 只包含 5 个元素。
+
+另外，以上所看到的列表推导式都只有一个循环，实际上它可使用多个循环，就像嵌套循环一样。例如如下代码：
+
+```python
+d_list = [(x, y) for x in range(5) for y in range(4)]
+# d_list列表包含20个元素
+print(d_list)
+```
+
+上面代码中，**x 是遍历 range(5) 的迭代变量**（计数器），因此该 x 可迭代 5 次；**y 是遍历 range(4) 的计数器**，因此该 y 可迭代 4 次。因此，**该（x,y）表达式一共会迭代 20 次**。上面的 for 表达式相当于如下嵌套循环：
+
+```python
+dd_list = []
+for x in range(5):
+    for y in range(4):
+        dd_list.append((x, y))
+
+输出结果：
+[(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3), (4, 0), (4, 1), (4, 2), (4, 3)]
+
+```
+
+当然，也支持类似于三层嵌套的 for 表达式，例如如下代码：
+
+```python
+e_list = [[x, y, z] for x in range(5) for y in range(4) for z in range(6)]
+# e_list列表包含120个元素
+print(e_list)
+```
+
+对于包含多个循环的 for 表达式，同样可指定 if 条件。
+
+假如我们有一个需求：
+
+- 程序要将两个列表中的数值按“能否整除”的关系配对在一起。
+- 比如 src_a 列表中包含 30，src_b 列表中包含 5，其中 30 可以整除 5，那么就将 30 和 5 配对在一起。对于上面的需求使用 for 表达式来实现非常简单，例如如下代码：
+
+```python
+src_a = [30, 12, 66, 34, 39, 78, 36, 57, 121]
+src_b = [3, 5, 7, 11]
+# 只要x能整除y，就将它们配对在一起
+result = [(x, y) for x in src_a for y in src_b if x % y == 0]
+print(result)
+
+输出结果：
+[(30, 3), (30, 5), (12, 3), (66, 3), (66, 11), (39, 3), (78, 3), (36, 3), (57, 3), (121, 11)]
+
 ```
 
 ```python
->>> b = [0 for i in range(10)]
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+print([x*x for x in range(10) if x % 7 == 0])
+# 上面这行等价于下面这段
+number = 0
+list1 = []
+while number < 10:
+    if number % 7 == 0:
+        list1.append(number*number)
+    number += 1
+print(list1)
+
+# [0, 49]
 ```
+
+
+
+#### 元组推导式
+
+元组推导式可以利用 range 区间、元组、列表、字典和集合等数据类型，快速生成一个满足指定需求的元组。
+
+元组推导式的语法格式如下：
+
+```python
+(表达式 for 迭代变量 in 可迭代对象 [if 条件表达式] )
+```
+
+其中，用 [] 括起来的部分，可以使用，也可以省略。
+
+通过和列表推导式做对比，你会发现，除了**元组推导式是用 () 圆括号**将各部分括起来，而列表推导式用的是 []，其它完全相同。不仅如此，元组推导式和列表推导式的用法也完全相同。
+
+例如，我们可以使用下面的代码生成一个包含数字 1~9 的元组：
+
+```python
+a = (x for x in range(1,10))
+print(a)
+
+输出结果：
+<generator object <genexpr> at 0x000001C6E5F97748>
+```
+
+从上面的执行结果可以看出，使用元组推导式生成的结果并不是一个元组，而是一个**生成器对象**，这一点和列表推导式是不同的。
+
+如果我们想要使用元组推导式获得新元组或新元组中的元素，有以下三种方式：
+
+1. 使用 tuple() 函数，可以直接将生成器对象转换成元组，例如：
+
+   ```python
+   a = (x for x in range(1,10))
+   print(tuple(a))
+   
+   运行结果为：
+   (1, 2, 3, 4, 5, 6, 7, 8, 9)
+   
+   ```
+
+2. 直接使用 for 循环遍历生成器对象，可以获得各个元素，例如：
+
+   ```python
+   a = (x for x in range(1,10))
+   for i in a:
+       print(i,end=' ')
+   print(tuple(a))
+   
+   输出结果：
+   1 2 3 4 5 6 7 8 9 ()
+   ```
+
+3. 使用 __next__() 方法遍历生成器对象，也可以获得各个元素，例如：
+
+   ```python
+   a = (x for x in range(3))
+   print(a.__next__())
+   print(a.__next__())
+   print(a.__next__())
+   a = tuple(a)
+   print("转换后的元组：",a)
+   
+   输出结果：
+   0
+   1
+   2
+   转换后的元组： ()
+   ```
+
+注意，无论是使用 for 循环遍历生成器对象，还是使用 __next__() 方法遍历生成器对象，遍历后原生成器对象将不复存在，这就是遍历后转换原生成器对象却得到空元组的原因。
+
+#### 字典推导式
+
+Python 中，使用字典推导式可以借助列表、元组、字典、集合以及 range 区间，快速生成符合需求的字典。
+
+字典推导式的语法格式如下：
+
+```python
+{表达式 for 迭代变量 in 可迭代对象 [if 条件表达式]}
+```
+
+可以看到，和其它推导式的语法格式相比，唯一不同在于，**字典推导式用的是大括号{}**。
+
+```python
+listdemo = ['Jack','Tom']
+#将列表中各字符串值为键，各字符串的长度为值，组成键值对
+newdict = {key:len(key) for key in listdemo}
+print(newdict)
+
+输出结果：
+{'Jack': 4, 'Tom': 3}
+```
+
+交换现有字典中各键值对的键和值。
+
+```python
+olddict={'Jack': 4, 'Tom': 3}
+newdict = {v: k for k, v in olddict.items()}
+print(newdict)
+
+输出结果：
+{4: 'Jack', 3: 'Tom'}
+```
+
+使用 if 表达式筛选符合条件的键值对。
+
+```python
+olddict={'Jack': 4, 'Tom': 3}
+newdict = {v: k for k, v in olddict.items() if v>3}
+print(newdict)
+
+输出结果：
+{4: 'Jack'}
+```
+
+#### 集合推导式
+
+集合推导式的语法格式和字典推导式完全相同，如下所示：
+
+```
+{ 表达式 for 迭代变量 in 可迭代对象 [if 条件表达式] }
+```
+
+
+**集合推导式和字典推导式的格式完全相同，那么给定一个类似的推导式，如何判断是哪种推导式呢？**
+
+最简单直接的方式，就是根据表达式进行判断，如果表达式以键值对`(key：value)`的形式，则证明此推导式是字典推导式；反之，则是集合推导式。
+
+```python
+setnew = {i**2 for i in range(3)}
+print(setnew)
+
+输出结果：
+{0, 1, 4}
+```
+
+既然生成的是集合，那么其保存的元素必须是唯一的。
+
+```python
+tupledemo = (1,1,2,3,4,5,6,6)
+setnew = {x**2 for x in tupledemo if x%2==0}
+print(setnew)
+
+输出结果：
+{16, 4, 36}
+```
+
+```python
+dictdemo = {'1':1,'2':2,'3':3}
+setnew = {x for x in dictdemo.keys()}
+print(setnew)
+
+输出结果：
+{'2', '1', '3'}
+```
+
+
+
+
 
 ### 生成全0列表
 
@@ -5139,6 +5540,25 @@ In [8]: a[0][0] = 1
 In [9]: a
 Out[9]: [[1], [0], [0], [0], [0], [0], [0], [0], [0], [0]]
 ```
+
+
+
+### 遍历过程中修改列表
+
+- 导致数据遗漏
+
+```python
+list1 = [ 'a', 'b', 'c', 'd' ]
+	for i in range(len(list1)):
+	list1.pop(i)
+# 列表在执行pop()之后，长度会减少，因此不能使用固定长度的for循环遍历
+```
+
+
+
+
+
+
 
 
 
@@ -5397,6 +5817,30 @@ int main(){
 	cout << "8和12的最小公倍数为 " << l << endl;
 	return 0;
 }
+```
+
+### 九九乘法表
+
+```python
+# 用列表推导式生成九九乘法表
+print('\n'.join([' '.join([ f"{j}*{i}={j*i}" for j in range(1,i+1)]) for i in range(1,10)]))
+
+# 用双循环实现
+for j in range(1,10):
+    for i in range(1,j+1):
+        print(f'{i}*{j}={i*j}',end=' ')
+    print()
+
+# 1*1=1 
+# 1*2=2 2*2=4 
+# 1*3=3 2*3=6 3*3=9 
+# 1*4=4 2*4=8 3*4=12 4*4=16 
+# 1*5=5 2*5=10 3*5=15 4*5=20 5*5=25 
+# 1*6=6 2*6=12 3*6=18 4*6=24 5*6=30 6*6=36 
+# 1*7=7 2*7=14 3*7=21 4*7=28 5*7=35 6*7=42 7*7=49 
+# 1*8=8 2*8=16 3*8=24 4*8=32 5*8=40 6*8=48 7*8=56 8*8=64 
+# 1*9=9 2*9=18 3*9=27 4*9=36 5*9=45 6*9=54 7*9=63 8*9=72 9*9=81 
+
 ```
 
 
@@ -5660,6 +6104,62 @@ int main()
 ```
 
 
+
+# Python 小demo
+
+```python
+import pprint
+with open("./24-demo.txt") as f:
+    file_data = f.readlines()
+    pprint.pprint(file_data)   # 为了演示文件内容而特意使用了pprint
+
+ # ['You can eat and eat, but nothing will ever fill the void. Welcome to the '
+#  'real world! It sucks. You’re gonna love it!\n',
+#  '\n',
+#  'I thought that it (propose) mattered what I said or where I said it. \n',
+#  '\n',
+#  'Then I realized the only thing that matters is that you, you make me happier '
+#  'than I ever thought I could be.\n',
+#  '\n',
+#  'If I had known the last time I saw you would be the last time, I ... I would '
+#  'have stopped to memorize your face, the way you move, everything about '
+#  'you. \n',
+#  '\n',
+#  'If I had known the last time I kissed you would have been the last time... I '
+#  'never would have stopped.\n',
+#  '\n',
+#  'Monica, I thought this (getting married) was going to be the most difficult '
+#  'thing I ever gonna have to do. \n',
+#  '\n',
+#  'But when I saw you walking down that aisle I realized how simple it was.\n',
+#  '\n',
+#  'I love you. Any surprises that come our way it’s okay, because I will always '
+#  'love you. You are the person I was meant to spend the rest of my life '
+#  'with.\n',
+#  '\n',
+#  'I say more sumb things before 9 am than most people say all day.\n',
+# ...   
+
+
+# 统计全部行数
+print(len(file_data))          # 27
+
+# 统计空行行数
+print(file_data.count("\n"))     # 13
+
+# 统计非空行的行数,方法1：相减
+print(len(file_data) - file_data.count("\n"))             # 14
+# 方法2：将列表数据转换为set数据，这样空行就只有一个（重复的被去掉），
+# 再-1，那剩下的集合长度，就是非空行的行数
+print(len(set(file_data)) - 1)                            # 14
+
+# 统计单词 I 出现的次数
+print(file_data.count("I"))  # 错误用法，结果为0
+print(str(file_data).split(" ").count("I"))   # 16
+
+# 统计单词 you 和 You 出现的次数
+print(int(str(file_data).split(" ").count("you")) + int(str(file_data).split(" ").count("You"))) # 9
+```
 
 
 
