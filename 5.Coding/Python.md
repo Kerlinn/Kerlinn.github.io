@@ -3481,9 +3481,22 @@ deque(['Michael', 'Terry', 'Graham'])
 
 
 
-## 9. 输入与输出
+## 9. 输入输出/文件
 
-### 输入input()
+> ```python
+> while True:
+> 	print("按s键保存数据")
+> 	print("按|键读取数据")
+> 	print("按q键退出程序")
+> 	keyboard = input("请输入控制指令")
+> 	do something...
+> ```
+>
+> 输入也经常用于循环中，实现暂停循环的功能
+
+### 输入
+
+#### input()
 
 - 函数input()接受一个参数：即**要向用户显示的提示或说明，让用户知道该如何做**。在这个
   示例中，Python运行第1行代码时，用户将看到提示Tell me something, and I will repeat it back to you: 程序等待用户输人，并在用户按回车键后继续运行。输人存储在变量message中，接下来的print(message)将输人呈现给用户:
@@ -3507,7 +3520,7 @@ print("\nHello, "+name+"!")
 # Hello, Like !
 ```
 
-#### 使用int()来获取数值输入
+##### 使用input()来获取数值输入
 
 ```python
 height = input("How tall are you, in meters? ")
@@ -3519,7 +3532,7 @@ else:
     print("\nYou'll be able to ride when yor're a little older")
 ```
 
-#### 求模
+##### 求模
 
 ```python
 number = input("Enter a number, and I'll tell you if it's even or odd: ")
@@ -3534,27 +3547,325 @@ else:
 # The number 52 is even.
 ```
 
-### 输出print()
+#### 命令行参数
+
+编写命令行参数的一般逻辑
+
+```python
+import argparse
+parser = argparse.ArgumentParser(description="这个程序的用途")
+parser.add_argument("要添加的参数和参数描述")
+args = parser.parse_args()
+```
+
+- `args`用于接收参数并进行处理
+- 执行方式`python name.py 参数`
+
+```python
+import argparse
+# 执行方式  python3 ./38-1.py -number 100
+parser = argparse.ArgumentParser(description="这个程序用来演示参数处理")
+# -number 表示 number 参数是可选参数
+parser.add_argument( "-number", help="输入一个数字")
+args = parser.parse_args()
+print(f"你输入的number参数是 {args.number} ")
+
+
+# python 38-1.py -number 210
+# 你输入的number参数是 210 
+
+# python ./38-1.py -h
+# usage: 38-1.py [-h] [-number NUMBER]
+# 
+# 这个程序用来演示参数处理
+# 
+# options:
+#   -h, --help      show this help message and exit
+#   -number NUMBER  输入一个数字
+```
+
+##### 强制转换参数类型和设置默认值
+
+```python
+parser.add_argument( "-number1", type=int, default=10 )
+```
+
+```python
+import argparse
+# 执行方式  python3 38-1.py -number 100
+parser = argparse.ArgumentParser(description="这个程序用来演示参数处理")
+# -number 表示 number 参数是可选参数
+parser.add_argument( "-number1", type=int,  default=10, help="输入一个数字")
+parser.add_argument( "-number2", type=int,  default=20, help="输入一个数字")
+args = parser.parse_args()
+print(f"你输入的两数之和是 {args.number1+args.number2} ")
+
+# python3 38-2.py -number1 30 -number2 20
+# 你输入的两数之和是 50 
+```
+
+
+
+### 输出
+
+#### 三种输出格式
+
+1. 百分号%：用于定义格式和精度
+
+   ```python
+   # %常用格式:
+   # %s格式化字符串
+   # %d格式化整数
+   # %f浮点数
+   "%-5.3d" %(123.456)
+   '123  '# 3后面有两个占位符
+   ```
+
+   ```python
+   "%s is %s than %s" %("Beautiful", "better", "ugly")
+   ```
+
+2. format()函数
+
+   ```python
+   "{1} is {2} than {0}".format( "udhy", "Beautiful", "better")
+   "{B} is {b} than {u}".format(u = "ugly", B = "Beautiful", b = "better")
+   # 'Beautiful is better than ugly'
+   ```
+
+3. **f-strings**
+
+   ```python
+   u= "ugly"; B = "Beautiful"; b = "better"
+   f"{B} is {b} than{u}"
+   ```
+
+   
+
+#### print()
 
 - `print()` 函数输出给定参数的值。与表达式不同（比如，之前计算器的例子），它能处理多个参数，包括浮点数与字符串。它输出的字符串不带引号，且各参数项之间会插入一个空格，这样可以实现更好的格式化操作：
 
   ```python
-  >>> i = 256*256
-  >>> print('The value of i is', i)
-  The value of i is 65536
+  i = 256*256
+  print('The value of i is', i)
+  # The value of i is 65536
   ```
 
 - `print()`默认会在末尾回车，也可以使用end来自定义
 
   ```python
-  >>>: a, b = 0, 1
-  >>>: while a < 10:
-  ...:     print(a, end=', ')
-  ...:     a,b = b, a+b
-  0, 1, 1, 2, 3, 5, 8,
+  a, b = 0, 1
+  while a < 100:
+       print(a, end=', ')
+       a,b = b, a+b
+  # 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 
   ```
 
+
+#### f-strings
+
+- 通过定义好的格式进行输出
+
+- F-strings是Python3.6新增的字符串格式化功能
+
+- 比百分号和str.format()更友好
+
+- 采用了早期为字符串添加关键字方式，如"u"、"r"、 "b"
+
+- 计算功能
+
+  - F-strings的`{}`中可以实现数字计算、字符串连接、函数执行等计算任务
+
+  - 嵌入的内容可解释执行
+
+    ```python
+    f"{1+2}"        # 3 
+    f"{'a'+'b'}"    # ab
+    f"{print('c')}" # c
+    ```
+
+  - 宽度和精度调整格式：
+
+    ```python
+    f"{对象:宽度.精度类型}"
+    ```
+
+    ```python
+    number = 123.456
+    f"{number:20}"
+    # '             123.456'
+    
+    f"{number:010}"
+    # '000123.456'
+    
+    f"{number:4f}" # 指定类型后，默认保存小数点后6位
+    # '123.456000'
+    
+    f"{number:.2f}"
+    # '123.46'
+    ```
+
+### 文件
+
+#### 打开文件open()
+
+- 打开文件是文件的第一步操作
+- Python使用open()函数实现了文件打开
+- `open()` 返回一个 file object ，最常使用的是两个位置参数和一个关键字参数：`open(filename, mode, encoding=None)`
+
+```python
+f = open('workfile', 'w', encoding="utf-8")
+```
+
+- 第一个实参是文件名字符串
+
+- 第二个实参是包含**描述文件使用方式**字符的字符串。*mode* 的值包括 `'r'` ，表示文件只能读取；`'w'` 表示只能写入（现有同名文件会被覆盖）；`'a'` 表示打开文件并追加内容，任何写入的数据会自动添加到文件末尾。`'r+'` 表示打开文件进行读写。*mode* 实参是可选的，省略时的默认值为 `'r'`。
+
+- 通常情况下，文件是以 *text mode* 打开的，也就是说，你从文件中读写字符串，这些字符串是以特定的 *encoding* 编码的。如果没有指定 *encoding* ，默认的是与平台有关的。因为 UTF-8 是现代事实上的标准，除非你知道你需要使用一个不同的编码，否则建议使用 `encoding="utf-8"` 。
+
+- 在处理文件对象时，最好使用 [`with`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#with) 关键字。优点是，子句体结束后，文件会正确关闭，即便触发异常也可以。而且，使用 `with` 相比等效的 [`try`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#try)-[`finally`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#finally) 代码块要简短得多：
+
+  ```python
+  with open('workfile', encoding="utf-8") as f:
+      read_data = f.read()
   
+  # We can check that the file has been automatically closed.
+  f.closed
+  ```
+
+  如果没有使用 [`with`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#with) 关键字，则应调用 `f.close()` 关闭文件，即可释放文件占用的系统资源。
+
+  > 调用 `f.write()` 时，未使用 `with` 关键字，或未调用 `f.close()`，即使程序正常退出，也**可能** 导致 `f.write()` 的参数没有完全写入磁盘。
+
+  通过 [`with`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#with) 语句，或调用 `f.close()` 关闭文件对象后，再次使用该文件对象将会失败。
+
+  ```python
+  f.close()
+  f.read()
+  # Traceback (most recent call last):
+  #   File "<stdin>", line 1, in <module>
+  # ValueError: I/O operation on closed file.
+  ```
+
+#### 文件编码
+
+- 计算机普及之后，各个国家有不同的标准，比如中国制定的GBK编码，一直被Windows沿用
+
+- 为了避免编码混乱，后续产生了统一的Unicode 编码
+
+- 其中最广泛使用的UTF-8就是Unicode的一种实现方式
+
+- Windows默认使用GBK编码
+
+- Linux和macOS使用UTF-8编码
+
+  
+
+
+
+#### 文件对象的方法
+
+- 文件路径处理
+
+  ```python
+  file_handler = open("tmp/afile")
+  # 改变路径
+  import os
+  os.chdir("/tmp")
+  file_handler = open("afile")
+  ```
+
+- 读取文件内容，可以采用多个函数或语句实现:
+
+  - ```python
+    >>> cat test.txt
+    111
+    222
+    333
+    
+    aaa
+    bbb
+    ccc
+    ```
+
+  - `read([size])`返回指定size大小的内容，如果不指定size,将返回整个文件
+
+    ```python
+    f = open('./test.txt', mode='r', encoding='UTF-8')
+    data = f.read() # 直接原样读取全部数据
+    print(data)
+    # 111
+    # 222
+    # 333
+    
+    # aaa
+    # bbb
+    # ccc
+    ```
+
+  - `readline()`返回一行数据
+
+    ```python
+    f = open('./test.txt', mode='r', encoding='UTF-8')
+    data = f.readline() # 读取一行数据
+    print(data)
+    # 111
+    ```
+
+  - `readlines([size])`返回指定size 行数，如果不指定size，将返回全部文件；也可以用`list(f)`
+
+    ```python
+    f = open('./test.txt', mode='r', encoding='UTF-8')
+    data = f.readlines() # 读取所有数据，放在列表里
+    # data = list(f) # 效果同f.readlines()
+    print(data)
+    # ['111\n', '222\n', '333\n', '\n', 'aaa\n', 'bbb\n', 'ccc']
+    ```
+
+  - 【更常用】`for line in file` 从文件中**读取多行时，可以用循环遍历整个文件对象**。这种操作能高效利用内存，快速，且代码简单：
+
+    ```python
+    f = open('./test.txt', mode = 'r', encoding='UTF-8')
+    for data in f:
+        print(data)
+    f.close()
+    # 111
+    #
+    # 222
+    #
+    # 333
+    #
+    #
+    #
+    # aaa
+    #
+    # bbb
+    #
+    # ccc
+    # 
+    
+    f = open('./test.txt', mode = 'r', encoding='UTF-8')
+    for data in f:
+        print(data, end='')
+    f.close()
+    # 111
+    # 222
+    # 333
+    
+    # aaa
+    # bbb
+    # ccc
+    ```
+
+
+- 文件写入由`write()`函数实现，写入方式由`open()`函数控制。不同的open()函数打开模式，执行写入时，写入的位置和结果也不同:
+  - `mode = "r"`，报错: `io.UnsupportedOperation: not writable`
+  - `mode = "w"`或`mode = "w+"`**覆盖写入内容**，返回写入字符数量
+  - `mode="a"`或`mode="a+"`在文件结尾**追加写入内容**
+
+- 关闭文件：`f.close()`
+  - 如果不及时关闭，一方面写入文件数据很多，损失性能；另一方面，写入的数据可能会丢失。
 
 
 
@@ -6106,6 +6417,8 @@ int main()
 
 
 # Python 小demo
+
+## 文档读取
 
 ```python
 import pprint
