@@ -3766,108 +3766,137 @@ f = open('workfile', 'w', encoding="utf-8")
 
 #### 文件对象的方法
 
-- 文件路径处理
+##### 文件路径处理
 
-  ```python
-  file_handler = open("tmp/afile")
-  # 改变路径
-  import os
-  os.chdir("/tmp")
-  file_handler = open("afile")
+```python
+file_handler = open("tmp/afile")
+# 改变路径
+import os
+os.chdir("/tmp")
+file_handler = open("afile")
+```
+
+##### 读取文件
+
+读取文件内容，可以采用多个函数或语句实现:
+
+- ```python
+  >>> cat test.txt
+  111
+  222
+  333
+  
+  aaa
+  bbb
+  ccc
   ```
 
-- 读取文件内容，可以采用多个函数或语句实现:
+- `read([size])`返回指定size大小的内容，如果不指定size,将返回整个文件
 
-  - ```python
-    >>> cat test.txt
-    111
-    222
-    333
-    
-    aaa
-    bbb
-    ccc
-    ```
+  ```python
+  f = open('./test.txt', mode='r', encoding='UTF-8')
+  data = f.read() # 直接原样读取全部数据
+  print(data)
+  # 111
+  # 222
+  # 333
+  
+  # aaa
+  # bbb
+  # ccc
+  ```
 
-  - `read([size])`返回指定size大小的内容，如果不指定size,将返回整个文件
+- `readline()`返回一行数据
 
-    ```python
-    f = open('./test.txt', mode='r', encoding='UTF-8')
-    data = f.read() # 直接原样读取全部数据
-    print(data)
-    # 111
-    # 222
-    # 333
-    
-    # aaa
-    # bbb
-    # ccc
-    ```
+  ```python
+  f = open('./test.txt', mode='r', encoding='UTF-8')
+  data = f.readline() # 读取一行数据
+  print(data)
+  # 111
+  ```
 
-  - `readline()`返回一行数据
+- `readlines([size])`返回指定size 行数，如果不指定size，将返回全部文件；也可以用`list(f)`
 
-    ```python
-    f = open('./test.txt', mode='r', encoding='UTF-8')
-    data = f.readline() # 读取一行数据
-    print(data)
-    # 111
-    ```
+  ```python
+  f = open('./test.txt', mode='r', encoding='UTF-8')
+  data = f.readlines() # 读取所有数据，放在列表里
+  # data = list(f) # 效果同f.readlines()
+  print(data)
+  # ['111\n', '222\n', '333\n', '\n', 'aaa\n', 'bbb\n', 'ccc']
+  ```
 
-  - `readlines([size])`返回指定size 行数，如果不指定size，将返回全部文件；也可以用`list(f)`
+- 【更常用】`for line in file` 从文件中**读取多行时，可以用循环遍历整个文件对象**。这种操作能高效利用内存，快速，且代码简单：
 
-    ```python
-    f = open('./test.txt', mode='r', encoding='UTF-8')
-    data = f.readlines() # 读取所有数据，放在列表里
-    # data = list(f) # 效果同f.readlines()
-    print(data)
-    # ['111\n', '222\n', '333\n', '\n', 'aaa\n', 'bbb\n', 'ccc']
-    ```
+  ```python
+  f = open('./test.txt', mode = 'r', encoding='UTF-8')
+  for data in f:
+      print(data)
+  f.close()
+  # 111
+  #
+  # 222
+  #
+  # 333
+  #
+  #
+  #
+  # aaa
+  #
+  # bbb
+  #
+  # ccc
+  # 
+  
+  f = open('./test.txt', mode = 'r', encoding='UTF-8')
+  for data in f:
+      print(data, end='')
+  f.close()
+  # 111
+  # 222
+  # 333
+  
+  # aaa
+  # bbb
+  # ccc
+  ```
 
-  - 【更常用】`for line in file` 从文件中**读取多行时，可以用循环遍历整个文件对象**。这种操作能高效利用内存，快速，且代码简单：
+##### 写入文件
 
-    ```python
-    f = open('./test.txt', mode = 'r', encoding='UTF-8')
-    for data in f:
-        print(data)
-    f.close()
-    # 111
-    #
-    # 222
-    #
-    # 333
-    #
-    #
-    #
-    # aaa
-    #
-    # bbb
-    #
-    # ccc
-    # 
-    
-    f = open('./test.txt', mode = 'r', encoding='UTF-8')
-    for data in f:
-        print(data, end='')
-    f.close()
-    # 111
-    # 222
-    # 333
-    
-    # aaa
-    # bbb
-    # ccc
-    ```
+文件写入由`write()`函数实现，写入方式由`open()`函数控制。不同的open()函数打开模式，执行写入时，写入的位置和结果也不同:
+
+- `mode = "r"`，报错: `io.UnsupportedOperation: not writable`
+- `mode = "w"`或`mode = "w+"`**覆盖写入内容**，返回写入字符数量
+- `mode="a"`或`mode="a+"`在文件结尾**追加写入内容**
 
 
-- 文件写入由`write()`函数实现，写入方式由`open()`函数控制。不同的open()函数打开模式，执行写入时，写入的位置和结果也不同:
-  - `mode = "r"`，报错: `io.UnsupportedOperation: not writable`
-  - `mode = "w"`或`mode = "w+"`**覆盖写入内容**，返回写入字符数量
-  - `mode="a"`或`mode="a+"`在文件结尾**追加写入内容**
 
-- 关闭文件：`f.close()`
-  - 如果不及时关闭，一方面写入文件数据很多，损失性能；另一方面，写入的数据可能会丢失。
+#### 关闭文件
 
+- `close()`函数可以告知内核，文件在内存中有更新。如果不及时关闭，一方面写入文件数据很多，**降低性能**；另一方面，写入的**数据可能会丢失**。
+- `write()`函数写入后，必须显式`close()`
+- `read-`族函数读取后，不必`close()`但建议关闭，避免文件描述符耗尽
+- `open()`失败，不必`close()`
 
+#### with语句
+
+- with语句可以使打开和关闭文件保持一致性， 即：
+
+  **使用with语句打开的文件，离开with语句块作用域会自动关闭**
+
+- ```python
+  with open(文件) as 文件描述符:
+  	文件读写操作
+  # with语句块结束，自动关闭文件
+  ```
+
+- ```python
+  with open('./test.txt', mode='r', encoding='UTF-8') as f:
+      data = f.read()
+  
+  print(f.read())  # ValueError: I/O operation on closed file.
+  ```
+
+  
 
 
 
@@ -3881,29 +3910,34 @@ f = open('workfile', 'w', encoding="utf-8")
 
 ![image-20231117155714974](./Python.assets/image-20231117155714974.png)
 
-
-
 ### 定义函数
+
+```python
+def fun_name([parameter]):
+    body
+    [return xxx]
+```
 
 下列代码创建一个可以输出限定数值内的斐波那契数列函数：
 
 ```python
->>> def fib(n):    # write Fibonacci series up to n
-...     """Print a Fibonacci series up to n."""
-...     a, b = 0, 1
-...     while a < n:
-...         print(a, end=' ')
-...         a, b = b, a+b
-...     print()
-...
->>> # Now call the function we just defined:
-... fib(2000)
-0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597
+ # write Fibonacci series up to n
+def fib(n):   
+    '''Print a Fibonacci series up to n.'''
+    a, b = 0, 1
+    while a < n:
+        print(a, end=' ')
+        a, b = b, a+b
+    print()
+
+# Now call the function we just defined:
+fib(2000)
+# 0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597
 ```
 
 定义函数使用关键字 `def`，后跟函数名与括号内的形参列表。函数语句从下一行开始，并且必须缩进。
 
-函数内的第一条语句是字符串时，该字符串就是文档字符串，也称为 *docstring*，详见 文档字符串。利用文档字符串可以自动生成在线文档或打印版文档，还可以让开发者在浏览代码时直接查阅文档；Python 开发者最好养成在代码中加入文档字符串的好习惯。
+函数内的第一条语句是字符串时，该字符串就是**文档字符串（介绍该函数是干嘛的）**，也称为 *docstring*。利用文档字符串可以自动生成在线文档或打印版文档，还可以让开发者在浏览代码时直接查阅文档；Python 开发者最好养成**在代码中加入文档字符串的好习惯**。
 
 函数在 *执行* 时使用函数局部变量符号表，所有函数变量赋值都存在局部符号表中；引用变量时，首先，在局部符号表里查找变量，然后，是外层函数局部符号表，再是全局符号表，最后是内置名称符号表。因此，尽管可以引用全局变量和外层函数的变量，但最好不要在函数内直接赋值（除非是 `global` 语句定义的全局变量，或 `nonlocal` 语句定义的外层函数变量）。
 
@@ -3930,18 +3964,18 @@ None
 编写不直接输出斐波那契数列运算结果，而是返回运算结果列表的函数也非常简单：
 
 ```python
->>> def fib2(n):  # return Fibonacci series up to n
-...     """Return a list containing the Fibonacci series up to n."""
-...     result = []
-...     a, b = 0, 1
-...     while a < n:
-...         result.append(a)    # see below
-...         a, b = b, a+b
-...     return result
-...
->>> f100 = fib2(100)    # call it
->>> f100                # write the result
-[0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+def fib2(n):  # return Fibonacci series up to n
+    """Return a list containing the Fibonacci series up to n."""
+    result = []
+    a, b = 0, 1
+    while a < n:
+        result.append(a)    # see below
+        a, b = b, a+b
+    return result
+
+f100 = fib2(100)    # call it
+f100                # write the result
+# [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
 ```
 
 本例也新引入了一些 Python 功能：
@@ -4298,7 +4332,7 @@ def write_multiple_items(file, separator, *args):
 
 #### Lambda表达式
 
-`lambda` 关键字用于创建小巧的匿名函数。`lambda a, b: a+b` 函数返回两个参数的和。Lambda 函数可用于任何需要函数对象的地方。在语法上，匿名函数只能是单个表达式。在语义上，它只是常规函数定义的语法糖。与嵌套函数定义一样，lambda 函数可以引用包含作用域中的变量：
+`lambda` 关键字用于**创建小巧的匿名函数**。`lambda a, b: a+b` 函数返回两个参数的和。Lambda 函数可用于任何需要函数对象的地方。在语法上，匿名函数只能是单个表达式。在语义上，它只是常规函数定义的语法糖。与嵌套函数定义一样，lambda 函数可以引用包含作用域中的变量：
 
 ```python
 >>> def make_incrementor(n):
@@ -6418,7 +6452,27 @@ int main()
 
 # Python 小demo
 
-## 文档读取
+## 文件
+
+### 文件编码检测
+
+```python
+# pip install chardet
+from chardet.universaldetector import UniversalDetector
+ 
+detector = UniversalDetector()
+ 
+with open("./test.txt", "rb") as f:
+    detector.feed(f.read())
+    detector.close()
+ 
+    print(detector.result)
+# {'encoding': 'utf-8', 'confidence': 0.7525, 'language': ''}
+```
+
+
+
+### 文档读取
 
 ```python
 import pprint
@@ -6474,9 +6528,26 @@ print(str(file_data).split(" ").count("I"))   # 16
 print(int(str(file_data).split(" ").count("you")) + int(str(file_data).split(" ").count("You"))) # 9
 ```
 
+## 文件合并
 
+- 合并文件 = 读取原始文件 + 追加写入新的文件
+- 关键任务:
+  1. 以可读取的模式打开原始文件
+  2. 以写入的模式创建并打开要合并的文件
+  3. 正确关闭文件
 
-
+```python
+# 打开文件demo1.txt并读取其数据
+with open("demo1.txt") as f1:
+    file_data_1 = f1.read()
+# 打开文件demo2.txt并读取其数据
+with open("demo2.txt") as f2:
+    file_data_2 = f2.read()
+# 将两个数据写入到demo3.txt
+with open("demo3.txt", mode="w") as f3:
+    f3.write(file_data_1)
+    f3.write(file_data_2)
+```
 
 
 
