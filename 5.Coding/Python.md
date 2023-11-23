@@ -3432,56 +3432,7 @@ range(0, 10)
 
 
 
-## 8. 数据结构
-
-
-
-### 用列表实现堆栈
-
-使用列表方法实现堆栈非常容易，最后插入的最先取出（“后进先出”）。把元素添加到堆栈的顶端，使用 `append()` 。从堆栈顶部取出元素，使用 `pop()` ，不用指定索引。例如：
-
-```python
->>> stack = [3, 4, 5]
->>> stack.append(6)
->>> stack.append(7)
->>> stack
-[3, 4, 5, 6, 7]
->>> stack.pop()
-7
->>> stack
-[3, 4, 5, 6]
->>> stack.pop()
-6
->>> stack.pop()
-5
->>> stack
-[3, 4]
-```
-
-### 用列表实现队列
-
-列表也可以用作队列，最先加入的元素，最先取出（“先进先出”）；然而，列表作为队列的效率很低。因为，在列表末尾添加和删除元素非常快，但在列表开头插入或移除元素却很慢（因为所有其他元素都必须移动一位）。
-
-实现队列最好用 [`collections.deque`](https://docs.python.org/zh-cn/3.10/library/collections.html#collections.deque)，可以快速从两端添加或删除元素。例如：
-
-```python
->>> from collections import deque
->>> queue = deque(["Eric", "John", "Michael"])
->>> queue.append("Terry")           # Terry arrives
->>> queue.append("Graham")          # Graham arrives
->>> queue.popleft()                 # The first to arrive now leaves
-'Eric'
->>> queue.popleft()                 # The second to arrive now leaves
-'John'
->>> queue                           # Remaining queue in order of arrival
-deque(['Michael', 'Terry', 'Graham'])
-```
-
-
-
-
-
-## 9. 输入输出/文件
+## 8. 输入输出/文件
 
 > ```python
 > while True:
@@ -3902,7 +3853,7 @@ file_handler = open("afile")
 
 
 
-## 10. 函数
+## 9. 函数
 
 ### 内置函数
 
@@ -3986,6 +3937,14 @@ f100                # write the result
 
 
 ### 函数定义详解
+
+```python
+# 含参函数定义
+def func(args):
+    对args进行处理
+# 函数调用
+func(variables)
+```
 
 #### 默认值参数
 
@@ -4400,10 +4359,6 @@ Arguments: spam eggs
 'spam and eggs'
 ```
 
-
-
-
-
 ```python
 def greet_user(username):
     "显示简单的问候语"
@@ -4412,6 +4367,60 @@ def greet_user(username):
 greet_user('jesse')
 # Hello, Jesse!
 ```
+
+#### 类型提示（type hint)
+
+> 类型提示仅能对开发人员起到提示作用，不能用于类型检查
+
+偶尔看到一些代码在定义函数时，在def那一行后面会加一个`->`。有个专门的名词叫 **type hint， 即类型提示**。
+
+```python
+def add(a:int, b:int) -> int:
+    return a+b
+```
+
+意思是：**告诉你期待的输入类型和输出类型**。上面代码期待的类型为int。
+
+其实就是变量类型的动态定义和静态定义的区别。同样一个函数可以**不加->表示动态定义和加->表示静态定义**。
+
+​    对于上面左边函数，对n的数据类型不一定为int，也可以为float等等......而右边限定了只能int，这就是动静态的区别。
+
+我试着寻找这两者的区别和各自优势。有以下发现：
+
+​    1. 将动态类型函数改为静态类型函数**并不能使计算加快**；
+
+​    2. 就算你静态限定了int，输入为float的时候也不会报错，输出也不会变成期待的int类型。所以在使用上，动静态类型并没有区别。
+
+那么这个type hint看起来是比较鸡肋。
+
+它的用处有以下：
+
+​    1. 增加代码可读性；
+
+    2. 比较容易用其他语言改写。
+
+```python
+def twoSum(num1: int, num2: int=100) -> int:
+    sum = num1 + num2
+    return sum
+ 
+if __name__ == "__main__":
+    # __annotations__是函数的保留属性，保存的是函数声明中的注释内容，比如我们使用的对参数"num1"，"num2"和返回值的建议类型。
+    print(twoSum.__annotations__) # {'num1': <class 'int'>, 'num2': <class 'int'>, 'return': <class 'int'>}
+
+    # 正常用法。
+    print(twoSum(3,20))   # 23
+    # 注释内容后可以跟等号"=",意思为未传入实参时，该参数获得的默认值
+    print(twoSum(1))      # 101
+
+    # 该解释说明符并非强制检查，我们传入了两个str实参，并不会报错，而是继续进行函数中的加法运算。
+    print(twoSum('I love ','Arsenal'))  # I love Arsenal
+    # 如果传入的两个实参无法进行函数中规定的运算，则会正常报错。
+    print(twoSum('Arsenal'))            # TypeError: can only concatenate str (not "int") to str
+
+```
+
+
 
 ### 传递实参
 
@@ -4764,7 +4773,7 @@ from module_name import *
 
 
 
-## 11. 类
+## 10. 类
 
 > 类将函数和数据整洁地封装起来，让你能够灵活而高效地使用它们。
 
@@ -4809,6 +4818,51 @@ from module_name import *
 
 
 # Python 数据结构
+
+## 线性表
+
+### 用列表实现堆栈
+
+使用列表方法实现堆栈非常容易，最后插入的最先取出（“后进先出”）。把元素添加到堆栈的顶端，使用 `append()` 。从堆栈顶部取出元素，使用 `pop()` ，不用指定索引。例如：
+
+```python
+>>> stack = [3, 4, 5]
+>>> stack.append(6)
+>>> stack.append(7)
+>>> stack
+[3, 4, 5, 6, 7]
+>>> stack.pop()
+7
+>>> stack
+[3, 4, 5, 6]
+>>> stack.pop()
+6
+>>> stack.pop()
+5
+>>> stack
+[3, 4]
+```
+
+### 用列表实现队列
+
+列表也可以用作队列，最先加入的元素，最先取出（“先进先出”）；然而，列表作为队列的效率很低。因为，在列表末尾添加和删除元素非常快，但在列表开头插入或移除元素却很慢（因为所有其他元素都必须移动一位）。
+
+实现队列最好用 [`collections.deque`](https://docs.python.org/zh-cn/3.10/library/collections.html#collections.deque)，可以快速从两端添加或删除元素。例如：
+
+```python
+>>> from collections import deque
+>>> queue = deque(["Eric", "John", "Michael"])
+>>> queue.append("Terry")           # Terry arrives
+>>> queue.append("Graham")          # Graham arrives
+>>> queue.popleft()                 # The first to arrive now leaves
+'Eric'
+>>> queue.popleft()                 # The second to arrive now leaves
+'John'
+>>> queue                           # Remaining queue in order of arrival
+deque(['Michael', 'Terry', 'Graham'])
+```
+
+
 
 ## 数组
 
