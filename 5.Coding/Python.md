@@ -3864,9 +3864,12 @@ file_handler = open("afile")
 ### 定义函数
 
 ```python
-def fun_name([parameter]):
-    body
+# 含参函数定义
+def func([args]):
+    对args进行处理
     [return xxx]
+# 函数调用
+func(variables)
 ```
 
 下列代码创建一个可以输出限定数值内的斐波那契数列函数：
@@ -3934,21 +3937,181 @@ f100                # write the result
 - `return` 语句返回函数的值。`return` 语句不带表达式参数时，返回 `None`。函数执行完毕退出也返回 `None`。
 - `result.append(a)` 语句调用了列表对象 `result` 的 *方法* 。方法是“从属于”对象的函数，命名为 `obj.methodname`，`obj` 是对象（也可以是表达式），`methodname` 是对象类型定义的方法名。不同类型定义不同的方法，不同类型的方法名可以相同，且不会引起歧义。（用 *类* 可以自定义对象类型和方法，详见 [类](https://docs.python.org/zh-cn/3.10/tutorial/classes.html#tut-classes) ）示例中的方法 `append()` 是为列表对象定义的，用于在列表末尾添加新元素。本例中，该方法相当于 `result = result + [a]` ，但更有效。
 
+### 常规参数传递
 
+#### 位置参数
 
-### 函数定义详解
+函数调用时，根据函数定义的参数（形参）的 位置 来传递参数。第1个实参赋值给第1个形参，第1个实参赋值给第2个形参 。
 
 ```python
-# 含参函数定义
-def func(args):
-    对args进行处理
-# 函数调用
-func(variables)
+def mul(a,b,c):
+    print(a*b*c)
+    
+def welcome(username):
+    print('欢迎',username,'光临')    
+    
+# 调用时，根参数的位置传递参数
+mul(1,2,3)
+welcome('郭靖')
+# 6
+# 欢迎 郭靖 光临
 ```
+
+```python
+def describe_pet(animal_type, pet_name):
+    "显示宠物的信息"
+    print("\nI have a "+animal_type+".")
+    print("My "+animal_type+"'s name is "+pet_name.title()+".")
+
+describe_pet('hamster', 'harry')
+describe_pet('dog', 'willie')
+# I have a hamster.
+# My hamster's name is Harry.
+# 
+# I have a dog.
+# My dog's name is Willie.
+```
+
+
+
+
+
+$$
+\[ \pi = 4 \times \left(1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9} - \frac{1}{11} + \ldots\right) \]
+$$
+
+
+
+#### 关键字参数
+
+- 不再是按照位置给出参数，而是把参数名字也带进来
+
+`kwarg=value` 形式的 [关键字参数](https://docs.python.org/zh-cn/3.10/glossary.html#term-keyword-argument) 也可以用于调用函数。函数示例如下：
+
+```python
+def parrot(voltage, state='a stiff', action='voom', type='Norwegian Blue'):
+    print("-- This parrot wouldn't", action, end=' ')
+    print("if you put", voltage, "volts through it.")
+    print("-- Lovely plumage, the", type)
+    print("-- It's", state, "!")
+```
+
+该函数接受一个必选参数（`voltage`）和三个可选参数（`state`, `action` 和 `type`）。该函数可用下列方式调用：
+
+```python
+parrot(1000)                                          # 1 positional argument
+parrot(voltage=1000)                                  # 1 keyword argument
+parrot(voltage=1000000, action='VOOOOOM')             # 2 keyword arguments
+parrot(action='VOOOOOM', voltage=1000000)             # 2 keyword arguments
+parrot('a million', 'bereft of life', 'jump')         # 3 positional arguments
+parrot('a thousand', state='pushing up the daisies')  # 1 positional, 1 keyword
+# 最后一个输入的输出效果↓
+#-- This parrot wouldn't voom if you put a thousand volts through it.
+#-- Lovely plumage, the Norwegian Blue
+#-- It's pushing up the daisies !
+```
+
+以下调用函数的方式都无效：
+
+```python
+parrot()                     # required argument missing
+parrot(voltage=5.0, 'dead')  # non-keyword argument after a keyword argument
+parrot(110, voltage=220)     # duplicate value for the same argument
+parrot(actor='John Cleese')  # unknown keyword argument
+```
+
+函数调用时，**关键字参数必须跟在位置参数后面**。所有传递的关键字参数都必须匹配一个函数接受的参数（比如，`actor` 不是函数 `parrot` 的有效参数），关键字参数的顺序并不重要。这也包括必选参数，（比如，`parrot(voltage=1000)` 也有效）。不能对同一个参数多次赋值，下面就是一个因此限制而失败的例子：
+
+```python
+>>> def function(a):
+...     pass
+...
+>>> function(0, a=0)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: function() got multiple values for argument 'a'
+```
+
+最后一个形参为 `**name` 形式时，接收一个字典（详见 [映射类型 --- dict](https://docs.python.org/zh-cn/3.10/library/stdtypes.html#typesmapping)），该字典包含与函数中已定义形参对应之外的所有关键字参数。`**name` 形参可以与 `*name` 形参（下一小节介绍）组合使用（`*name` 必须在 `**name` 前面）， `*name` 形参接收一个 [元组](https://docs.python.org/zh-cn/3.10/tutorial/datastructures.html#tut-tuples)，该元组包含形参列表之外的位置参数。例如，可以定义下面这样的函数：
+
+```python
+def cheeseshop(kind, *arguments, **keywords):
+    print("-- Do you have any", kind, "?")
+    print("-- I'm sorry, we're all out of", kind)
+    for arg in arguments:
+        print(arg)
+    print("-" * 40)
+    for kw in keywords:
+        print(kw, ":", keywords[kw])
+```
+
+该函数可以用如下方式调用：
+
+```python
+cheeseshop("Limburger", "It's very runny, sir.",
+           "It's really very, VERY runny, sir.",
+           shopkeeper="Michael Palin",
+           client="John Cleese",
+           sketch="Cheese Shop Sketch")
+```
+
+输出结果如下：
+
+```python
+-- Do you have any Limburger ?
+-- I'm sorry, we're all out of Limburger
+It's very runny, sir.
+It's really very, VERY runny, sir.
+----------------------------------------
+shopkeeper : Michael Palin
+client : John Cleese
+sketch : Cheese Shop Sketch
+```
+
+注意，关键字参数在输出结果中的顺序与调用函数时的顺序一致。
 
 #### 默认值参数
 
-为参数指定默认值是非常有用的方式。调用函数时，可以使用比定义时更少的参数，例如：
+为参数指定默认值。调用函数时，可以使用比定义时更少的参数，例如：
+
+- 使用默认值时，在形参列表中必须先列出没有默认值的形参，再列出有默认值的实参。这让Python依然能够正确地解读位置实参。
+
+```python
+def foo3(argv1=100, argv2=200, argv3=300):
+    print(argv1)
+    print(argv2)
+    print(argv3)
+    
+foo3("one", "two", "three")
+# one
+# two
+# three
+foo3("one", "three", "two")
+# one
+# three
+# two
+foo3(argv1="one", argv3="three", argv2="two")
+# one
+# two
+# three
+foo3("one", argv3="three", argv2="two")
+# one
+# two
+# three
+```
+
+```python
+def describe_pet(pet_name, animal_type='dog'):
+    """显示宠物的信息"""
+    print("\nI have a " + animal_type + ".")
+    print("My " + animal_type + "'s name is " + pet_name.title() + ".")
+
+
+describe_pet(pet_name='willie')
+describe_pet('willie') # 这样也行，因此pet_name得放在第一个位置
+# I have a dog.
+# My dog's name is Willie.
+```
 
 ```python
 def ask_ok(prompt, retries=4, reminder='Please try again!'):
@@ -4016,87 +4179,39 @@ def f(a, L=None):
     return L
 ```
 
-#### 关键字参数
+##### 等效的函数调用
 
-`kwarg=value` 形式的 [关键字参数](https://docs.python.org/zh-cn/3.10/glossary.html#term-keyword-argument) 也可以用于调用函数。函数示例如下：
+```Python
+# 函数定义
+def describe_pet(pet_name, animal_type= 'dog' ):
+    if animal_type == 'dog':
+        print("汪汪！") 
+    if animal_type =='hamster':
+        print("唧唧！")
 
-```python
-def parrot(voltage, state='a stiff', action='voom', type='Norwegian Blue'):
-    print("-- This parrot wouldn't", action, end=' ')
-    print("if you put", voltage, "volts through it.")
-    print("-- Lovely plumage, the", type)
-    print("-- It's", state, "!")
+# 函数调用    
+# 一条名为Willie的小狗
+describe_pet('willie')
+describe_pet(pet_name= 'willie')
+#一只名为Harry的仓鼠
+describe_pet('harry','hamster' )
+describe_pet(pet_name='harry', animal_type= 'hamster')
+describe_pet(animal_type='hamster', pet_name= 'harry')
+
+# 汪汪！
+# 汪汪！
+# 唧唧！
+# 唧唧！
+# 唧唧！
 ```
 
-该函数接受一个必选参数（`voltage`）和三个可选参数（`state`, `action` 和 `type`）。该函数可用下列方式调用：
+### 不定长参数
 
-```python
-parrot(1000)                                          # 1 positional argument
-parrot(voltage=1000)                                  # 1 keyword argument
-parrot(voltage=1000000, action='VOOOOOM')             # 2 keyword arguments
-parrot(action='VOOOOOM', voltage=1000000)             # 2 keyword arguments
-parrot('a million', 'bereft of life', 'jump')         # 3 positional arguments
-parrot('a thousand', state='pushing up the daisies')  # 1 positional, 1 keyword
-```
 
-以下调用函数的方式都无效：
 
-```python
-parrot()                     # required argument missing
-parrot(voltage=5.0, 'dead')  # non-keyword argument after a keyword argument
-parrot(110, voltage=220)     # duplicate value for the same argument
-parrot(actor='John Cleese')  # unknown keyword argument
-```
 
-函数调用时，关键字参数必须跟在位置参数后面。所有传递的关键字参数都必须匹配一个函数接受的参数（比如，`actor` 不是函数 `parrot` 的有效参数），关键字参数的顺序并不重要。这也包括必选参数，（比如，`parrot(voltage=1000)` 也有效）。不能对同一个参数多次赋值，下面就是一个因此限制而失败的例子：
 
-```python
->>> def function(a):
-...     pass
-...
->>> function(0, a=0)
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: function() got multiple values for argument 'a'
-```
 
-最后一个形参为 `**name` 形式时，接收一个字典（详见 [映射类型 --- dict](https://docs.python.org/zh-cn/3.10/library/stdtypes.html#typesmapping)），该字典包含与函数中已定义形参对应之外的所有关键字参数。`**name` 形参可以与 `*name` 形参（下一小节介绍）组合使用（`*name` 必须在 `**name` 前面）， `*name` 形参接收一个 [元组](https://docs.python.org/zh-cn/3.10/tutorial/datastructures.html#tut-tuples)，该元组包含形参列表之外的位置参数。例如，可以定义下面这样的函数：
-
-```python
-def cheeseshop(kind, *arguments, **keywords):
-    print("-- Do you have any", kind, "?")
-    print("-- I'm sorry, we're all out of", kind)
-    for arg in arguments:
-        print(arg)
-    print("-" * 40)
-    for kw in keywords:
-        print(kw, ":", keywords[kw])
-```
-
-该函数可以用如下方式调用：
-
-```python
-cheeseshop("Limburger", "It's very runny, sir.",
-           "It's really very, VERY runny, sir.",
-           shopkeeper="Michael Palin",
-           client="John Cleese",
-           sketch="Cheese Shop Sketch")
-```
-
-输出结果如下：
-
-```python
--- Do you have any Limburger ?
--- I'm sorry, we're all out of Limburger
-It's very runny, sir.
-It's really very, VERY runny, sir.
-----------------------------------------
-shopkeeper : Michael Palin
-client : John Cleese
-sketch : Cheese Shop Sketch
-```
-
-注意，关键字参数在输出结果中的顺序与调用函数时的顺序一致。
 
 #### 特殊参数
 
@@ -4289,30 +4404,6 @@ def write_multiple_items(file, separator, *args):
 -- This parrot wouldn't VOOM if you put four million volts through it. E's bleedin' demised !
 ```
 
-#### Lambda表达式
-
-`lambda` 关键字用于**创建小巧的匿名函数**。`lambda a, b: a+b` 函数返回两个参数的和。Lambda 函数可用于任何需要函数对象的地方。在语法上，匿名函数只能是单个表达式。在语义上，它只是常规函数定义的语法糖。与嵌套函数定义一样，lambda 函数可以引用包含作用域中的变量：
-
-```python
->>> def make_incrementor(n):
-...     return lambda x: x + n
-...
->>> f = make_incrementor(42)
->>> f(0)
-42
->>> f(1)
-43
-```
-
-上例用 lambda 表达式返回函数。还可以把匿名函数用作传递的实参：
-
-```python
->>> pairs = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
->>> pairs.sort(key=lambda pair: pair[1])
->>> pairs
-[(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
-```
-
 #### 文档字符串
 
 以下是文档字符串内容和格式的约定。
@@ -4324,8 +4415,6 @@ def write_multiple_items(file, separator, *args):
 Python 解析器不会删除 Python 中多行字符串字面值的缩进，因此，文档处理工具应在必要时删除缩进。这项操作遵循以下约定：文档字符串第一行 *之后* 的第一个非空行决定了整个文档字符串的缩进量（第一行通常与字符串开头的引号相邻，其缩进在字符串中并不明显，因此，不能用第一行的缩进），然后，删除字符串中所有行开头处与此缩进“等价”的空白符。不能有比此缩进更少的行，但如果出现了缩进更少的行，应删除这些行的所有前导空白符。转化制表符后（通常为 8 个空格），应测试空白符的等效性。
 
 下面是多行文档字符串的一个例子：
-
-\>>>
 
 ```python
 >>> def my_function():
@@ -4429,23 +4518,12 @@ if __name__ == "__main__":
 - 注意多个参数时，实参的前后位置要对应准确
 
 ```python
-def describe_pet(animal_type, pet_name):
-    "显示宠物的信息"
-    print("\nI have a "+animal_type+".")
-    print("My "+animal_type+"'s name is "+pet_name.title()+".")
 
-describe_pet('hamster', 'harry')
-describe_pet('dog', 'willie')
-# I have a hamster.
-# My hamster's name is Harry.
-# 
-# I have a dog.
-# My dog's name is Willie.
 ```
 
 #### 关键字实参
 
-- 关键字实参是传递给函数的名称值对。你直接在实参中将名称和值关联起来了，因此向函数传递实参时不会混淆(不会得到名为Hamster的harry这样的结果)。关键字实参让你无需考虑函数调用中的实参顺序，还清楚地指出了函数调用中各个值的用途。
+- 关键字实参是传递给函数的名称`键值-对`。你直接在实参中将名称和值关联起来了，因此向函数传递实参时不会混淆(不会得到名为Hamster的harry这样的结果)。关键字实参让你无需考虑函数调用中的实参顺序，还清楚地指出了函数调用中各个值的用途。
 - 使用关键字实参时，务必准确地指定函数定义中的形参名。
 
 ```python
@@ -4465,37 +4543,9 @@ describe_pet(pet_name='harry',animal_type='hamster')
 
 #### 默认值
 
-- 使用默认值时，在形参列表中必须先列出没有默认值的形参，再列出有默认值的实参。这让Python依然能够正确地解读位置实参。
-
-```python
-def describe_pet(pet_name, animal_type='dog'):
-    """显示宠物的信息"""
-    print("\nI have a " + animal_type + ".")
-    print("My " + animal_type + "'s name is " + pet_name.title() + ".")
+- 
 
 
-describe_pet(pet_name='willie')
-describe_pet('willie') # 这样也行，因此pet_name得放在第一个位置
-# I have a dog.
-# My dog's name is Willie.
-```
-
-#### 等效的函数调用
-
-```Python
-# 函数定义
-def describe_pet(pet_name, animal_type= 'dog' ):
-
-
-# 函数调用    
-#一条名为Willie的小狗
-describe_pet('willie')
-describe_pet(pet_name= 'willie')
-#一只名为Harry的仓鼠
-describe_pet('harry','hamster' )
-describe_pet(pet_name=' harry', animal_type= 'hamster')
-describe_pet(animal_type=' hamster', pet_name= ' harry')
-```
 
 ### 返回值
 
@@ -4769,6 +4819,32 @@ import make_pizza as mp
 ```python
 from module_name import *
 #  = import module_name
+```
+
+
+
+### Lambda表达式
+
+`lambda` 关键字用于**创建小巧的匿名函数**。`lambda a, b: a+b` 函数返回两个参数的和。Lambda 函数可用于任何需要函数对象的地方。在语法上，匿名函数只能是单个表达式。在语义上，它只是常规函数定义的语法糖。与嵌套函数定义一样，lambda 函数可以引用包含作用域中的变量：
+
+```python
+>>> def make_incrementor(n):
+...     return lambda x: x + n
+...
+>>> f = make_incrementor(42)
+>>> f(0)
+42
+>>> f(1)
+43
+```
+
+上例用 lambda 表达式返回函数。还可以把匿名函数用作传递的实参：
+
+```python
+>>> pairs = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
+>>> pairs.sort(key=lambda pair: pair[1])
+>>> pairs
+[(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
 ```
 
 
@@ -5978,6 +6054,51 @@ list1 = [ 'a', 'b', 'c', 'd' ]
 
 ## 轮子
 
+### 计算Pi
+
+- 用反余弦函数
+
+```python
+import math
+
+def Pi(x:int):
+    pi = math.acos(-1) # 用反余弦函数来算
+    print(f'{pi:.{x}f}') # x是浮点数的位数
+
+Pi(20)
+# 3.14159265358979311600
+```
+
+- 蒙特卡洛法
+
+![image-20231205163210344](./Python.assets/image-20231205163210344.png)
+
+```python
+import random
+
+# 蒙特卡洛方法
+def cal_pi(n:int) -> float:
+    count = 0
+
+    for i in range(int(n)):
+        x = random.random()
+        y = random.random()
+        d = (x - 0.5) ** 2 + (y - 0.5) ** 2
+        if d <= 0.5 ** 2:
+            count+=1
+        else:
+            pass
+
+    return (4*count)/n
+
+# 测试验证
+n = 10000000 # n为点的数量
+print(f"PI的近似值为：{cal_pi(int(n))}")
+# PI的近似值为：3.1424044
+```
+
+- 莱布尼兹公式
+
 ### ASCII
 
 - 数字：0(48) ~ 9(57)
@@ -6582,7 +6703,7 @@ print(str(file_data).split(" ").count("I"))   # 16
 print(int(str(file_data).split(" ").count("you")) + int(str(file_data).split(" ").count("You"))) # 9
 ```
 
-## 文件合并
+### 文件合并
 
 - 合并文件 = 读取原始文件 + 追加写入新的文件
 - 关键任务:
