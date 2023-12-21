@@ -32,6 +32,7 @@
 
 - [大模型](4.LLM/_llm)
 
+  - [预训练语言模型的前世今生](4.LLM/Theory/预训练语言模型的前世今生)
   - [人类反馈强化学习(RLHF)](4.LLM/Theory/人类反馈强化学习(RLHF))
   - [检索增强LLM](4.LLM/Theory/检索增强LLM)
   - [向量数据库](4.LLM/Theory/向量数据库)
