@@ -3872,6 +3872,9 @@ def func([args]):
 func(variables)
 ```
 
+- 只要是合法的标识符即可（同变量命名）
+- 为了提高可读性，建议函数名由一个或多个有意义的单词组成，单词之间用下划线_分隔，字母全部小写
+
 下列代码创建一个可以输出限定数值内的斐波那契数列函数：
 
 ```python
@@ -3891,11 +3894,25 @@ fib(2000)
 
 定义函数使用关键字 `def`，后跟函数名与括号内的形参列表。函数语句从下一行开始，并且必须缩进。
 
-函数内的第一条语句是字符串时，该字符串就是**文档字符串（介绍该函数是干嘛的）**，也称为 *docstring*。利用文档字符串可以自动生成在线文档或打印版文档，还可以让开发者在浏览代码时直接查阅文档；Python 开发者最好养成**在代码中加入文档字符串的好习惯**。
+函数内的第一条语句是字符串时，该字符串就是**文档字符串**（介绍该函数是干嘛的），也称为 *docstring*。利用文档字符串可以自动生成在线文档或打印版文档，还可以让开发者在浏览代码时直接查阅文档；Python 开发者最好养成**在代码中加入文档字符串的好习惯**。
 
-函数在 *执行* 时使用函数局部变量符号表，所有函数变量赋值都存在局部符号表中；引用变量时，首先，在局部符号表里查找变量，然后，是外层函数局部符号表，再是全局符号表，最后是内置名称符号表。因此，尽管可以引用全局变量和外层函数的变量，但最好不要在函数内直接赋值（除非是 `global` 语句定义的全局变量，或 `nonlocal` 语句定义的外层函数变量）。
+> 可以用help()查看函数的文档，只要把文档字符串紧接着放在函数的声明行的后面，它就可以被help识别了。
 
-在调用函数时会将实际参数（实参）引入到被调用函数的局部符号表中；因此，实参是使用 *按值调用* 来传递的（其中的 *值* 始终是对象的 *引用* 而不是对象的值）。当一个函数调用另外一个函数时，会为该调用创建一个新的局部符号表。【实际上，*对象引用调用* 这种说法更好，因为，传递的是可变对象时，调用者能发现被调者做出的任何更改（插入列表的元素）】
+#### 形参列表
+
+- 在函数名后面的括号内，多个形参用逗号分隔，可以没有参数
+- 参数可以有默认值，**可以用等号=直接指定默认值，有默认值的参数必须排最后**
+- 没有默认值的参数，在调用的时候必须指定
+- 形参也可以没有，但是括号不能省略
+- 调用有默认值的参数要指定名字
+- 
+
+#### 返回值
+
+- 返回值可以没有，直接**省略return**这句话
+- 返回值可以是一个或多个，用逗号分隔，组合成一个元组
+- 返回值还可以是表达式
+  
 
 函数定义在当前符号表中把函数名与函数对象关联在一起。解释器把函数名指向的对象作为用户自定义函数。还可以使用其他名称指向同一个函数对象，并访问访该函数：
 
@@ -3932,12 +3949,93 @@ f100                # write the result
 # [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
 ```
 
-本例也新引入了一些 Python 功能：
+#### 一个例子
 
-- `return` 语句返回函数的值。`return` 语句不带表达式参数时，返回 `None`。函数执行完毕退出也返回 `None`。
-- `result.append(a)` 语句调用了列表对象 `result` 的 *方法* 。方法是“从属于”对象的函数，命名为 `obj.methodname`，`obj` 是对象（也可以是表达式），`methodname` 是对象类型定义的方法名。不同类型定义不同的方法，不同类型的方法名可以相同，且不会引起歧义。（用 *类* 可以自定义对象类型和方法，详见 [类](https://docs.python.org/zh-cn/3.10/tutorial/classes.html#tut-classes) ）示例中的方法 `append()` 是为列表对象定义的，用于在列表末尾添加新元素。本例中，该方法相当于 `result = result + [a]` ，但更有效。
+```python
+# 函数定义
+def myfunc(arg1, arg2, arg3=None):
+    ''' 
+    This is a example for python documentation.
+    这是一个为python函数提供文档的例子。
+    arg1: 第一个参数的说明
+    arg2: 第二个参数的说明
+    arg3: 第三个参数的说明（这个参数有默认值）
+    v1, v2, v3: 返回值的说明 
+    '''
+    v1 = arg1 + arg2
+    v2 = arg1 * arg2
+    if arg3 is None:
+        v3 = arg1 + arg2
+    else:
+        v3 = arg1 + arg2 + arg3
+    return v1, v2, v3
+# 函数调用
+v1, v2, v3 = myfunc(5, 3, arg3=4)
+print(v1, v2, v3)    #8 15 12
+ 
+# 使用arg3的默认值调用函数
+v1, v2, v3 = myfunc(5, 3)
+print(v1, v2, v3)    #8 15 8
+ 
+# 忽略一个返回值
+v1, v2, _ = myfunc(5, 3)
+print(v1, v2, v3)    #8 15 8
+ 
+# 看看返回值是元组tuple，在返回的过程中被自动解包
+print(type(myfunc(5,3)))    #<class 'tuple'>
+```
 
-### 常规参数传递
+
+
+### 函数的参数
+
+- 函数的参数是参数与外部可变的输入之间交互的通道。
+- 函数的参数名称应该满足标识符命名规范，应该有明确的含义，可通过参数名称知道每个参数的含义。
+- 在函数定义下面的注释中逐个注明函数（和返回值）的含义，以便用户即使不甚了解函数中的具体内容也能正确无误的使用它。
+- **实参：实际参数，从外面传递来的实际的参数**
+- **形参：形式参数，在函数内部它形式上的名字**
+- 调用函数时，实参按照【顺序位置】与形参绑定，称为**位置参数**（Positional Argument）
+- 也可以在调用时，写明实参与形参的对应关系，称作传递**关键字参数**（Keyword Argument），这时候位置信息被忽略了.
+  - 关键字实参是传递给函数的名称`键值-对`。你直接在实参中将名称和值关联起来了，因此向函数传递实参时不会混淆(不会得到名为Hamster的harry这样的结果)。关键字实参让你无需考虑函数调用中的实参顺序，还清楚地指出了函数调用中各个值的用途。
+- 使用关键字实参时，务必准确地指定函数定义中的形参名。
+- 同时传递位置参数与关键字参数，应该**先传递位置参数**，再传递关键字参数!
+- 函数定义的时候，可以指定默认值，但带**默认值的参数必须列在参数列表的最后**
+
+```python
+# 举一个小栗子，计算纸箱子的体积
+def cube_volume(length, width, height = 0.25):
+    '''
+    计算纸箱子的体积(单位：m)
+    length: 长；    width: 宽
+    height: 高（默认参数0.25）
+    v: 返回值，纸箱的体积，单位m**3
+    '''
+    if length <= 0:
+        print('length must larger than 0!')
+        return 0
+    if width <= 0:
+        print('width must larger than 0!')
+        return 0
+    if height <= 0:
+        print('height must larger than 0!')
+        return 0
+    v = length*width*height
+    print('length = %.2f; width = %.2f; height = %.2f; cube volume = %.2f' % \
+          (length, width, height, v))
+    return v
+ 
+# 使用位置参数调用
+v = cube_volume(1, 2, 3)
+# 使用关键字参数调用
+v = cube_volume(width = 1, height = 2, length = 3)
+# 位置参数和关键字参数混用
+v = cube_volume(1, height = 2, width = 3)
+ 
+# 关键字参数在位置参数之前会报错
+# v = cube_volume(width = 1, 2, 3) # SyntaxError: positional argument follows keyword argument
+```
+
+
 
 #### 位置参数
 
@@ -3972,13 +4070,19 @@ describe_pet('dog', 'willie')
 # My dog's name is Willie.
 ```
 
+```python
+def address_book(name, *telphone, alias_name=None, **custom):
+    print(f"name: {name}, tel: {telphone}, aname: {alias_name}, custom:{custom}")
 
-
-
-
-$$
-\[ \pi = 4 \times \left(1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9} - \frac{1}{11} + \ldots\right) \]
-$$
+address_book("wilson")
+address_book("wilson",1234,4567,5678)
+address_book("wilson",1234,4567,5678,home="Guangdong")
+address_book("wilson",1234,4567,5678,alias_name='w',aaa="bbb", home="Guangdong")
+# name: wilson, tel: (), aname: None, custom:{}
+# name: wilson, tel: (1234, 4567, 5678), aname: None, custom:{}
+# name: wilson, tel: (1234, 4567, 5678), aname: None, custom:{'home': 'Guangdong'}
+# name: wilson, tel: (1234, 4567, 5678), aname: w, custom:{'aaa': 'bbb', 'home': 'Guangdong'}
+```
 
 
 
@@ -4098,6 +4202,8 @@ foo3("one", argv3="three", argv2="two")
 # one
 # two
 # three
+
+# 上面的例子是说，对于多个参数，如果位置是正确的，不用加argv=，如果是错误的，也行，但得指定哪一个参数，需要用argv=
 ```
 
 ```python
@@ -4205,13 +4311,528 @@ describe_pet(animal_type='hamster', pet_name= 'harry')
 # 唧唧！
 ```
 
+
+
+#### 可变对象
+
+- 如果参数是可变对象（如列表），函数内部对此对象的修改会在函数执行后仍然有效
+- 如果默认参数是可变对象，函数内部修改了此对象后，函数默认值也发生了改变!
+- 实际函数**传递进去的是地址，函数体不会将地址传递出来**，但地址对应的值发生了变化。
+
+```python
+# 对列表的乘方运算
+def pow_list(x, p):
+    '''
+    power of a list
+    x: list
+    p: power
+    not return value
+    '''
+    for i in range(len(x)):
+        x[i] **= p
+    
+    #这样会输出乘方后的值，但不会改变x列表里的值
+    #因为在计算时将x中的值传入了新的参数进行计算
+    #for i in x:
+    #    i **= p
+    #    print(i)
+    #print(x)
+ 
+x = [1,2,3,5,7,9,10,12]
+pow_list(x,2)
+print(x)
+# 可见函数内部对列表x中元素的更改，当函数退出之后依然有效
+```
+
+利用可变对象的特点，可以制作一种隐藏的**参数记录器**
+
+```python
+# 隐藏的参数记录器
+def growing_list(x, y=[]):
+    y.append(x)
+    print(y)
+# 重复执行growing_list(‘a’)会发生什么结果？
+growing_list(2)         #[2]
+growing_list('张三')    #[2, '张三']
+growing_list(22333)     #[2, '张三', 22333]
+```
+
+#### 参数收集（不定个数的参数）
+
+- 参数收集，指定是可以往函数内传递不定个数的参数，例如有时候传递3个，有时候传递5个，有时候传递10个，等等。
+- 传递不定个数的参数，要在定义参数时，加上一个星号“*”（形参为空的tuple）。
+- 带星号的参数可以位于参数列表的任意位置（不一定是开头也不一定是结尾），python要求一个函数只能有一个带星参数。
+
+```python
+# 不定个数的数字求和
+def my_sum(*t):
+    # 带星号的输入参数被当作元组处理
+    print(t, type(t))
+    sum = 0
+    for s in t:
+        sum += s
+    return sum
+# 事实上该函数接受了不定个数的输入参数
+my_sum(1,2,3,4,2233)
+```
+
+- 如果带星参数后面还有别的参数，则它们必须要用关键字参数的方式传递，否则python不知道它们到底是啥，都会给收集到带星参数里。
+
+```python
+# 不定个数的数字乘方后求和
+def pow_sum(*t, p):
+    # 带星号的输入参数被当作元组处理
+    print(t, type(t))
+    sum = 0
+    for s in t:
+        sum += s**p
+    return sum
+# 最后一个参数p，需要指定关键字传递
+pow_sum(1,2,3,4,2233,p=2)
+# 如果不指定关键字传递呢？会报错
+# pow_sum(1,2,3,4,2233,2)
+```
+
+解决一个实际问题
+
+```python
+# 不定个数的数字加权求和
+# 权重随着数字的个数而发生变化
+def weighted_sum(x1,x2,*y):
+    sum = 0
+    n = len(y)
+    weight = 1/3/n
+    for i in y:
+        sum += weight*i
+    return sum+1/3*x1+1/3*x2
+ 
+weighted_sum(1,2,3)           # 2.0
+weighted_sum(1,2,3,22,44,55)   # 11.333333333333332
+weighted_sum(1,2,3,4,5,6)     # 2.5
+```
+
+#### **参数收集（收集关键字参数）**
+
+- python除了带一个星号的参数，还支持带两个星号的参数。它的功能是收集关键字参数。
+- 一个函数，至多可以带一个一星参数（收集位置参数），加上一个二星参数（收集关键字参数）。
+- 二星参数在函数内部以字典的形式存在。
+- 二星参数必须在参数列表的末尾，它后面不能再有别的关键字参数和位置参数了。
+
+```python
+# 测试一星参数和两星参数
+def test_star(a, b, c, *onestar, **twostar):
+    print('a = %d; b = %d; c = %d' % (a, b, c))
+    print(onestar, type(onestar))
+    print(twostar, type(twostar))
+ 
+test_star(1, 2, 3, 4, 5, 6, s1 = 7, s2 = 8, s3 = 9)
+# a = 1; b = 2; c = 3
+# (4, 5, 6) <class 'tuple'>
+# {'s1': 7, 's2': 8, 's3': 9} <class 'dict'>
+
+# 换个顺序呢？
+test_star(1, 2, 3, 4, 5, 6, s1 = 7, s2 = 8, s3 = 9, a = 10, b = 11, c = 12)
+# TypeError: test_star() got multiple values for argument 'a'
+# 报错了，二星参数后面不能再传递关键字参数了（当然位置参数也不行）
+```
+
+- **“参数收集”功能，会让带星参数尽量少的收集，把更多参数留给正常的位置参数和关键字参数**
+
+```python
+# 如果有默认参数，要注意可能引起的bug
+def test_star(a, b, c, p = 5, *onestar, **twostar):
+    print('a = %d; b = %d; c = %d; p = %d' % (a, b, c, p))    #a = 1; b = 2; c = 3; p = 4
+    print(onestar, type(onestar))            #(5, 6) <class 'tuple'>
+    print(twostar, type(twostar))            #{'s1': 7, 's2': 8, 's3': 9} <class 'dict'>
+ 
+
+test_star(1, 2, 3, 4, 5, 6, s1 = 7, s2 = 8, s3 = 9)
+# a = 1; b = 2; c = 3; p = 4
+# (5, 6) <class 'tuple'>
+# {'s1': 7, 's2': 8, 's3': 9} <class 'dict'>
+# 会传递一个p=4进去，而不是设想的，onestar=(4,5,6)
+```
+
+#### 逆向参数收集（炸开参数）
+
+- 在参数外部定义好了的列表、元组、字典等，可以在传参的时候被“炸开”，其中的内容被自动分配到参数列表中
+- “炸”列表或者元组，需要在前面添加一个星号。
+- “炸”字典，需要在前面添加两个星号。
+
+```python
+# 炸参数例子
+def zha(a,b,c):
+    print(a,b,c)
+# 炸元组
+z = (1,2,3)            #1 2 3
+zha(*z)
+# 炸列表
+z = [4,5,6]            #4 5 6
+zha(*z)
+# 炸字典
+z = {'a':7,'b':8,'c':9}    #7 8 9
+zha(**z)
+# 炸字典
+z = {'c':7,'a':8,'b':9}    #8 9 7
+zha(**z)
+ 
+# 如果炸开后参数个数或Key不匹配，会报错
+# z = {'c':7,'a':8}
+# zha(**z)
+# zha() missing 1 required positional argument: 'b'
+```
+
+#### 参数的内存管理
+
+- python的参数传递，传递的是参数值而非参数地址。参数值被复制后传递进函数。
+- 对于数值类型的参数（整型、浮点、复数等），在函数内改变参数值，函数外面不受影响。
+- 对于容器类型的参数（列表、字典、字符串等），在函数内改变了容器里的内容，在函数的外面也可以体现出来。
+
+```python
+# 传递数值类型参数
+# 在函数内修改，在函数外面不受影响
+def mod_para1(a,b):
+    print('In mod_para1, before modification: a = %d; b = %d' % (a,b))    #a = 2; b = 8
+    a *= 2
+    b += 4
+    print('In mod_para1, after modification: a = %d; b = %d' % (a,b))    #a = 4; b = 12
+a = 2
+b = 8
+print('Out of mod_para1, before modification: a = %d; b = %d' % (a,b))    #a = 2; b = 8
+mod_para1(a,b)
+print('Out of mod_para1, after modification: a = %d; b = %d' % (a,b))    #a = 2; b = 8
+
+# Out of mod_para1, before modification: a = 2; b = 8
+# In mod_para1, before modification: a = 2; b = 8
+# In mod_para1, after modification: a = 4; b = 12
+# Out of mod_para1, after modification: a = 2; b = 8
+```
+
+- **传递容器类型参数**
+- **在函数内修改，在函数外面也能体现，也可以用这种方法向外界传递信息**
+- **如果不希望容器类型中的内容被修改，请手动使用`copy.copy()`、`copy.deepcopy()`方法**
+
+```python
+# 列表通过函数传参时，被改动了数据
+def mod_para2(x):
+    print('In mod_para2, before modification: x = ' + str(x))
+    for i in range(len(x)):
+        x[i] *= 2
+    print('In mod_para2, after modification: x = ' + str(x))
+x = [i for i in range(10)]
+print('Out of mod_para2, before modification: x = ' + str(x))
+mod_para2(x)
+print('Out of mod_para2, after modification: x = ' + str(x))
+import copy
+A = [1,2,3]; B = copy.copy(A)
+mod_para2(B); print(A,B)
+# Out of mod_para2, before modification: x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+# In mod_para2, before modification: x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+# In mod_para2, after modification: x = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+# Out of mod_para2, after modification: x = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+# In mod_para2, before modification: x = [1, 2, 3]
+# In mod_para2, after modification: x = [2, 4, 6]
+# [1, 2, 3] [2, 4, 6]
+```
+
+#### 函数中变量的作用域
+
+- 创建于函数外部，它是全局（Global）的，它在这个py文件内部的任何地方可见。
+- 创建于函数内部，它是局部（Local）的，它只能在函数内部才能访问，在函数外部不可见。
+- 全局变量和局部变量重名，函数内会访问到局部变量，函数外访问到全局变量。
+- 函数内部能访问全局变量，但不能修改！
+- 如果非要在函数内部修改全局变量，需要声明（不推荐这么干！）
+
+```python
+gv1 = 1
+def test():
+    # gv1=2
+    print('在函数内部访问全局变量：gv1 = %d' % gv1)    #1
+    # gv1=2
+test()
+print('在函数外部访问全局变量：gv1 = %d' % gv1)    #1
+```
+
+- 上面的例子，会在gv1 = 2的前一行，报错，看起来匪夷所思。
+- 事实上，这属于python对全局变量的“遮蔽”（hide）操作。在python的函数内部对不存在的变量赋值时，默认会重新定义局部变量。也就是说，在整个函数的内部，gv1都被重新定义了，这一操作会影响整个函数，因此会在它的上一行报错。
+- 为了访问被遮蔽的全局变量，需要使用globals()函数，将全局变量以字典的形式输出。（globals()['全局变量名']）——或者可以简单认为出全局变量通过globals()中的字典存储
+- 目前得知python3.10以后是不会报错了，但这种操作方法我们一般是不推荐的！
+
+```python
+# 访问被遮蔽的全局变量
+gv1 = 1
+def test():
+    # 用globals函数访问被遮蔽的全局变量
+    print('在函数内部访问全局变量：gv1 = %d' % globals()['gv1'])
+    gv1 = 2 
+    print('在函数内部访问修改后的全局变量：gv1 = %d' % gv1)
+test()
+print('在函数外部访问全局变量：gv1 = %d' % gv1) # 函数内部修改的其实是同名局部变量，全局变量没有被修改。
+```
+
+- 正常的做法是，只要有定义全局变量，函数内部的局部变量就不应该和它重名！
+- 可以用global语句，在函数内部声明全局变量，经过声明的全局变量在函数内部可以访问和修改。
+
+```python
+# 测试全局变量
+gv1 = 1
+def test():
+    global gv1 #全局变量我来撑控
+    print('在函数内部访问全局变量：gv1 = %d' % gv1)    #1
+    gv1+=1
+test()
+print('在函数外部访问全局变量：gv1 = %d' % gv1)    #2
+```
+
+#### 获取指定范围内的变量
+
+- python提供了多个方法可以让我们访问到每个变量的“名字”和他们持有的“值”
+- 变量在内存的某处保存着“名字”-“值”对儿
+- **globals()**: 返回全局范围内所有变量组成的字典, globals()[“名字”]
+- **locals()**: 返回当前函数范围内的所有变量组成的字典
+- vars(object): 获取指定对象范围内的所有变量组成的字典（如果不传入object参数，vars和locals的作用完全相同）
+- 如果在全局范围内（在函数外部）调用locals()，则它的行为和globals()一样，也会列出全局范围内所有变量
+- 一般来说，上述函数所列出的变量字典，都不应该被修改！但事实上它们可以被修改！！不推荐使用这种方式修改变量。
+
+### 函数的嵌套
+
+- python可以在函数的内部定义函数，多个函数相互嵌套。在其它函数内部的函数称为“**局部函数**”。
+- 局部函数是对外隐藏的，只能封闭在定义它的那一个函数的内部使用。
+- python的函数也可以作为返回值，如果把局部函数作为返回值，就可以在其它函数中使用了。
+
+**一个栗子（利用局部函数实现多种平均值的切换）**
+
+```python
+# 利用局部函数实现多种平均值的切换
+def mymean(x, mtype = 'arithmetic'):
+    '''计算列表x的平均值,用mtype定义计算哪种平均值,默认为算术平均值(arithmetic mean)    '''
+    def arithmetic(x): 
+        ''' 算术平均值(arithmetic mean)  '''
+        m = sum(x)/len(x);    return m
+    def geometric(x): 
+        '''几何平均值(geometric mean) '''
+        p = 1.;  n = len(x)
+        for i in range(n):      p *= x[i]
+        m = p ** (1/n);       return m
+    def harmonic(x): 
+        ''' 调和平均值(harmonic mean) '''
+        s = 0.;      n = len(x)
+        for i in range(n):        s += 1/x[i]
+        m = 1/(s/n);        return m
+    if mtype == 'arithmetic':    return arithmetic
+    elif mtype == 'geometric':    return geometric
+    elif mtype == 'harmonic':     return harmonic
+    else:        return arithmetic
+
+x = (1,3,5,7,9)
+print(mymean(x))      # <function mymean.<locals>.arithmetic at 0x7f9924282e60>，返回的是一层函数
+print(mymean(x)(x))   # 5.0
+print(mymean(x,mtype='harmonic')(x))   # 2.7975133214920076
+```
+
+- 类似于函数内局部变量遮蔽全局变量，局部函数内的变量也会遮蔽它所在函数的局部变量。
+- 因此使用局部函数时，同样要注意变量名的问题，不同层次的函数变量名应该不同。
+- 如果要访问上一层函数的局部变量，在局部函数中应该用nonlocal声明（类比于用global声明全局变量）。
+
+```python
+# 局部函数内的变量与函数内的局部变量相冲突，这个程序会报错
+def test1():
+    fv = 1
+    def test2():
+        # print('局部函数内打印上层函数中的局部变量：%d' % fv) # 会在这里报错
+        fv = 2
+        print('局部函数内打印上层函数中的局部变量（更改后）：%d' % fv)    #2        
+    test2()
+    print('上层函数内打印局部变量（更改后）：%d' % fv)    #1        
+    return fv
+print('上层函数外打印局部变量（更改后）：%d' % test1())    #1
+```
+
+**使用nolocal声明的方式可以使用/更改全局变量**
+
+```python
+# 局部函数内的变量与函数内的局部变量相冲突，应该改成这样就不报错了
+def test1():
+    fv = 1
+    def test2():
+        nonlocal fv # 用nonlocal声明，把fv声明为上一层函数的变量
+        print('局部函数内打印上层函数中的局部变量：%d' % fv)    #1
+        fv = 2
+        print('局部函数内打印上层函数中的局部变量（更改后）：%d' % fv)    #2    
+        
+    test2()
+    print('上层函数内打印局部变量（更改后）：%d' % fv)    #2
+    return fv
+ 
+print('上层函数外打印局部变量（更改后）：%d' % test1())    #2
+```
+
+### 函数的高级内容
+
+- python中万物皆对象**，函数也是对象**。函数可以赋值给变量，可以作为函数的参数，也可以作为函数的返回值。
+- python中以函数作为对象的用法，可以类比于c语言中的函数指针，但比函数指针灵活的多，也更不容易出错。
+
+```python
+# 以第三章栗子中mymean函数为例
+# 将函数赋值给变量f
+f = mymean2('arithmetic')
+# 打印出来看看
+print(f)
+# 测试一下
+x = list(range(1,10))
+m = f(x)
+print(m)
+# 也可以像上面的例子一样，连起来写
+print(mymean2('geometric')(x))
+```
+
+#### 函数作为函数的形参
+
+- 有时候需要定义一个函数，让它内部的大致流程都固定下来，但其中某些部件可以替换：类似于汽车换发动机，电脑换显卡。
+- 这种“可替换式”的程序设计方式，在python中可以方便的通过将函数作为形参的方式来实现。
+
+#### 使用函数作为返回值
+
+- 将一个函数对象（可以是局部函数，也可以是别的地方定义的函数）作为返回值，适合“部件替换式”程序设计中，判断使用哪个部件。
+- 具体实现方式参见第三章局部变量栗子中的代码
+
+```python
+# 以第三章栗子中mymean函数为例
+# 编写另一个程序，对列表中的数字进行变换，变成均值为1的另一个列表
+# 均值，可以是算术平均值、几何平均值、调和平均值
+def mynormalize(x, mtype):
+    f = mymean(mtype)
+    m = f(x)
+    return [i/m for i in x]
+ 
+x = list(range(1,10))
+mtype = 'geometric'
+print(mymean(mtype)(x))
+print(mynormalize(x, mtype))
+```
+
+#### 递归
+
+- 在一个函数里面调用它自己，称为递归。
+- 递归可以视作一种隐式的循环，不需要循环语句控制也可实现重复执行某段代码。
+- 递归在大型复杂程序中非常有用，在数值和非数值算法中都能大显身手！
+- 使用递归的时候要注意，当一个函数不断调用自己的时候，必须保证在某个时刻函数的返回值是确定的，即不再调用自己。
+
+```python
+# 斐波那契数列（Fibonacci sequence）
+# 在现代物理、准晶体结构、化学等领域，斐波纳契数列都有直接的应用
+def Fibonacci(n):
+    '''    Fibonacci sequence
+    f(0)=1, f(1) = 1, f(n) = f(n-1)+f(n-2)    '''
+    if n == 0 or n == 1:        return 1
+    else:      return Fibonacci(n-1) + Fibonacci(n-2)
+# 测试一下，注意n不要设的太大，python的递归效率是比较低的，太大会死机
+print(Fibonacci(5))
+# 斐波那契数列，前20位
+print('Fibonacci sequence:')
+for i in range(20):
+    print('%d: %d' % (i,Fibonacci(i)))
+```
+
+### 局部函数与lambda
+
+- lambda表达式是现代编程语言引入的一种函数实现方式，它可以在一定程度上代替局部函数。
+- 对于局部函数，它的名字只在函数内部有意义，在函数外部看不到它的名字。即便使用返回值的形式传出来了，它的名字并没有被同时传出来。
+- 从命名的意义上讲，局部函数都是“隐姓埋名”的，出了这个函数就没人知道它的名字。
+- lambda表达式就相当于匿名函数。
+
+```python
+# 一行中的hello world
+greeting = lambda: print('Hello lambda!')
+greeting()  # Hello lambda!
+
+# lambda表达式可以放在数组里面，批量运行
+L = [lambda x: x**2, lambda x: x**3, lambda x: x**4]
+for p in L:
+    print(p(3))
+# 9
+# 27
+# 81
+```
+
+```python
+pairs = [(1, 'one'), (3, 'three'), (2, 'two'), (4, 'four')]
+pairs.sort(key=lambda pair: pair[0])    # [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
+pairs.sort(key=lambda pair: pair[1])    # [(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
+```
+
+
+
+#### 用lambda表达式代替局部函数
+
+```python
+# 用lambda表达式代替局部函数
+def mymean2(mtype = 'arithmetic'):
+    '''    返回计算平均值所用的函数，用mtype定义计算哪种平均值，默认为算术平均值（arithmetic mean）    '''
+    # 由于lambda表达式只能写一行，这里用numpy和scipy的现成的函数来实现
+    import numpy as np
+    import scipy.stats as st
+    a = np.array(x)
+    if mtype == 'arithmetic': # 算术平均值（arithmetic mean）
+        return lambda a: np.mean(a)
+    elif mtype == 'geometric':# 几何平均值（geometric mean）
+        return lambda a: st.gmean(a)
+    elif mtype == 'harmonic': # 调和平均值（harmonic mean）
+        return lambda a: st.hmean(a)
+    else:        # 默认：算术平均值（arithmetic mean）
+        return lambda a: np.mean(a)
+ 
+x = list(range(1,10))
+print(x)        # [1, 2, 3, 4, 5, 6, 7, 8, 9]
+print(mymean2('arithmetic')(x))    # 5.0
+print(mymean2('geometric')(x))     # 4.147166274396913
+print(mymean2('harmonic')(x))      # 3.181371861411138
+```
+
+#### 常见数学方法的内部函数
+
+```python
+# 判断所有元素是否为True，相当于多重的and
+help(all)
+print(all([3>2,6<9]))                # True
+# 任意一个元素是否为True，相当于多重的or
+help(any)
+print(any([3>2,6<9]))                # True
+# 最大值和最小值
+help(max)
+help(min)
+print(max([1,2,5,3]))                # 5
+print(min([1,2,5,3]))                # 1
+# 四舍五入(到小数点后第n位)
+help(round)
+print(round(3.1415926,3))            # 3.142
+# 所有元素相加 
+help(sum)
+print(sum([1,2,3]))                  # 6
+print(sum([1,2,3],5))                # 11
+# 乘幂
+help(pow)
+print(pow(6,2))                      # 36
+print(pow(6,2,5))                    # 1, 6^2 mod 5
+# 带余除法
+help(divmod)
+print(divmod(6,2))                   # (3, 0)
+# 绝对值
+help(abs)
+print(abs(-2.56))                    # 2.56
+```
+
+
+
+
+
+
+
+
+
+
+
 ### 不定长参数
-
-
-
-
-
-
 
 #### 特殊参数
 
@@ -4457,7 +5078,7 @@ greet_user('jesse')
 # Hello, Jesse!
 ```
 
-#### 类型提示（type hint)
+### 类型提示（type hint)
 
 > 类型提示仅能对开发人员起到提示作用，不能用于类型检查
 
@@ -4508,44 +5129,6 @@ if __name__ == "__main__":
     print(twoSum('Arsenal'))            # TypeError: can only concatenate str (not "int") to str
 
 ```
-
-
-
-### 传递实参
-
-#### 位置实参
-
-- 注意多个参数时，实参的前后位置要对应准确
-
-```python
-
-```
-
-#### 关键字实参
-
-- 关键字实参是传递给函数的名称`键值-对`。你直接在实参中将名称和值关联起来了，因此向函数传递实参时不会混淆(不会得到名为Hamster的harry这样的结果)。关键字实参让你无需考虑函数调用中的实参顺序，还清楚地指出了函数调用中各个值的用途。
-- 使用关键字实参时，务必准确地指定函数定义中的形参名。
-
-```python
-def describe_pet(animal_type, pet_name):
-    "显示宠物的信息"
-    print("\nI have a "+animal_type+".")
-    print("My "+animal_type+"'s name is "+pet_name.title()+".")
-
-describe_pet('hamster', 'harry')
-describe_pet(pet_name='harry',animal_type='hamster')
-# I have a hamster. 
-# My hamster's name is Harry.
-#
-# I have a hamster.
-# My hamster's name is Harry.
-```
-
-#### 默认值
-
-- 
-
-
 
 ### 返回值
 
@@ -4823,28 +5406,146 @@ from module_name import *
 
 
 
-### Lambda表达式
+### 高阶函数
 
-`lambda` 关键字用于**创建小巧的匿名函数**。`lambda a, b: a+b` 函数返回两个参数的和。Lambda 函数可用于任何需要函数对象的地方。在语法上，匿名函数只能是单个表达式。在语义上，它只是常规函数定义的语法糖。与嵌套函数定义一样，lambda 函数可以引用包含作用域中的变量：
+#### map
+
+
+
+#### filter
+
+
+
+#### reduce
+
+> reduce需要通过fuctools库导入
+
+### 装饰器
+
+> TL;DR
+>
+> 采用了闭包的思路（内外函数嵌套，内函数引用外函数作用域下的非全局变量，外函数返回内函数的引用），在不改变原函数代码的前提下为函数增添新的功能
+
+函数是Python中的**第一类对象** ，可以把函数**赋值给变量**，对该变量进行调用，可实现原函数的功能。
+（变量——函数——函数式编程）
+
+Python中，作用域的概念仅仅存在于：当变量在Module(模块)、Class(类)、def(函数) 中定义的时候
+
+理解这一点至关重要！ 对于LEGB原则准确、快速的理解很有帮助。
+
+再说的直白点，作用域存在于 def和 class之内的缩进代码块 .py后缀Python文件中！
+
+#### 1、闭包
+
+要想了解装饰器，首先要了解一个概念，闭包。什么是闭包，一句话说就是，在函数中再嵌套一个函数，并且引用外部函数的变量，这就是一个闭包了。光说没有概念，直接上一个例子。
 
 ```python
->>> def make_incrementor(n):
-...     return lambda x: x + n
-...
->>> f = make_incrementor(42)
->>> f(0)
-42
->>> f(1)
-43
+def outer(x):
+    def inner(y):
+        return x + y
+    return inner
+
+print(outer(6)(5))
+-----------------------------
+>>>11
 ```
 
-上例用 lambda 表达式返回函数。还可以把匿名函数用作传递的实参：
+如代码所示，在outer函数内，又定义了一个inner函数，并且inner函数又引用了外部函数outer的变量x，这就是一个闭包了。在输出时，outer(6)(5),第一个括号传进去的值返回inner函数，其实就是返回6 + y，所以再传第二个参数进去，就可以得到返回值，6 + 5。
+
+#### 2、装饰器
+
+接下来就讲装饰器，其实装饰器就是一个闭包，装饰器是闭包的一种应用。什么是装饰器呢，简言之，**python装饰器就是用于拓展原来函数功能的一种函数，这个函数的特殊之处在于它的返回值也是一个函数，使用python装饰器的好处就是在不用更改原函数的代码前提下给函数增加新的功能。**使用时，再需要的函数前加上@demo即可。
 
 ```python
->>> pairs = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
->>> pairs.sort(key=lambda pair: pair[1])
->>> pairs
-[(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
+def debug(func):
+    def wrapper():
+        print("[DEBUG]: enter {}()".format(func.__name__))
+        return func()
+    return wrapper
+
+@debug
+def hello():
+    print("hello")
+
+hello()
+-----------------------------
+>>>[DEBUG]: enter hello()
+>>>hello
+```
+
+例子中的装饰器给函数加上一个进入函数的debug模式，不用修改原函数代码就完成了这个功能，可以说是很方便了。
+
+#### 3、带参数的装饰器
+
+上面例子中的装饰器是不是功能太简单了，那么装饰器可以加一些参数吗，当然是可以的，另外装饰的函数当然也是可以传参数的。
+
+```python
+def logging(level):
+    def outwrapper(func):
+        def wrapper(*args, **kwargs):
+            print("[{0}]: enter {1}()".format(level, func.__name__))
+            return func(*args, **kwargs)
+        return wrapper
+    return outwrapper
+
+@logging(level="INFO")
+def hello(a, b, c):
+    print(a, b, c)
+
+hello("hello,","good","morning")
+-----------------------------
+>>>[INFO]: enter hello()
+>>>hello, good morning
+```
+
+如上，装饰器中可以传入参数，先形成一个完整的装饰器，然后再来装饰函数，当然函数如果需要传入参数也是可以的，用不定长参数符号就可以接收，例子中传入了三个参数。
+
+> @logging(level="INFO") 可以看做是 hello = logging(level="INFO")(hello)。这里的hello是函数对象，python中一切皆是对象，函数也可以像变量一样传递，加括号后hello()才是执行函数。于是这里就变成了hello = outwrapper(hello)，而outwrapper() 的返回是 wrapper，hello 就等于 wrapper，执行 hello() 就等价于执行 wrapper()，而等号右边的 hello 已经作为参数传递给 outrapper() 了
+
+#### 4、类装饰器
+
+装饰器也不一定只能用函数来写，也可以使用类装饰器，用法与函数装饰器并没有太大区别，实质是使用了类方法中的**call**魔法方法来实现类的直接调用。
+
+```python
+class logging(object):
+    def __init__(self, func):
+        self.func = func
+
+    def __call__(self, *args, **kwargs):
+        print("[DEBUG]: enter {}()".format(self.func.__name__))
+        return self.func(*args, **kwargs)
+
+@logging
+def hello(a, b, c):
+    print(a, b, c)
+
+hello("hello,","good","morning")
+-----------------------------
+>>>[DEBUG]: enter hello()
+>>>hello, good morning
+```
+
+类装饰器也是可以带参数的，如下实现
+
+```python
+class logging(object):
+    def __init__(self, level):
+        self.level = level
+
+    def __call__(self, func):
+        def wrapper(*args, **kwargs):
+            print("[{0}]: enter {1}()".format(self.level, func.__name__))
+            return func(*args, **kwargs)
+        return wrapper
+
+@logging(level="TEST")
+def hello(a, b, c):
+    print(a, b, c)
+
+hello("hello,","good","morning")
+-----------------------------
+>>>[TEST]: enter hello()
+>>>hello, good morning
 ```
 
 
@@ -4853,11 +5554,352 @@ from module_name import *
 
 > 类将函数和数据整洁地封装起来，让你能够灵活而高效地使用它们。
 
+### 面向对象
+
+其实面向对象的逻辑很简单，也非常符合人类思考的直觉。正是因为接近人类思维方式，所以才成为现代编程语言的主流。
+
+- **面向对象**相对于**[面向过程](https://www.zhihu.com/search?q=面向过程&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"answer"%2C"sourceId"%3A2365100638})**，两者编程逻辑完全不同。但面向对象也会向下兼容面向过程——Python里面也能实现面向过程。
+- **过程**类似于函数，执行后不返回结果；
+- 相对的，函数会返回结果。
+
+**面向对象的编程逻辑：**
+
+- 把功能需求的实现按步骤实现；
+- 将不同的独立功能，封装成一个个独立的函数；
+- 函数 - 可重复使用的代码块；
+- 函数包括内置的函数，也包括用户自己编写的函数；
+- 最后写成的代码，通常就是逐步地调用不同的函数。
+- 在一个对象中封装多个方法和属性，以实现不同的职责；
+- 根据职责的不同，定义不同的对象；
+- 通过不同对象调用不同的方法，来实现项目的功能需求。
+
+**面向对象的优点：**
+
+- 看重对象和对象的职责；
+- 不同对象有不同的属性，承担不用的角色；
+- 开发套路固定，可以应付复杂的项目需求；
+- 顺序调用不同对象，对象调用不用的属性和方法。
+
+这里我们用炒菜这么一个小例子进行对比说明。
+
+面向过程：把炒菜分解为不同步骤——把菜放入锅内->点火->加油->翻炒->出锅，菜就这么炒好了。
+
+面向对象：
+
+- 先抽象出不同的对象，不同对象有不同的属性和方法；
+- 菜是一个对象，菜有品种、重量等属性；
+- 锅是一个对象，有加菜、点火、翻炒、出锅等方法；
+- 菜.种类+菜.重量+，锅.加菜 -> 锅.点火 -> 锅.翻炒 -> 锅.灭火 -> 锅.出锅；
+- 如果实现得得更细一点，还可以增加锅的容量、温度等属性或者其它方法。
+
+通过对象的方法或属性，来实现某些功能的逻辑，相对更符合人类的思维方式。
+
+
+
+### 类 Class
+
+> 类，是某一类具有相同特征或行为的事物的抽象。
+>
+> 比如人类，人类有性别、身高、体重等属性；人类有学习、吃饭、编程、写论文等行为；
+
+- 程序开发时先定义类；
+- 类的共同**特征**被称为**属性**，**attribute**；
+- 类的共同**行为**被称为**方法**，**method**；
+- 类是抽象的，职责很单一，就是用于创建对象，也叫实例化；
+- 先有类，后有对象；同一个类只有一个，但是对象可以有很多个；
+- 通过人类这个类实例化出一个”王几行“，那王几行才是一个具体的**对象**。
+
+在Python中，几乎一切皆对象。变量、数据框、**函数，都是一个个对象**。
+
+#### dir() 函数
+
+> 查看类的结构，所有的属性和方法
+
+```python
+# 我们以列表型的对象为例
+list1 = [1, 2, 3, 4]
+dir(list1) ## list 类对象的结构
+
+['__add__', ## 前后各带两个下划线的，是Python自带的属性或方法
+ '__class__',
+ '__contains__',
+ '__delattr__',
+ '__delitem__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__getattribute__',
+ '__getitem__',
+ '__gt__',
+ '__hash__',
+ '__iadd__',
+ '__imul__',
+ '__init__',
+ '__init_subclass__',
+ '__iter__',
+ '__le__',
+ '__len__',
+ '__lt__',
+ '__mul__',
+ '__ne__',
+ '__new__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__reversed__',
+ '__rmul__',
+ '__setattr__',
+ '__setitem__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__',
+ 'append',
+ 'clear',
+ 'copy',
+ 'count',
+ 'extend',
+ 'index',
+ 'insert',
+ 'pop',
+ 'remove',
+ 'reverse',
+ 'sort']
+```
+
+我们试试使用这些属性或者方法。
+
+```python
+list1 = [26,1, 9,10,2]
+list1.sort() ## 对list1这个对象，实现排序方法
+list1
+
+[1, 2, 9, 10, 26]
+```
+
+用 `dir()` 查看函数的结构：
+
+```python
+def add2(x, y):
+    """两数之和"""
+    return x + y
+
+dir(add2)
+
+['__annotations__',
+ '__call__',
+ '__class__',
+ '__closure__',
+ '__code__',
+ '__defaults__',
+ '__delattr__',
+ '__dict__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__get__',
+ '__getattribute__',
+ '__globals__',
+ '__gt__',
+ '__hash__',
+ '__init__',
+ '__init_subclass__',
+ '__kwdefaults__',
+ '__le__',
+ '__lt__',
+ '__module__',
+ '__name__',
+ '__ne__',
+ '__new__',
+ '__qualname__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__setattr__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__']
+
+add2.__doc__ ## 函数备注说明的属性
+
+'两数之和'
+```
+
+#### 在类中封装方法
+
+类中的方法的首个参数必须是`self`：self 是调用方法的那个对象的引用。
+
+假设定义一个“人”类，定义两个方法，一个是玩耍，一个是学习。
+
+```python
+class HumanBeing: ## 类是要用“大驼峰”命名法
+    
+    def play(self):
+        print("投篮2万次")
+    
+    def study(self):
+        print("自学5小时")
+
+## 通过类，创建一个对象        
+linky = HumanBeing()
+
+linky.play() ## 从林克这个对象中，调用 play 方法   
+
+[Out: ] 投篮2万次
+```
+
+`id()`函数查看对象，在内存中的地址。
+
+```python
+id(linky) ## 查看对象在内存中的地址
+
+[Out: ] 140324690065584
+
+## 转换为 16 进制
+("%x" % id(linky))
+
+[Out: ] ("%x" % id(linky))
+```
+
+#### 属性的创建
+
+- 直接给对象增加属性
+- 先说一种不太推荐的、简单的操作：直接给**对象**增加一个属性。
+
+```python
+linky.height = 3.0
+dir(linky)
+
+[Out:] 
+['__class__',
+ '__delattr__',
+ '__dict__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__getattribute__',
+ '__gt__',
+ '__hash__',
+ '__init__',
+ '__init_subclass__',
+ '__le__',
+ '__lt__',
+ '__module__',
+ '__ne__',
+ '__new__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__setattr__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__',
+ '__weakref__',
+ 'height',
+ 'play',
+ 'study']
+
+linky.height
+
+[Out: ] 3.0
+```
+
+不过呢，这个 height 属性，只是加在了林克这个对象上，却没有加到“HumanBeing”这个类里边。
+
+```python
+dir(HumangBeing)
+
+[Out: ]
+['__class__',
+ '__delattr__',
+ '__dict__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__getattribute__',
+ '__gt__',
+ '__hash__',
+ '__init__',
+ '__init_subclass__',
+ '__le__',
+ '__lt__',
+ '__module__',
+ '__ne__',
+ '__new__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__setattr__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__',
+ '__weakref__',
+ 'play',            ## 这里没有 height 这个属性
+ 'study']
+```
+
+#### `__init__`对象初始化方法 ：指定默认属性
+
+在Python中，通过__init__内置方法，来对对象的属性进行初始值的设置，即初始化。 
+
+`__init__`方法的作用：专门用来定义一个类所有的属性。
+
+下面，我们就用这个方法，来定义类的属性。
+
+```python
+class HumanBeing:
+    def __init__(self):
+        self.height = 3.0 ## 默认拥有某个属性
+
+linky = HumanBeing()
+linky.height   
+
+[Out: ] 3.0
+```
+
+另外定义一个方法。
+
+```python
+class HumanBeing:
+    def __init__(self):
+        self.height = 3.0 ## 默认拥有某个属性
+
+    def play(self):
+        print("林克身高%s米爱打球" % self.height ) ## 这里的 self，指代的是实例化的对象
+    
+linky = HumanBeing()
+linky.play()
+
+[Out: ] 林克身高3.0米爱打球
+```
+
+说明：在使用类名`()`初始化对象的时候，Python会自动调用初始化方法。
+
+#### `__init__`对象初始化方法 ：引入参数
+
+```python
+class HumanBeing:
+    def __init__(self, height):
+        self.height = height ## 通过参数，初始化一个属性
+
+linky = HumanBeing(3.0)
+linky.height
+
+[Out: ] 3.0
+```
+
+
+
+
+
 ### 创建和使用类
-
-看书《Python编程从入门到实践》：==P157==
-
-
 
 
 
