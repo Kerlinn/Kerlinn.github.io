@@ -5369,41 +5369,6 @@ print(user_profile)
 
 > 编写函数时，你可以以各种方式**混合使用位置实参、关键字实参和任意数量的实参**。知道这些实参类型大有裨益，因为阅读别人编写的代码时经常会见到它们。**要正确地使用这些类型的实参并知道它们的使用时机**，需要经过一定的练习。就目前而言，牢记使用最简单的方法来完成任务就好了。继续往下阅读，就会知道在各种情况下哪种方法的效率是最高的。
 
-### 将函数存储在模块中 — import
-
-```python
-# 导入整个模块
-module_name.function_name()
-# 导入模块中的特定函数
-from module_name import function_name
-```
-
-```python
-# 导入整个模块
-import pizza
-# 导入模块中的特定函数
-from pizza import make_pizza
-```
-
-- Python读取这个文件时，代码行`import pizza`让Python打开文件pizza.py,并将其中的所有函数都复制到这个程序中。你看不到复制的代码，因为这个程序运行时，Python在 幕后复制这些代码。你只需知道，在making_pizzas.py中， 可以使用pizza.py中定义的所有函数。
-
-#### 重命名 — as
-
-```python
-import function_name as fn
-from module_name import function_name as fn
-
-from pizza import make_pizza as mp
-import make_pizza as mp
-```
-
-#### 导入所有 — *
-
-```python
-from module_name import *
-#  = import module_name
-```
-
 
 
 ### 高阶函数
@@ -5845,6 +5810,175 @@ dir(HumangBeing)
  'study']
 ```
 
+
+
+### 类的多继承
+
+- 菱形继承时，Python会按照C3算法(有向无环路图)按顺序遍历继承图
+- 通过`类对象名称.__mro__` 可以查看 继承顺序
+- 多重继承增加了继承的复杂度，应当减少多重继承的使用
+
+### 混入
+
+- 混入Mix-In是指借用多继承的语法，为现有类增加新的方法
+- 混入不定义新的属性，只包含方法
+- 混入便于重用，但绝不能实例化
+- 混入类一般在类名称后增加Mixin
+
+> 例如：披萨可以按层数分为单层、 双层，也可以按照形状分为圆形、方形，可以将它们定义为:单层Mixin、 双层Mixin、圆形Mixin、方形Mixin
+>
+> 定义一个披萨类:
+> `class披萨(主要材料，单层Mixin,圆形Mixin)`
+
+
+
+### 类的装饰器
+
+- 类的装饰器改变了调用的方法和行为
+- 类的装饰器让类的使用更加灵活，但也给新手增加了学习难度
+- 非必要，不要使用类的方法的装饰器
+
+####  classmethod装饰器
+
+- classmethod可以实例的方法定义为类的方法，用于类直接调用
+
+```python
+class Klass:
+	@classmethod
+	def func(cls):
+		pass
+```
+
+- cls表示当前操作的类，可以使用Klass.func()调用
+
+#### staticmethod装饰器
+
+- 不需要类的任何信息但又和类相关的一些方法，为了方便维护代码并保持代码工整，可以将该函数定义到类中并使用staticmethod修饰
+
+```python
+class Klass():
+	@staticmethod
+	def func():
+		pass
+```
+
+- staticmethod修饰的方法，不需要使用self或cls 
+
+#### property装饰器
+
+- 把方法伪装成属性；让属性可以像方法一样编写复杂逻辑
+- 调用更简单，把难度扔给编写类的人，所以很多python源码都是用这种形式
+
+```python
+class Klass:
+    
+	@property
+	def func(self):
+		return self.__varName
+	@func. setter
+	def func(self, varValue):
+		self.__varName = varValue 
+```
+
+```python
+class Klass3:
+    @property
+    def func(self):
+        return self.__varName
+    @func.setter
+    def func(self, varValue):
+        self.__varName = varValue
+
+        
+        
+obj = Klass3()
+obj.func="123"
+print(obj.func)  # 123
+```
+
+
+
+
+
+### 一些常见问题
+
+- self与cls：self指实例，cls指class
+
+- 设计错误：
+  - 哪些对象应该被抽象为类?
+  - 哪些功能应该被定义为属性。哪些应该被定义为方法?
+  - 如何解决类之间的依赖?
+
+### SOLID原则
+
+#### S 单一职责原则
+
+- 类只负责做一件事，即只有一个职责。即越小越好
+
+#### O 开闭原则
+
+- 类应当对扩展开放，对修改关闭，使其有更好的可维护性
+
+#### L 里氏替换原则
+
+- 某个对象使用类的子类时，应当和使用父类有相同的行为。
+- 即：对于任何类，客户端都能应该能无差别的使用它的子类，并且不会影响运行时的预期行为。
+
+#### I 接口隔离原则
+
+- Python使用“鸭子类型”实现接口，一个类对另一个类的依赖要建立在最小接口上（接口越小越好）
+- 你想定义一个即像列表又像字典的功能，直接可以去改
+
+```python
+def func():
+    pass
+# dir(func)
+# func()            
+# ['__annotations__',
+#  '__call__',      函数有call方法，即可以被调用,执行func()不会报错
+#  '__class__',
+#  '__closure__',
+
+class Class1:
+    pass
+# dir(Class1)
+# ['__class__',     类没有call方法，即不可以被调用，会报错 ↓ 
+#  '__delattr__',
+#  '__dict__',
+# c1 = Class1()     # 'Class1' object is not callable
+# c1()               
+
+class Class2:
+    def __call__(self):
+        print("类也可以被调用")
+dir(Class2)
+# ['__call__',     给他加了一个__call__方法就可以了
+#  '__class__',
+#  '__delattr__',
+#  '__dict__',
+c2 = Class2()       
+c2()             # "类也可以被调用"，成功调用
+```
+
+
+
+#### D 依赖倒置原则
+
+- 高层模块不应该依赖低层模块，而是应该让二者依赖抽象
+
+
+
+
+
+
+
+
+
+### `__init__`方法
+
+- 有一类方法，以“`__`”开始和结束，实现了除一般方法外的特殊功能，
+- 被称作**魔术方法**
+
 #### `__init__`对象初始化方法 ：指定默认属性
 
 在Python中，通过__init__内置方法，来对对象的属性进行初始值的设置，即初始化。 
@@ -5859,9 +5993,24 @@ class HumanBeing:
         self.height = 3.0 ## 默认拥有某个属性
 
 linky = HumanBeing()
-linky.height   
+linky.height   # 3.0
+```
 
-[Out: ] 3.0
+```python
+class Klass(object):
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    
+    def information(self):
+        
+        print(self.name)
+        print(self.age)
+myself = Klass("Tom", 18)
+myself.information()   
+# Tom
+# 18     
 ```
 
 另外定义一个方法。
@@ -5897,9 +6046,260 @@ linky.height
 
 
 
+## 11. 模块与标准库
+
+### 将函数存储在模块中 — import
+
+```python
+# 导入整个模块
+import module_name.function_name()
+# 导入模块中的特定函数
+from module_name import function_name
+```
+
+```python
+# 导入整个模块
+import os
+# 导入模块的特定方法
+from os import chdir
+from os import chdir, getcwd
+```
+
+- Python读取这个文件时，代码行`import os`让Python打开文件os.py,并将其中的所有函数都复制到这个程序中。你看不到复制的代码，因为这个程序运行时，Python在 幕后复制这些代码。你只需知道，在chdir.py中， 可以使用os.py中定义的所有函数。
+
+不同的导入方法，使用函数的格式也不同，以使用getcwd() 函数为例:
+
+```python
+import os
+os.getcwd() 
+
+from os import getcwd
+getcwd()
+```
+
+#### 包
+
+- 多个模块放在一个文件夹中，该文件夹称作**包**
+
+- 包的导入与模块的导入相同:
+
+  ```python
+  import 包
+  from 包 import 模块
+  ```
+
+#### 重命名 — as
+
+```python
+import function_name as fn
+from module_name import function_name as fn
+
+from pizza import make_pizza as mp
+import make_pizza as mp
+```
+
+#### 导入所有 — *（不建议
+
+```python
+from module_name import *
+#  = import module_name
+```
+
+### 标准库
+
+https://docs.python.org/zh-cn/3.10/library/index.html
+
+![image-20240229150242917](./Python.assets/image-20240229150242917.png)
+
+#### 本地
+
+![image-20240229150054187](./Python.assets/image-20240229150054187.png)
+
+#### 远程
+
+![image-20240229150059530](./Python.assets/image-20240229150059530.png)
+
+### 创建自定义模块
+
+1. 导入自定义模块时，需确保**导入路径**正确
+2. 自定义模块的文件名称尽量**避免特殊字符**，文件名应**避免和标准库重名**
+3. 自定义模块多次导入，模块中的代码也**只能被执行一次**
+4. 自定义模块中**应为函数定义**，避免在模块中编写函数调用代码（写模块是给外面调用的，而不是在模块里就调用），或将函数调用代码放在`__name__`代码块中
+
+![image-20240229151734937](./Python.assets/image-20240229151734937.png)
+
+#### `if __name__ == '__main__':`
+
+> 学过Java、C、C++的程序员应该都知道，每次开启一个程序，都必须写一个主函数作为程序的入口，也就是我们常说的main函数。如下所示， main()就是Java中的一个main函数。
+>
+> ```java
+> public class HelloWorld {
+> 	public static void main(String[] args) {
+>     	System.out.println("HelloWorld");
+> 	}
+> }
+> ```
+>
+> 与Java、C、C++等几种语言不同的是，Python是一种**解释型脚本语言**，在执行之前不同要将所有代码先编译成中间代码，Python程序运行时是从模块**顶行**开始，**逐行进行翻译执行**，所以，最顶层（没有被缩进）的代码都会被执行，所以Python中并不需要一个统一的main()作为程序的入口。在某种意义上讲，“`if __name__==’__main__:`”也像是一个标志，象征着Java等语言中的程序主入口，告诉其他程序员，代码入口在此——这是“`if __name__==’__main__:`”这条代码的意义之一。
+>
+> Python解释器在导入模块时，会将模块中没有缩进的代码全部执行一遍（模块就是一个独立的Python文件）。开发人员通常会在模块下方增加一些测试代码，为了避免这些测试代码在模块被导入后执行，可以利用`__name__`属性。
+>
+> 具体来说：
+>
+> `__name__`属性是Python的一个内置属性，记录了一个字符串。
+>
+> - 若是在当前文件，`__name__` 是`__main__`。
+> - 在hello文件中打印本文件的`__name__`属性值，显示的是`__main__`
+>
+> ![image-20240229152715724](./Python.assets/image-20240229152715724.png)
+>
+> - 若是导入的文件，`__name__`是模块名。
+> - test66文件导入hello模块，在test66文件中打印出hello模块的`__name__`属性值，显示的是hello模块的模块名。
+>
+> ![image-20240229153800874](./Python.assets/image-20240229153800874.png)
+>
+> - 因此`__name__ == '__main__'` 就表示在当前文件中，可以在`if __name__ == '__main__':`条件下写入测试代码，如此可以避免测试代码在模块被导入后执行。
 
 
-### 创建和使用类
+
+## 12. 异常
+
+- 异常是Python解释器在执行程序的过程中，出现错误时的一种管理机制，它会在错误被监测到的位置“引发
+- 引发异常时，代码块会发生中断
+- 异常是一种特殊**对象**
+- 除SystemExit异常外，当异常没有被完全处理时，都会打印栈回溯信息
+
+```python
+>>> 10 * (1/0)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ZeroDivisionError: division by zero
+>>> 4 + spam*3
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'spam' is not defined
+>>> '2' + 2
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: can only concatenate str (not "int") to str
+```
+
+
+
+### 异常基类
+
+- BaseException —— 所有内置异常的基类
+- Exception —— 所有内置的非系统退出类异常都派生自此类，所有用户自定义异常也应当派生自此类
+- ArithmeticError —— 此基类用于派生针对各种算术类错误而引发的内置异常
+- BufferError —— 当与缓冲区相关的操作无法执行时此基类将被引发
+- LookupError —— 此基类用于派生当映射或序列所使用的键或索引无效时引发的异常
+
+### 异常捕获
+
+出现异常时，如何利用程序进行处理？
+
+```python
+try:
+	可能产生异常的代码
+except异常:
+	捕获指定的异常后运行的代码
+finally:
+	无论是否抛出异常，该部分代码均会执行
+```
+
+
+
+#### try-except子句
+
+```python
+>>> while True:
+...     try:
+...         x = int(input("Please enter a number: "))
+...         break
+...     except ValueError:
+...         print("Oops!  That was no valid number.  Try again...")
+```
+
+[`try`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#try) 语句的工作原理如下：
+
+- 首先，执行 *try 子句* （[`try`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#try) 和 [`except`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#except) 关键字之间的（多行）语句）。
+- 如果没有触发异常，则跳过 *except 子句*，[`try`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#try) 语句执行完毕。
+- 如果在执行 [`try`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#try) 子句时发生了异常，则跳过该子句中剩下的部分。 如果异常的类型与 [`except`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#except) 关键字后指定的异常相匹配，则会执行 *except 子句*，然后跳到 try/except 代码块之后继续执行。
+- 如果发生的异常与 *except 子句* 中指定的异常不匹配，则它会被传递到外部的 [`try`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#try) 语句中；如果没有找到处理程序，则它是一个 *未处理异常* 且执行将终止并输出如上所示的消息。
+
+[`try`](https://docs.python.org/zh-cn/3.10/reference/compound_stmts.html#try) 语句可以有多个 *except 子句* 来为不同的异常指定处理程序。 但最多只有一个处理程序会被执行。 处理程序只处理对应的 *try 子句* 中发生的异常，而不处理同一 `try` 语句内其他处理程序中的异常。 *except 子句* 可以用带圆括号的元组来指定多个异常，例如:
+
+```python
+... except (RuntimeError, TypeError, NameError):
+...     pass
+```
+
+#### else子句
+
+`try` ... `except` 语句具有可选的 *else 子句*，该子句如果存在，它必须放在所有 *except 子句* 之后。 它适用于 *try 子句* 没有引发异常但又必须要执行的代码。 例如:
+
+```python
+for arg in sys.argv[1:]:
+    try:
+        f = open(arg, 'r')
+    except OSError:
+        print('cannot open', arg)
+    else:
+        print(arg, 'has', len(f.readlines()), 'lines')
+        f.close()
+```
+
+使用 `else` 子句比向 `try` 子句添加额外的代码要好，可以避免意外捕获非 `try` ... `except` 语句保护的代码触发的异常。
+
+
+
+#### finally子句
+
+`try` 语句还有一个可选子句，用于定义在所有情况下都必须要执行的清理操作。例如：
+
+```python
+>>> try:
+...     raise KeyboardInterrupt
+... finally:
+...     print('Goodbye, world!')
+...
+Goodbye, world!
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+```
+
+**如果存在 `finally` 子句，则 `finally` 子句是 `try` 语句结束前执行的最后一项任务。不论 `try` 语句是否触发异常，都会执行 `finally` 子句。**以下内容介绍了几种比较复杂的触发异常情景：
+
+- 如果执行 `try` 子句期间触发了某个异常，则某个 `except` 子句应处理该异常。如果该异常没有 `except` 子句处理，在 `finally` 子句执行后会被重新触发。
+- `except` 或 `else` 子句执行期间也会触发异常。 同样，该异常会在 `finally` 子句执行之后被重新触发。
+- 如果 `finally` 子句中包含 `break`、`continue` 或 `return` 等语句，异常将不会被重新引发。
+- 如果执行 `try` 语句时遇到 `break`,、`continue` 或 `return` 语句，则 `finally` 子句在执行 `break`、`continue` 或 `return` 语句之前执行。
+- 如果 `finally` 子句中包含 `return` 语句，则返回值来自 `finally` 子句的某个 `return` 语句的返回值，而不是来自 `try` 子句的 `return` 语句的返回值。
+
+#### 捕获多个异常
+
+- try语句块可以支持捕获多个异常:
+
+```python
+try:
+	可能产生异常的语句
+except 异常1:
+	处理方式
+except 异常2:
+	处理方式二
+except...
+```
+
+### 自定义异常
+
+借用Python强大的异常处理功能，编写程序中断逻辑，继承现有的异常，并**为现有的异常增加额外功能**。
+
+自定义异常需要继承异常的基类，一般通过继承Exception 类实现:
+
+```python
+class MyException(Exception)
+```
 
 
 
@@ -5907,7 +6307,6 @@ linky.height
 
 
 
-### 使用类和实例
 
 
 
@@ -5915,23 +6314,16 @@ linky.height
 
 
 
-### 继承
+
+## 13.高级数据类型与算法
 
 
 
 
 
-### 导入类
 
 
 
-### Python标准库
-
-
-
-
-
-### 类编码风格
 
 
 
