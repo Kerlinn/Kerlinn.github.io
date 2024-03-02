@@ -73,8 +73,6 @@
 
 具体而言，一种方法可能涉及检索较小的块，然后引用父 ID 以返回较大的块。或者，可以检索单个句子，并返回句子的周围文本窗口。
 
-[Advanced RAG 01: Small-to-Big Retrieval](https://www.yuque.com/coconut-mobrg/xpwse3/ehb0wkysdqwpd16p#TuXrt)
-
 #### Summary 总结
 
 它类似于 Small-to-Big 概念，其中首先生成较大块的摘要，然后对摘要执行检索。随后，可以对较大的块进行二次检索。
