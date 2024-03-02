@@ -18,11 +18,12 @@
 
 * [大模型](4.LLM/_llm)
   - [预训练语言模型的前世今生](4.LLM/Theory/预训练语言模型的前世今生)
-  - [人类反馈强化学习(RLHF)](4.LLM/Theory/人类反馈强化学习(RLHF))
+  - [大模型研究进展（聚焦RAG）](4.LLM/Engineering/大模型研究进展（聚焦RAG）)
   - [检索增强LLM](4.LLM/Theory/检索增强LLM)
   - [检索增强生成(RAG)综述](4.LLM/Theory/RAG综述)
   - [模块化RAG与RAG的流程](4.LLM/Theory/模块化RAG与RAG的流程)
   - [向量数据库](4.LLM/Theory/向量数据库)
+  - [人类反馈强化学习(RLHF)](4.LLM/Theory/人类反馈强化学习(RLHF))
   - [主要通用模型](4.LLM/Engineering/主要通用模型)
   - [垂直领域模型](4.LLM/Engineering/垂直领域模型)
   
