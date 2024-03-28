@@ -4,12 +4,14 @@
 
 > 基础知识：软件工程，数据科学与工程，机器学习，深度学习
 >
-> 研究领域：自然语言处理，知识图谱，大模型（理论+工程）
+> 研究领域：自然语言处理，知识图谱，大模型理论与工程，检索增强生成（RAG），智能体（Agent）
 >
 > 实践项目：
 >
 > - 闻达（大模型调用平台）
 > - DB-GPT（基于大模型的本地问答）
+> - QAnything（基于RAG的本地问答）
+> - 基于LangChain和知识图谱的RAG本地问答
 
 &emsp;&emsp;
 
@@ -22,7 +24,8 @@
 
 - [自然语言处理](2.NLP/_nlp)
 
-  - [自然语言处理导论](2.NLP/1.自然语言处理导论)
+  - [自然语言处理导论](2.NLP/自然语言处理导论)
+  - [ACL2023](2.NLP/ACL2023：LLM相关论文总结)
 
 - [知识图谱](3.KG/_kg)
 
@@ -41,12 +44,19 @@
   - [人类反馈强化学习(RLHF)](4.LLM/Theory/人类反馈强化学习(RLHF))
   - [主要通用模型](4.LLM/Engineering/主要通用模型)
   - [垂直领域模型](4.LLM/Engineering/垂直领域模型)
+  - [斯坦福AI小镇](4.LLM/Engineering/AI-Town)
+  - [ChatGLM相关实践](4.LLM/Engineering/ChatGLM相关实践)
 
 - [实践项目](5.Coding/_coding.md)
 
-  - [终端命令](5.Coding/终端命令)
-  - [Python](5.Coding/Python)
   - [闻达（大模型调用平台）](5.Coding/闻达)
+  
   - [DB-GPT（基于大模型的本地问答）](5.Coding/DB-GPT)
+  
+  - [QAnything（基于检索增强生成的本地问答）](5.Coding/QAnything)
+  
+  - [基于LangChain和KG的RAG问答平台](5.Coding/基于LangChain和KG的RAG问答平台)
+  
+    
   
   
