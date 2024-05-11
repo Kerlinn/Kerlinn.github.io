@@ -1,13 +1,11 @@
 <!-- doc/_sidebar.md -->
 
 * [基本介绍](README)
-
 * [基础知识](1.Basic/_basic.md)
   - [软件工程](1.Basic/SE/软件工程)
   - [数据工程](1.Basic/DE/数据工程)
   - [机器学习](1.Basic/ML/机器学习)
   - [深度学习](1.Basic/DL/深度学习)
-  
 * [自然语言处理](2.NLP/_nlp)
 
   - [自然语言处理导论](2.NLP/自然语言处理导论)
@@ -23,7 +21,6 @@
   - [大语言模型：一种最少数学知识和专业术语的原理解释](4.LLM/Theory/大语言模型：一种最少数学知识和专业术语的原理解释)
   - [预训练语言模型的前世今生](4.LLM/Theory/预训练语言模型的前世今生)
   - [大模型研究进展（聚焦RAG）](4.LLM/Engineering/大模型研究进展（聚焦RAG）)
-  - [检索增强LLM](4.LLM/Theory/检索增强LLM)
   - [检索增强生成(RAG)综述](4.LLM/Theory/RAG综述)
   - [模块化RAG与RAG的流程](4.LLM/Theory/模块化RAG与RAG的流程)
   - [向量数据库](4.LLM/Theory/向量数据库)
@@ -36,4 +33,4 @@
   - [闻达（大模型调用平台）](5.Coding/闻达)
   - [DB-GPT（基于大模型的本地问答）](5.Coding/DB-GPT)
   - [QAnything（基于检索增强生成的本地问答）](5.Coding/QAnything)
-  - [基于LangChain和KG的RAG问答平台](5.Coding/基于LangChain和KG的RAG问答平台)
+  - [基于LangChain和ChatGLM3的知识库Agent](5.Coding/基于LangChain和ChatGLM3的知识库Agent)
