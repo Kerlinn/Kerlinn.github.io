@@ -33,4 +33,5 @@
   - [闻达（大模型调用平台）](5.Coding/闻达)
   - [DB-GPT（基于大模型的本地问答）](5.Coding/DB-GPT)
   - [QAnything（基于检索增强生成的本地问答）](5.Coding/QAnything)
+  - [LangChain教程](5.Coding/LangChain教程)
   - [基于LangChain和ChatGLM3的知识库Agent](5.Coding/基于LangChain和ChatGLM3的知识库Agent)
