@@ -1002,25 +1002,144 @@ RAG中基于检索的度量侧重于检索相关信息以支持生成任务的�
 
 这篇综述全面审视了现有的RAG模型，从检索的角度将它们的核心技术总结为四个主要步骤。它认识到一些方法可能包含多个步骤，将这些步骤解耦可能会模糊它们的内在联系。然而，主要目标是简化方法的复杂性，清晰地划定它所解决的具体问题。这使得更清晰地识别出可供进一步优化和改进的领域。尽管进行了彻底的调查，但领域的快速发展和页面限制意味着某些方面可能尚未完全分析和探讨，或者可能遗漏了最新的进展。虽然这篇论文提及了可以帮助开发RAG的评估方法，但也承认像LangChain和LlamaIndex这样的成熟工具作为有用的资源。然而，这项调查的重点并不在于详细介绍评估流程或这些工具的具体用途，而是在于说明评估方面如何支持RAG的进展。这个选择突显了未来工作的一个领域，强调了方法论的清晰性和评估工具在精炼和增强RAG模型方面的应用的重要性。
 
+# FlashRAG: A Modular Toolkit for Efficient Retrieval-Augmented Generation Research
+
+![image-20240527115237322](./RAG综述.assets/image-20240527115237322.png)
+
+## 0. 摘要
+
+随着大型语言模型（LLMs）的出现，检索增强生成（RAG）技术的潜力已经吸引了相当多的研究关注。为了增强RAG系统的各个方面，已经引入了许多新颖的算法和模型。然而，由于缺乏标准化的实施框架，再加上RAG过程本身复杂，使得研究人员在一致的环境中比较和评估这些方法变得具有挑战性和耗时。现有的RAG工具包如LangChain和LlamaIndex虽然可用，但通常过于庞大和笨重，无法满足研究人员的个性化需求。为了应对这一挑战，我们提出了FlashRAG，这是一个高效且模块化的开源工具包，旨在协助研究人员在统一框架内复制现有的RAG方法并开发他们自己的RAG算法。我们的工具包实现了12种先进的RAG方法，并收集并整理了32个基准数据集。我们的工具包具有多种功能，包括可定制的模块化框架、丰富的预实现RAG作品集合、全面的数据处理集、高效的辅助预处理脚本以及广泛和标准的评估指标。我们的工具包和资源可在https://github.com/RUC-NLPIR/FlashRAG上获取。
+
+## 1. 介绍
+
+在大型语言模型（LLMs）的时代，检索增强生成（RAG）[1, 2] 作为一种强大的解决方案，通过利用外部知识库[3]来减轻LLMs中的幻觉问题。RAG技术的巨大应用和潜力已经吸引了相当多的研究关注。近年来，为了改进RAG系统的各个方面，引入了大量的新算法和模型，使得在一致的设置下比较和评估这些方法变得越来越具有挑战性。
+
+许多工作不是开源的，或者在他们的开源代码中有固定设置，这使得适应新数据或创新组件变得困难。此外，使用的数据处理集和检索语料库经常变化，资源分散，这可能导致研究人员花费过多的时间在预处理步骤上，而不是专注于优化他们的方法。此外，由于RAG系统的复杂性，涉及索引、检索和生成等多个步骤，研究人员通常需要自己实现系统的许多部分。尽管有一些现有的RAG工具包，如LangChain[4]和LlamaIndex[5]，它们通常庞大而笨重，阻碍了研究人员实现定制流程，并未能解决上述问题。因此，迫切需要一个统一的、面向研究人员的RAG工具包，以简化方法学开发和比较研究。
+
+为了解决上述问题，我们引入了FlashRAG，这是一个开源库，旨在使研究人员能够轻松地复制现有的RAG方法并开发他们自己的RAG算法。这个库允许研究人员使用构建的管道来复制现有工作，使用提供的RAG组件来构建他们自己的RAG流程，或者简单地使用组织好的数据集和语料库来加速他们自己的RAG工作流程。与现有的RAG工具包相比，FlashRAG更适合研究人员。总结来说，我们的FlashRAG库的关键特点和能力可以概括为以下四个方面：
+
+**广泛且可定制的模块化RAG框架。**为了促进易于扩展的RAG过程，我们在两个层面上实现了模块化RAG。在组件级别，我们提供了全面的RAG组件，包括四个主要类别中的13个组件：裁判、检索器、细化器和生成器。这些组件可以单独在代码中使用，或者组合成一个连贯的管道。在管道级别，经过审查当前RAG开发的状态后，我们实现了8个常见的RAG流程。基于这个框架，现有的方法可以轻松复制，并且可以在不同的设置下运行和评估RAG流程。
+
+**预实现的高级RAG算法。**据我们所知，FlashRAG提供的现有工作的实现是最全面的。到目前为止，基于我们的框架，我们已经实现了12种高级RAG算法，如Self-RAG和FLARE，涵盖了顺序RAG、条件RAG、分支RAG和循环RAG类别。这些方法已在统一设置下进行了评估，并且有可用的基准报告。借助我们的框架，研究人员可以轻松地在各种设置下评估这些方法，并与他们自己的方法进行公平比较，从而提高整体的可复制性。我们计划将更多的方法纳入我们的库中。
+
+**全面的基准数据集。**为了提高RAG研究中数据集的一致性和可重用性，我们编译了32个常见的RAG基准数据集，并将它们预处理成统一格式。其中一些数据集，如asqa和wikiasp，已针对RAG场景进行了特定调整，以确保一致性。我们已经在Hugging Face平台上托管了这些数据集，以便轻松访问和使用。
+
+**高效的RAG辅助脚本。**为了最小化RAG实验的设置时间，我们提供了一套全面的辅助脚本，包括下载和切片维基百科以创建语料库、构建检索索引以及预先准备检索结果。这些步骤对于后续流程很重要，但它们通常很繁琐，并且可能需要很多时间。我们用户友好的脚本设计直观，确保研究人员可以轻松地导航RAG相关研究的准备阶段。
+
+## 2. 相关工作
+
+RAG过程通常涉及各种组件和复杂的初步处理（例如构建语料库和构建索引）。由于缺乏专门的RAG研究库，大多数开源代码倾向于使用他们首选的实现，并涉及复杂的环境配置。因此，运行他人的代码通常耗时，并且很难迁移到自己的设置中。同时，数据集和语料库的处理和使用缺乏标准化，增加了在自身与现有方法之间进行公平比较的挑战。
+
+近年来，已经开发了许多与RAG相关的开源工具包，提供了丰富的RAG组件。Langchain[4]、LlamaIndex[5]和Haystack[6]是被广泛采用的作品之一。这些库提供了与LLM相关的一系列高级API，例如向量数据库和嵌入模型，这极大地简化了与LLM的交互，并轻松地运行RAG过程。尽管有许多优点，但这些库缺乏对研究人员的支持。一方面，它们倾向于忽视现有工作的实现，包括方法、广泛使用检索语料库和基准数据集。另一方面，它们通常过于庞大且高度封装，隐藏了操作细节或需要复杂的文档搜索，因此缺乏定制的灵活性。
+
+鉴于这些问题，已经引入了几个更轻量级和更可定制的RAG专业工具包。例如，FastRAG[7]基于Haystack的API进行优化，并提供了有限数量的支持方法和基准数据集。LocalRQA[8]专注于RAG过程中的训练阶段，为训练可能涉及RAG过程的各种组件（如检索器、生成器）提供了全面的脚本。AutoRAG[9]采用了与我们类似的设计理念，实现了模块化RAG流程。该库将RAG中的每个组件表示为一个节点，通过连接这些节点来实现RAG流程。尽管AutoRAG包含了多种评估指标和基准，但在直接实现现有工作方面有所不足。因此，在我们的库中，我们不仅设计了全面的RAG组件集合来实现各种RAG流程，还实现了各种RAG工作，以便现有工作在不同设置下的效果可以直接通过几行代码复制。此外，我们提供了丰富的资源，包括大量的处理过的数据集、获取和预处理广泛使用语料库的脚本等，以尽可能加快研究人员的准备时间。
+
+> 表1：与其他RAG工具包的比较。模块化组件指的是工具包是否由模块化组件组成。自动评估表示工具包是否提供自动化评估能力，以评估各种数据集的性能。语料库助手显示工具包是否提供处理语料库的辅助工具，包括清理和分块。
+
+![image-20240527115656843](./RAG综述.assets/image-20240527115656843.png)
+
+## 3. 工具包：FlashRAG
+
+FlashRAG旨在为研究人员提供便利，以便于进行RAG相关的研究。如图1所示，FlashRAG工具包的整体结构由三个层次模块组成：环境模块、组件模块和管道模块。环境模块是工具包的基础，它建立了实验所需的数据集、超参数和评估指标。在环境模块的基础上，组件模块由各种RAG组件组成，每个组件都具有其特定的角色（例如，检索和生成）。管道模块综合了各种组件模块，目的是实现一个完整的RAG流程。在本文中，我们将介绍组件和管道模块。更多细节可在我们库的文档中找到。
+
+### 3.1 组件模块
+
+组件模块将RAG过程中涉及的所有元素整合到一个统一的框架中。每个组件都具备自主功能，可以独立应用。目前，组件模块包括五个主要组件： Judger, Retriever, Reranker, Refiner, and Generator （裁判器、检索器、重排器、细化器和生成器）。
+
+**裁判器（Judger）**作为一个初步组件，用于评估查询是否需要检索。鉴于这一领域有限的工作和模型，我们目前提供了一个基于[SKR](Yile Wang, Peng Li, Maosong Sun, and Yang Liu. Self-knowledge guided retrieval augmentation for large language models. In Findings of the Association for Computational Linguistics: EMNLP 2023, pages 10303–10315, Singapore, December 2023. Association for Computational Linguistics.)[10]方法的裁判器，它使用精选的LLM自知识数据集来确定检索的必要性。
+
+**检索器（Retriever）**的实现在我们的工具包中得到了广泛的覆盖。对于稀疏检索，我们集成了[Pyserini库](Jimmy Lin, Xueguang Ma, Sheng-Chieh Lin, Jheng-Hong Yang, Ronak Pradeep, and Rodrigo Nogueira. Pyserini: A Python toolkit for reproducible information retrieval research with sparse and dense representations. In Proceedings of the 44th Annual International ACM SIGIR Conference on Research and Development in Information Retrieval (SIGIR 2021), pages 2356–2362, 2021.)[11]以便于使用BM25方法。对于密集检索，我们提供了对各种基于BERT的嵌入模型的支持，如[DPR](Vladimir Karpukhin, Barlas Oguz, Sewon Min, Patrick Lewis, Ledell Wu, Sergey Edunov, Danqi Chen, and Wen-tau Yih. Dense passage retrieval for open-domain question answering. In Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP), pages 6769–6781, Online, November 2020. Association for Computational Linguistics.)[12]、[E5](Liang Wang, Nan Yang, Xiaolong Huang, Binxing Jiao, Linjun Yang, Daxin Jiang, Rangan Majumder, and Furu Wei. Text embeddings by weakly-supervised contrastive pre-training. arXiv preprint arXiv:2212.03533, 2022.)[13]和[BGE](Shitao Xiao, Zheng Liu, Peitian Zhang, and Niklas Muennighoff. C-pack: Packaged resources to advance general chinese embedding, 2023.)[14]。FlashRAG还支持基于T5架构的模型，如[ANCE](Lee Xiong, Chenyan Xiong, Ye Li, Kwok-Fung Tang, Jialin Liu, Paul N. Bennett, Junaid Ahmed, and Arnold Overwijk. Approximate nearest neighbor negative contrastive learning for dense text retrieval. In International Conference on Learning Representations, 2021.)[15]。我们使用FAISS[[16](Matthijs Douze, Alexandr Guzhva, Chengqi Deng, Jeff Johnson, Gergely Szilvasy, PierreEmmanuel Mazaré, Maria Lomeli, Lucas Hosseini, and Hervé Jégou. The faiss library. 2024.), [17](Jeff Johnson, Matthijs Douze, and Hervé Jégou. Billion-scale similarity search with GPUs. IEEE Transactions on Big Data, 7(3):535–547, 2019.)]进行向量数据库计算，以确保检索效率，并利用HuggingFace的datasets库来提高语料库加载速度。
+
+为了增强检索结果的可重用性并适应非开源检索器，我们的库支持使用称为"检索缓存"的预先检索结果。在每次检索实例中，系统会自动使用当前查询在检索缓存中搜索相关结果，并将它们作为返回值呈现。使用我们的检索器，用户可以设置自动保存检索缓存为JSONL文件以供将来使用。对于非开源检索器，用户可以将检索结果格式化以适应我们的缓存结构进行加载。
+
+**重排器（Reranker）**的目标是优化检索器返回的结果顺序，以提高检索准确性。目前，FlashRAG支持多种广泛使用的交叉编码器模型，如bge-reranker和jina-reranker。在嵌入模型用于重排的场景中（例如，使用BM25作为检索器），我们还支持使用像E5这样的双编码器模型作为重排器。在实践中，重排器通过装饰器集成到检索器的检索功能中，实现了与任何检索器的无缝结合。用户可以用一行代码组装任何检索器和重排器。
+
+**细化器（Refiner）**用于细化输入文本，供生成器使用，以减少令牌使用量并减少检索文档中的噪声，从而改善最终的RAG响应。作为RAG过程的重要组成部分，各种研究集中在开发更优越的细化上。我们已经审查了现有文献并实现了四种类型的细化器，每种在处理检索文档方面表现不同。提取式细化器（The Extractive Refiner）采用嵌入模型从检索文本中提取具有较高语义相似性的语义单元，如句子或短语。抽象式细化器利用seq2seq模型直接总结检索文本，支持专用模型如[RECOMP](Fangyuan Xu, Weijia Shi, and Eunsol Choi. Recomp: Improving retrieval-augmented lms with compression and selective augmentation. arXiv preprint arXiv:2310.04408, 2023.)[18]，以及HuggingFace上可用的具有类似结构的通用摘要模型。此外，我们还支持使用基于困惑度的细化器，如LLMLingua[[19](Huiqiang Jiang, Qianhui Wu, Chin-Yew Lin, Yuqing Yang, and Lili Qiu. LLMLingua: Compressing prompts for accelerated inference of large language models. In Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing, pages 13358– 13376. Association for Computational Linguistics, December 2023.), [20](Huiqiang Jiang, Qianhui Wu, , Xufang Luo, Dongsheng Li, Chin-Yew Lin, Yuqing Yang, and Lili Qiu. LongLLMLingua: Accelerating and enhancing llms in long context scenarios via prompt compression. ArXiv preprint, abs/2310.06839, 2023.)]细化器和选择性上下文[[21](Yucheng Li. Unlocking context constraints of llms: Enhancing context efficiency of llms with self-information-based content filtering. arXiv preprint arXiv:2304.12102, 2023.)]细化器。
+
+**生成器（Generator ）**是RAG过程中的最后一个组件，在工具包中得到了充分的覆盖。在生成器模块中，我们集成了两个领先的LLM加速库，[vllm](Woosuk Kwon, Zhuohan Li, Siyuan Zhuang, Ying Sheng, Lianmin Zheng, Cody Hao Yu, Joseph E. Gonzalez, Hao Zhang, and Ion Stoica. Efficient memory management for large language model serving with pagedattention. In Proceedings of the ACM SIGOPS 29th Symposium on Operating Systems Principles, 2023.)[22]和[FastChat](Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan Zhuang, Zhanghao Wu, Yonghao Zhuang, Zi Lin, Zhuohan Li, Dacheng Li, Eric. P Xing, Hao Zhang, Joseph E. Gonzalez, and Ion Stoica. Judging llm-as-a-judge with mt-bench and chatbot arena, 2023.)[23]，因此支持多种主流LLM。此外，我们提供了[Transformers库](Thomas Wolf, Lysandre Debut, Victor Sanh, Julien Chaumond, Clement Delangue, Anthony Moi, Pierric Cistac, Tim Rault, Rémi Louf, Morgan Funtowicz, Joe Davison, Sam Shleifer, Patrick von Platen, Clara Ma, Yacine Jernite, Julien Plu, Canwen Xu, Teven Le Scao, Sylvain Gugger, Mariama Drame, Quentin Lhoest, and Alexander M. Rush. Transformers: State-of-theart natural language processing. In Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing: System Demonstrations, pages 38–45, Online, October 2020. Association for Computational Linguistics.)[24]的原生接口以增强鲁棒性。我们还支持各种编码器-解码器模型，如[Flan-T5]( Jason Wei, Maarten Bosma, Vincent Zhao, Kelvin Guu, Adams Wei Yu, Brian Lester, Nan Du, Andrew M Dai, and Quoc V Le. Finetuned language models are zero-shot learners. In International Conference on Learning Representations.)[25]。对于这些模型，我们支持使用[Fusion in Decoder (FiD)](Gautier Izacard and Edouard Grave. Leveraging passage retrieval with generative models for open domain question answering. In Paola Merlo, Jorg Tiedemann, and Reut Tsarfaty, editors, Proceedings of the 16th Conference of the European Chapter of the Association for Computational Linguistics: Main Volume, pages 874–880, Online, April 2021. Association for Computational Linguistics.)技术[26]，进一步优化处理检索文档时的效率。
+
+### 3.2 管道组件
+
+基于前面概述的多样化组件，我们能够将RAG过程的算法流程与每个组件的具体实现解耦，便于组装整个管道。整个管道处理用户提供的数据集，执行相应的RAG过程，并提供最终的评估结果和中间结果。在构建管道时，只需要考虑整个RAG过程所需的组件以及这些组件之间的数据流逻辑。具体来说，在每个管道中，需要在`init(.)`函数中加载所需的组件，并根据每个组件的接口在`run(.)`函数中实现相应的逻辑。
+
+为了系统地执行各种RAG任务的操作逻辑，我们对RAG相关文献进行了深入调查。借鉴[RAG Survey](Yunfan Gao, Yun Xiong, Xinyu Gao, Kangxiang Jia, Jinliu Pan, Yuxi Bi, Yi Dai, Jiawei Sun, Qianyu Guo, Meng Wang, and Haofen Wang. Retrieval-augmented generation for large language models: A survey, 2024.)[27]的总结，我们将所有RAG流程分为四种类型：顺序、分支、条件和循环。到目前为止，我们已经实现了8种不同的管道，涵盖了一系列先进的RAG工作。
+
+**顺序管道（Sequential Pipeline）**实现了查询的线性执行路径，正式表示为查询 -> 检索器 -> 检索后处理（重排器、细化器）-> 生成器。一旦用户配置了他们的设置，库就会自动加载必要的组件及其相应的处理逻辑。
+
+**分支管道（Branching Pipeline）**为单个查询执行多个并行路径（通常每个检索到的文档一个路径），并将所有路径的结果合并以形成最终输出。目前，我们的库支持两种先进的分支方法：[REPLUG管道](Weijia Shi, Sewon Min, Michihiro Yasunaga, Minjoon Seo, Rich James, Mike Lewis, Luke Zettlemoyer, and Wen tau Yih. Replug: Retrieval-augmented black-box language models, 2023.)[28]和[SuRe管道](Jaehyung Kim, Jaehyun Nam, Sangwoo Mo, Jongjin Park, Sang-Woo Lee, Minjoon Seo, JungWoo Ha, and Jinwoo Shin. Sure: Summarizing retrievals using answer candidates for opendomain QA of LLMs. In The Twelfth International Conference on Learning Representations, 2024.)[29]。REPLUG管道并行处理每个检索到的文档，并将所有文档的生成概率结合起来产生最终答案。SuRe管道从每个检索到的文档生成候选答案，然后对所有候选答案进行排名。在实现SuRe时，我们遵循原始论文的提示和处理流程，以确保结果的准确性和可比性。
+
+**条件管道（Conditional Pipeline）**使用裁判器根据裁判结果将查询引导到不同的执行路径。在当前框架中，被认为需要检索的查询被发送到正常的顺序流程，其余的则绕过检索直接进行生成。我们提供实用功能来根据裁判器的判断拆分和合并输入数据集，确保所有处理都可以批量进行，这提高了管道的效率。此外，条件管道支持与各种类型的管道集成，这意味着它可以根据不同裁判器结果为查询执行不同的管道。
+
+**循环管道（Loop Pipeline）**涉及检索和生成过程之间的复杂交互，通常包括多个检索和生成周期。与前三种类型的管道相比，这种类型提供了更大的灵活性和改进的结果。我们支持四种广泛认可的方法，包括迭代[[30](Zhihong Shao, Yeyun Gong, Yelong Shen, Minlie Huang, Nan Duan, and Weizhu Chen. Enhancing retrieval-augmented large language models with iterative retrieval-generation synergy. In Houda Bouamor, Juan Pino, and Kalika Bali, editors, Findings of the Association for Computational Linguistics: EMNLP 2023, pages 9248–9274, Singapore, December 2023. Association for Computational Linguistics.), [31](Zhangyin Feng, Xiaocheng Feng, Dezhi Zhao, Maojin Yang, and Bing Qin. Retrieval-generation synergy augmented large language models, 2023.)]、[自我提问](Ofir Press, Muru Zhang, Sewon Min, Ludwig Schmidt, Noah Smith, and Mike Lewis. Measuring and narrowing the compositionality gap in language models. In Houda Bouamor, Juan Pino, and Kalika Bali, editors, Findings of the Association for Computational Linguistics: EMNLP 2023, pages 5687–5711, Singapore, December 2023. Association for Computational Linguistics.)[32]、[Self-RAG](Akari Asai, Zeqiu Wu, Yizhong Wang, Avirup Sil, and Hannaneh Hajishirzi. Self-RAG: Learning to retrieve, generate, and critique through self-reflection. In The Twelfth International Conference on Learning Representations, 2024.)[33]和[FlARE](Zhengbao Jiang, Frank F Xu, Luyu Gao, Zhiqing Sun, Qian Liu, Jane Dwivedi-Yu, Yiming Yang, Jamie Callan, and Graham Neubig. Active retrieval augmented generation. arXiv preprint arXiv:2305.06983, 2023.)[34]。对于这些方法中的每一种，我们支持灵活调整检索器和生成器，以测试它们在不同场景中的性能。
+
+### 3.3 数据集和语料库
+
+#### 3.3.1 数据集
+
+如表2所示，我们收集并预处理了32个基准数据集，涵盖了RAG工作中使用的大部分数据集。我们研究并列出每个数据集中答案的来源以供参考。对于大多数数据集来说，知识来源于维基百科，这突显了它在RAG任务中的重要性。所有数据集都已被格式化为统一的JSONL结构，通常包含四个字段：ID、问题、标准答案和元数据。对于多项选择数据集，如MMLU[35, 36]和OpenBookQA[37]，还提供了一个额外的"选项"字段。我们已经在HuggingFace上托管了处理过的数据集，以便于访问。有关数据集处理的详细信息可以在附录中找到。
+
+> 表2：数据集摘要。FlashRAG目前包括了各种不同任务的数据集。每个数据集的样本大小以及答案的知识来源都列出来作为参考。"-" 表示知识来源是常识。* 符号表示这个数据集的任务已经被修改以适应RAG场景。
+
+![image-20240527121152719](./RAG综述.assets/image-20240527121152719.png)
+
+除了数据集，我们还提供了多种数据集过滤工具，供用户过滤整个数据集。例如，用户可以从整个数据集中随机或顺序地选择一定数量的样本进行评估，或者通过数据集的元数据选择数据集的子集。这些方法统一在一个数据集加载函数中，可以通过标准接口访问。用户也被允许实现自己的过滤函数。
+
+#### 3.3.2 语料库
+
+除了数据集，用于检索的语料库，也被称为知识库，是实验的另一个重要准备。在各种研究工作中，通常使用以下两种类型的语料库：维基百科转储和MS MARCO段落。
+
+**维基百科段落**：维基百科段落包括来自英文维基百科条目的一系列文档，作为许多数据集的知识来源，例如KILT[61]。它最初在DrQA[68]中作为检索语料库被引入，并在之前的作品[12, 1, 34]中得到使用。获取维基百科转储涉及一个复杂的过程，包括下载XML格式的维基百科快照，清理文本以去除多余的HTML标签并提取相应的文本内容，以及将整个文档文本分割成单独的段落以供检索。
+
+由于各种原因，现有工作中使用了几种不同的维基百科版本，增加了复制的难度。为了解决这个问题，我们提供了易于使用的脚本，用于自动下载和预处理任何所需的维基百科版本。此外，我们还提供各种分块功能，以支持自定义分割方法，使研究人员能够将自己的语料库与他人的作品对齐或建立一个标准语料库以供使用。我们还提供了DPR在2018年12月20日呈现的广泛使用的维基百科转储，作为基础资源。
+
+**MS MARCO段落**[42]：MS MARCO段落包括880万个段落，来源于Bing搜索引擎检索。与维基百科转储相比，它包含的段落较少。幸运的是，这个语料库已经过预处理，可以直接使用。由于这个数据集已经托管在Hugging Face上，并且符合我们所需的格式，我们提供了它的原始链接，以便于下载。
 
 
 
+### 3.4 评估
+
+我们的库支持多种评估指标来评估RAG过程的质量。根据评估的主题，我们支持的指标可以分为两类：检索方面的指标和生成方面的指标。
+
+检索方面的指标：为了评估检索的质量，我们支持四种指标，包括召回率@k、精确率@k、F1@k和平均准确率（MAP）。与评估独立的检索系统不同，在RAG过程中检索到的文档通常缺乏黄金标签（例如，相关或不相关的标签）。因此，我们通过考虑黄金答案是否出现在检索到的文档中作为相关性的指标来促进这些评估。其他类型的指标可以通过继承现有指标并修改内部的计算方法来获得。
+
+生成方面的指标：为了评估生成的质量，我们支持五种指标，包括token级别的F1分数、精确匹配、准确率、BLEU[69]和ROUGE-L[70]。此外，我们支持评估生成中使用的token数量，以便于分析整个过程的成本。
+
+为了适应自定义评估指标，我们的库为用户提供了一个指标模板来实现。由于我们的库自动保存执行的中间结果，用户可以方便地评估中间组件产生的结果。例如，用户可以比较细化器运行前后的token数量，或者多轮检索结果之间的精确度差异。
 
 
 
+## 4.实验结果和讨论
 
+FlashRAG能够让研究人员对RAG方法进行基准测试，评估他们自己的RAG方法，并在RAG领域内进行探索。为了展示FlashRAG的能力，我们进行了一系列实验，以提供可复现的基准和探索。
 
+**实验设置**。在主要实验中，我们采用了最新的LLAMA3-8B-instruct[71]作为生成器，使用E5-base-v2作为检索器，使用2018年12月的维基百科数据作为检索语料库。生成器模型的最大输入长度设置为4096。对于每个查询，我们检索了五个文档。对于不使用自定义定义提示的方法，我们应用了一个一致的默认提示，该提示显示在附录中。需要特定设置和超参数的方法在我们的表格中用星号标记，其具体配置记录在附录中。所有实验都在8个NVIDIA A100 GPU上进行。我们在六个常用数据集上进行了实验：Natural Questions(NQ)[38]、TriviaQA[39]、HotpotQA[52]、2WikiMultihopQA[53]、PopQA[40]和WebQuestions[45]。我们在NQ、TriviaQA、Web Questions上使用精确匹配作为指标，在HotpotQA、2WikiMultihopQA和PopQA上使用token级别的F1作为指标。
 
+**方法**。我们在所有支持的RAG方法上进行了实验。这些方法根据它们主要优化的RAG组件进行分类：AAR[72]旨在优化检索器；LongLLMLingua[20]、RECOMP[18]和Selective-Context[21]专注于优化细化器以压缩输入提示；Ret-Robust[73]和REPLUG[28]专注于优化生成器及其相关的解码方法；SKR[10]增强了决定是否为查询检索的裁判器；SuRe[29]、Self-RAG[33]、FLARE[34]、Iter-RetGen[30]和ITRG[31]优化了整个RAG流程，包括多次检索和生成过程。
 
+### 4.1 主要结果
 
+表3显示了各种方法的主要结果。总体而言，与直接生成基线相比，RAG方法有显著提高。标准RAG配备了先进的检索器和生成器，是一个强大的基线，在六个数据集上表现良好。AAR通过训练contriever模型改进检索器，在多个数据集上获得了与e5基线相当的结果。对于细化器（refiners），所有三种方法都显示出显著的改进。细化器在像HotpotQA和2WikiMultihopQA这样的多跳数据集上表现尤为出色。这很可能是因为复杂问题导致文档检索的准确性降低，产生更多噪声，需要细化器优化。在生成器优化方法中，Ret-Robust使用Llama2-13B模型和lora模块，极大地增强了生成器对检索文档的理解，并超过了其他无需训练的方法。优化RAG过程的有效性因数据集而异。在像NQ和TriviaQA这样的较简单数据集上，FLARE和Iter-RetGen与标准RAG相当或略低。然而，在需要多步推理的复杂数据集上，如HotpotQA，与基线相比有显著改进。这表明自适应检索方法更适合复杂问题，而在较简单的任务上，它们可能成本更高，收益却只有适度。
 
+> 表3：在三个数据集上进行了RAG方法的性能评估。"优化组件"表示该方法主要优化的组件，而"流程"表示对整个RAG过程的优化。带有∗标记的方法表示使用了经过训练的生成器。
 
+![image-20240527122002913](./RAG综述.assets/image-20240527122002913.png)
 
+### 4.2 RAG中检索的影响
 
+在RAG过程中，检索器是一个关键组件，对结果产生重大影响。检索到的文档的数量和质量决定了最终答案。然而，由于成本等方面的考虑，现有的研究工作通常采用固定的检索器和固定数量的检索文档，忽略了这一领域的探索。为了彻底调查检索过程对整体RAG结果的影响，我们进行了一系列实验。
 
+在图2中，我们展示了不同数量的检索文档的结果。如图2左半部分所示，当检索文档的数量为3或5时，整体性能最佳。检索文档数量过多或不足都会导致性能显著下降，降幅高达40%。这一趋势在不同的检索器中是一致的，包括密集和稀疏检索方法。此外，我们观察到当检索文档数量较大时，三种不同质量的检索器的结果趋于一致。相比之下，在top1结果中，密集方法（E5、Bge）与BM25之间存在较大差距，表明检索到的文档越少，检索器的质量对最终结果的影响越大。
 
+![image-20240527122055772](./RAG综述.assets/image-20240527122055772.png)
 
+> 图2：在不同数量的检索文档和检索器下标准RAG过程的结果。左图：使用三种不同的检索器和不同数量的检索文档，在六个数据集上的平均结果。右图：在六个数据集上使用E5作为检索器的单独结果。
 
+在图2的右半部分，我们绘制了检索文档数量对不同数据集的影响。可以看出，在大多数数据集上，使用前3个或前5个检索结果可以获得最佳性能，这表明这可能是检索文档质量和噪声之间良好平衡的代表。
 
+## 5. 局限
 
+我们的工具包目前有一些限制，我们计划在未来逐步改进。(1) 尽管我们努力涵盖许多有代表性的RAG方法，但由于时间和成本的考虑，我们没有包括所有现有的RAG工作。这可能需要将来开源社区的贡献。(2) 我们的工具包缺乏对RAG相关组件训练的支持。我们在最初设计时考虑过训练问题，但由于训练方法的多样性以及许多专门用于检索器和生成器训练的存储库的存在，我们没有包括这部分。将来，我们可能会添加一些辅助脚本，以提供一些帮助，满足研究人员的训练需求。
 
+## 6. 总结
+
+为了应对研究人员在复制研究时面临的挑战以及与RAG领域研究相关的高昂开发成本，我们引入了一个模块化的RAG工具包。我们的工具包包括全面的RAG基准数据集、先进的RAG方法实现，以及用于预处理语料库和多种评估指标的代码。它使研究人员能够轻松地复制现有的RAG方法，开发新算法，并专注于优化他们的研究。
